@@ -1,8 +1,6 @@
-# Default config for sway
-#
-# Copy this to ~/.config/sway/config and edit it to your liking.
-#
-# Read `man 5 sway` for a complete reference.
+gaps inner 20
+focus_follows_mouse no
+
 
 ### Variables
 #
@@ -20,6 +18,10 @@ set $term termite
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 set $menu 'rofi -modi run, drun, window  -show drun'
+
+
+bindsym $mod+shift+g gaps inner current minus 10
+bindsym $mod+g gaps inner current plus 10
 
 bindsym --locked XF86AudioRaiseVolume exec --no-startup-id ~/.config/sway/actions/volume-up
 bindsym --locked XF86AudioLowerVolume exec --no-startup-id ~/.config/sway/actions/volume-down
@@ -105,7 +107,7 @@ input type:keyboard {
     bindsym $mod+Shift+q kill
 
     # Start your launcher
-    bindsym $mod+d exec $menu
+    bindsym $mod+Space exec $menu
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
@@ -191,7 +193,7 @@ input type:keyboard {
     bindsym $mod+Shift+space floating toggle
 
     # Swap focus between the tiling area and the floating area
-    bindsym $mod+space focus mode_toggle
+    bindsym $mod+d focus mode_toggle
 
     # Move focus to the parent container
     bindsym $mod+a focus parent
@@ -247,10 +249,10 @@ bar {
     # https://i3wm.org/docs/userguide.html#_colors
     colors {
         # Text color of status bar
-        statusline #f8b500
+        statusline #999999
 
         # Background color of status bar
-        background #5e227f
+        background #333333
     }
 }
 
