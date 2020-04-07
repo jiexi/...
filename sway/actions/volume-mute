@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
 
-pamixer -t
-pkill -RTMIN+1 i3blocks
+volumectl mute
+# pamixer -t
+# pkill -RTMIN+1 i3blocks

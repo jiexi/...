@@ -29,6 +29,11 @@ bindsym --locked XF86AudioNext exec --no-startup-id mpc next
 bindsym --locked XF86AudioPrev exec --no-startup-id mpc prev
 bindsym --locked XF86MonBrightnessUp exec --no-startup-id ~/.config/sway/actions/brightness-up
 bindsym --locked XF86MonBrightnessDown exec --no-startup-id ~/.config/sway/actions/brightness-down
+# bindsym XF86AudioRaiseVolume exec volumectl raise
+# bindsym XF86AudioLowerVolume exec volumectl lower
+# bindsym XF86AudioMute exec volumectl mute
+# bindsym XF86MonBrightnessUp exec lightctl raise
+# bindsym XF86MonBrightnessDown exec lightctl lower
 
 bindsym Print exec --no-startup-id ~/.config/sway/actions/take-screenshot entire-screen
 bindsym Shift+Print exec --no-startup-id ~/.config/sway/actions/take-screenshot box
@@ -249,7 +254,14 @@ bar {
     }
 }
 
-
+# 
+# Notifications:
+#
 exec --no-startup-id mako
+
+for_window [app_id="avizo-service"] border pixel 0
+for_window [app_id="avizo-service"] sticky toggle
+no_focus [app_id="avizo-service"]
+exec --no-startup-id avizo-service
 
 include @sysconfdir@/sway/config.d/*
