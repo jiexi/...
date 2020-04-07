@@ -9,7 +9,6 @@ set -x EDITOR vim
 # Alias
 #########################################
 # cd
-alias ~  "cd ~"
 alias ..  "cd .."
 alias ... "cd ../.."
 
