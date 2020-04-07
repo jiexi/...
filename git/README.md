@@ -2,4 +2,5 @@
 
 Configuration for [git](https://git-scm.com/).
 
-Init script creates symlink to `~/.gitconfig`.
+## Init
+`init.sh` creates symlink to `~/.gitconfig`.
