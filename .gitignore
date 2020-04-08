@@ -1,12 +1,22 @@
+# VSCode
+Code - OSS/*
+!Code - OSS/User
+Code - OSS/User/*
+!Code - OSS/User/
+!Code - OSS/User/snippets/
+!Code - OSS/User/settings.json
+!Code - OSS/User/keybindings.json
+
+# Others
 Hamsket/
 Popcorn-Time/
 Unknown Organization/
-
 autostart/
 dconf/
 htop/
 google-chrome/
 pavucontrol.ini
+paperwm/
 pulse/
 vlc/
 zoomus.conf

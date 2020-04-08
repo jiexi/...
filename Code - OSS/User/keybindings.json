@@ -1,0 +1,49 @@
+// Place your key bindings in this file to override the defaultsauto[]
+[
+    {
+        "key": "ctrl+alt+k ctrl+alt+s",
+        "command": "workbench.action.openGlobalKeybindingsFile"
+    },
+    {
+        "key": "ctrl+0",
+        "command": "workbench.action.toggleSidebarVisibility",
+        "when": "sideBarFocus"
+    },
+    {
+        "key": "ctrl+b",
+        "command": "-workbench.action.toggleSidebarVisibility"
+    },
+    {
+        "key": "ctrl+0",
+        "command": "workbench.view.explorer",
+        "when": "!sideBarVisible"
+    },
+    {
+        "key": "ctrl+alt+,",
+        "command": "workbench.action.openSettingsJson"
+    },
+    {
+        "key": "enter",
+        "command": "renameFile",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "f2",
+        "command": "-renameFile",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "i",
+        "command": "explorer.newFile",
+        "when": "listFocus && !inputFocus"
+    },
+    {
+        "key": "o",
+        "command": "explorer.newFolder",
+        "when": "listFocus && !inputFocus"
+    },
+    {
+        "key": "ctrl+shift+0",
+        "command": "workbench.files.action.refreshFilesExplorer"
+    },
+]
