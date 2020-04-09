@@ -15,11 +15,22 @@ Hamsket/
 Popcorn-Time/
 Unknown Organization/
 autostart/
+configstore/
+dleyna-*
 dconf/
-htop/
+enchant/
+evolution/
+gedit/
+goa-*/
 google-chrome/
+gtk-*/
+htop/
+jesseduffield/
+monitors.xml*
+nautilus/
 pavucontrol.ini
 paperwm/
 pulse/
+user-dirs.*
 vlc/
 zoomus.conf
