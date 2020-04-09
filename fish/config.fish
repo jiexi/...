@@ -20,7 +20,7 @@ alias .... "cd ../../.."
 
 function cd
   builtin cd $argv
-  ls
+  ls -1
   echo
 end
 
