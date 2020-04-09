@@ -6,11 +6,24 @@ set -x EDITOR vim
 
 
 #########################################
-# Alias
+# Alias / Key Bindings
 #########################################
+# meta
+alias config "cd ~/.config"
+alias dotfiles "cd ~/.config"
+alias reload "source ~/.config/fish/config.fish"
+
 # cd
 alias ..  "cd .."
 alias ... "cd ../.."
+alias .... "cd ../../.."
+
+function cd
+  builtin cd $argv
+  ls
+  echo
+end
+
 
 # TODO(JL): clean these up
 # git
@@ -32,6 +45,30 @@ alias ... "cd ../.."
 # alias dc   "docker-compose"
 # alias dcub "docker-compose up --build"
 
+# !! and !$ substitution
+function bind_bang
+  switch (commandline -t)
+  case "!"
+    commandline -t $history[1]; commandline -f repaint
+  case "*"
+    commandline -i !
+  end
+end
+
+function bind_dollar
+  switch (commandline -t)
+  case "!"
+    commandline -t ""
+    commandline -f history-token-search-backward
+  case "*"
+    commandline -i '$'
+  end
+end
+
+function fish_user_key_bindings
+  bind ! bind_bang
+  bind '$' bind_dollar
+end
 
 #########################################
 # Etc
@@ -44,5 +81,8 @@ function fish_title
 end
 
 if [ (tty) = "/dev/tty1" ]
-  exec sway 
+  exec sway
 end
+
+# TODO: Add dotfile update checker
+# TODO: Add message if uncommitted dotfiles

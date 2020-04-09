@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+
+# https://github.com/Depau/sway-configs/blob/retrowave/.bin/swaylock-blur
+
+image_prefix=~/.swaylock.
+image_ext=".jpg"
+
+outputs="$(swaymsg -rt get_outputs | jq '.[].name' -r)"
+
+function get_images_arg {
+  echo "$outputs" | while read output; do
+    echo -n "-i $output:${image_prefix}${output}${image_ext} "
+  done
+}
+
+images_arg="$(get_images_arg)"
+
+echo "$outputs" | parallel \
+  "grim -t jpeg -q 97 -o {} '${image_prefix}{}${image_ext}';" \
+  "convert '${image_prefix}{}${image_ext}' -spread 20 '${image_prefix}{}${image_ext}'"
+
+swaylock $images_arg $@
+
+sleep 0.5
+
+echo "$outputs" | while read output; do
+  rm "${image_prefix}${output}${image_ext}"
+done
