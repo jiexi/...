@@ -1,4 +1,4 @@
-# Arch 
+# Arch
 
 Tools, notes, and shared packages for [Arch Linux](https://www.archlinux.org/).
 Nothing here currently, but eventually PKGBUILD files.
@@ -24,3 +24,4 @@ pacman -Qtd # lists packages installed as dependencies but no longer depended on
 
 ## Future instructions/script steps
 * Add user to audio and video group (fixes `light` sudo permissions)
+* Add instructions for tty caps lock escape rebind based on [this arch wiki page](https://wiki.archlinux.org/index.php/Linux_console/Keyboard_configuration#Keymaps)
