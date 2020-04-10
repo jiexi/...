@@ -15,17 +15,18 @@ set $right l
 set $terminal termite
 
 ## Launcher
-set $launcher 'rofi -modi run, drun, window  -show drun'
+set $menu 'rofi -modi run, drun, window  -show drun'
 
 ## Lockscreen
 set $lock '~/.config/sway/actions/lock-screen -f'
 
-
-bindsym $mod+shift+g gaps inner current minus 10
-bindsym $mod+g gaps inner current plus 10
+#
+# Gaps:
+#
 
 gaps inner 10
-focus_follows_mouse no
+bindsym $mod+shift+g gaps inner current minus 10
+bindsym $mod+g gaps inner current plus 10
 
 
 #
@@ -153,8 +154,8 @@ output eDP-1 scale 1
     # You can "split" the current object of your focus with
     # $mod+b or $mod+v, for horizontal and vertical splits
     # respectively.
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+    bindsym $mod+b split h
+    bindsym $mod+v split v
 
     # Switch the current container between different layout styles
     bindsym $mod+s layout stacking
@@ -204,13 +205,43 @@ mode "resize" {
     bindsym Right resize grow width 10px
 
     # Return to default mode
+    bindsym $mod+r mode "default"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
 bindsym $mod+r mode "resize"
 
+#
+# Power:
+#
+## Menu
+set $mode_power Power Management: (l) lock, (e) logout, (s) sleep, (r) reboot, (p) poweroff
+
+mode "$mode_power" {
+    bindsym l exec --no-startup-id $lock, mode "default"
+    bindsym e exit
+    bindsym s exec --no-startup-id systemctl hybrid-sleep, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym p exec --no-startup-id systemctl poweroff, mode "default"
+
+    # back to normal
+    bindsym $mod+Grave mode "default"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+Grave mode "$mode_power"
+
+## Lid Controls
 bindswitch lid:on exec ~/.config/sway/actions/lid-close
 bindswitch lid:off exec ~/.config/sway/actions/lid-open
+
+## Idle configuration:
+exec swayidle -w \
+    timeout 600 $lock \
+    timeout 615 'swaymsg "output * dpms off"' \
+    resume 'swaymsg "output * dpms on"' \
+    after-resume 'swaymsg "output * dpms on"' \
+    before-sleep $lock && sleep 1
 
 
 #
@@ -243,17 +274,6 @@ input type:keyboard {
 
 
 #
-# Idle configuration:
-#
-exec swayidle -w \
-    timeout 600 $lock \
-    timeout 615 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"' \
-    after-resume 'swaymsg "output * dpms on"' \
-    before-sleep $lock
-
-
-#
 # Status Bar:
 #
 bar {
@@ -272,10 +292,12 @@ bar {
     }
 }
 
+
 #
 # Notifications:
 #
 exec --no-startup-id mako
+
 
 #
 # Volume/Brightness Indicator:
@@ -284,5 +306,13 @@ for_window [app_id="avizo-service"] border pixel 0
 for_window [app_id="avizo-service"] sticky toggle
 no_focus [app_id="avizo-service"]
 exec --no-startup-id avizo-service
+
+
+#
+# Miscellaneous:
+#
+focus_follows_mouse no
+focus_wrapping false
+focus_on_window_activation focus
 
 include @sysconfdir@/sway/config.d/*

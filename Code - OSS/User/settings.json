@@ -6,5 +6,8 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "editor.formatOnSave": true,
-    "keyboard.dispatch": "keyCode"
+    "keyboard.dispatch": "keyCode",
+    "workbench.editor.revealIfOpen": true,
+    "explorer.confirmDragAndDrop": false,
+    "editor.dragAndDrop": false
 }
