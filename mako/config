@@ -1,7 +1,7 @@
 background-color=#eeeeeeee
 border-color=#282a36
 border-radius=5
-border-size=2
+border-size=0
 font=pango:SFNS Display 14px
 format=<span weight="bold" rise="10000">%s</span>\n%b
 max-icon-size=50
