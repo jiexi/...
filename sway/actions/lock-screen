@@ -19,7 +19,7 @@ echo "$outputs" | parallel \
   "grim -t jpeg -q 97 -o {} '${image_prefix}{}${image_ext}';" \
   "convert '${image_prefix}{}${image_ext}' -spread 20 '${image_prefix}{}${image_ext}'"
 
-swaylock $images_arg $@
+swaylock $images_arg -f
 
 sleep 0.5
 

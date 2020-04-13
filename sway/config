@@ -18,7 +18,9 @@ set $terminal termite
 set $menu 'rofi -modi run, drun, window  -show drun'
 
 ## Lockscreen
-set $lock '~/.config/sway/actions/lock-screen -f'
+set $lock '~/.config/sway/actions/lock-screen'
+# NOTE: swayidle before-sleep doesn't actually seen to trigger, so....
+set $sleep '~/.config/sway/actions/lock-screen && systemctl hybrid-sleep'
 
 #
 # Gaps:
@@ -215,12 +217,13 @@ bindsym $mod+r mode "resize"
 # Power:
 #
 ## Menu
-set $mode_power Power Management: (l) lock, (e) logout, (s) sleep, (r) reboot, (p) poweroff
+set $mode_power Power Management: (l) lock, (s) sleep, (r) reboot, (p) poweroff
 
 mode "$mode_power" {
+    # (e) logout
+    # bindsym e exit
     bindsym l exec --no-startup-id $lock, mode "default"
-    bindsym e exit
-    bindsym s exec --no-startup-id systemctl hybrid-sleep, mode "default"
+    bindsym s exec --no-startup-id $sleep, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
     bindsym p exec --no-startup-id systemctl poweroff, mode "default"
 
@@ -235,13 +238,15 @@ bindsym $mod+Grave mode "$mode_power"
 bindswitch lid:on exec ~/.config/sway/actions/lid-close
 bindswitch lid:off exec ~/.config/sway/actions/lid-open
 
+
 ## Idle configuration:
 exec swayidle -w \
     timeout 600 $lock \
     timeout 615 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"' \
-    after-resume 'swaymsg "output * dpms on"' \
-    before-sleep $lock && sleep 1
+            resume 'swaymsg "output * dpms on"' \
+    before-sleep $lock
+    # NOTE: i think before-sleep is broken
+    # after-resume 'echo "am i needed to awake screens after coming back from closed lid action while on multi-monitor?"'
 
 
 #
