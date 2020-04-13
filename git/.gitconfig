@@ -2,6 +2,22 @@
 	email = jiexiluan@gmail.com
 	name = Jiexi Luan
 [alias]
+	# git-town
+	abort = town abort
+	continue = town continue
+	hack = town hack
+	kill = town kill
+	new-pull-request = town new-pull-request
+	pr = new-pull-request
+	mr = new-pull-request
+	prune-branches = town prune-branches
+	pb = prune-branches
+	rename-branch = town rename-branch
+	repo = town repo
+	ship = town ship
+	sync = town sync
+	undo = town undo
+	# regular
 	st = status
 	co = checkout
 	br = branch
