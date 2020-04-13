@@ -1,3 +1,8 @@
 [user]
 	email = jiexiluan@gmail.com
 	name = Jiexi Luan
+[alias]
+	st = status
+	co = checkout
+	br = branch
+	ci = commit
