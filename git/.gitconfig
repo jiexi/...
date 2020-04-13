@@ -6,3 +6,6 @@
 	co = checkout
 	br = branch
 	ci = commit
+	unstage = reset HEAD --
+	restart = reset HEAD --hard
+	all = add --all
