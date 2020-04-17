@@ -13,6 +13,7 @@ Code - OSS/User/*
 # Others
 Hamsket/
 Popcorn-Time/
+Postman/
 Unknown Organization/
 autostart/
 configstore/
@@ -26,6 +27,7 @@ google-chrome/
 gtk-*/
 htop/
 jesseduffield/
+menus/
 monitors.xml*
 nautilus/
 pavucontrol.ini
