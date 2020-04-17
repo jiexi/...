@@ -9,13 +9,15 @@
 	hack = town hack
 	kill = town kill
 	new-pull-request = town new-pull-request
-		mr = new-pull-request
 		pr = new-pull-request
+		new-merge-request = new-pull-request
+		mr = new-pull-request
 	prepend = town prepend
 	prune-branches = town prune-branches
 		pb = prune-branches
 	rename-branch = town rename-branch
 	repo = town repo
+	set-parent-branch = town set-parent-branch
 	ship = town ship
 	sync = town sync
 	undo = town undo
@@ -27,3 +29,4 @@
 	unstage = reset HEAD --
 	restart = reset HEAD --hard
 	all = add --all
+	trigger = commit --allow-empty -m "Trigger"
