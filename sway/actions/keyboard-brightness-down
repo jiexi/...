@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+me="$(basename "$0")";
+running=$(ps h -C "$me" | grep -wv $$ | wc -l);
+[[ $running > 1 ]] && exit;
+
+time=4
+bias=0
+
+kbd=$(light -L | grep kbd)
+
+light -Us $kbd 5
+
+light=$(light -s $kbd)
+light=$(echo $light | awk '{print int($1+0.5)}')
+scaled=$(echo "scale=2; $light / 100.0" | bc)
+
+alpha="0.5"
+
+if [ "$light" -lt "34" ]
+then
+    avizo-client --image-resource="brightness_low" --progress=$scaled --time=$time --background="rgba(255, 255, 255, $alpha)"
+elif [ "$light" -lt "66" ]
+then
+    avizo-client --image-resource="brightness_medium" --progress=$scaled --time=$time --background="rgba(255, 255, 255, $alpha)"
+elif [ "$light" -lt "101" ]
+then
+    avizo-client --image-resource="brightness_high" --progress=$scaled --time=$time --background="rgba(255, 255, 255, $alpha)"
+fi

@@ -34,29 +34,30 @@ bindsym $mod+g gaps inner current plus 10
 #
 # Multimedia:
 #
-bindsym --locked XF86AudioRaiseVolume exec --no-startup-id ~/.config/sway/actions/volume-up
-bindsym --locked XF86AudioLowerVolume exec --no-startup-id ~/.config/sway/actions/volume-down
-bindsym --locked XF86AudioMute exec --no-startup-id ~/.config/sway/actions/volume-mute
-bindsym --locked XF86AudioPlay exec --no-startup-id ~/.config/sway/actions/media-play
-bindsym --locked XF86AudioStop exec --no-startup-id ~/.config/sway/actions/media-stop
-bindsym --locked XF86AudioPrev exec --no-startup-id ~/.config/sway/actions/media-prev
-bindsym --locked XF86AudioNext exec --no-startup-id ~/.config/sway/actions/media-next
+bindsym --locked XF86AudioRaiseVolume exec ~/.config/sway/actions/volume-up
+bindsym --locked XF86AudioLowerVolume exec ~/.config/sway/actions/volume-down
+bindsym --locked XF86AudioMute exec ~/.config/sway/actions/volume-mute
+bindsym --locked XF86AudioPlay exec ~/.config/sway/actions/media-play
+bindsym --locked XF86AudioStop exec ~/.config/sway/actions/media-stop
+bindsym --locked XF86AudioPrev exec ~/.config/sway/actions/media-prev
+bindsym --locked XF86AudioNext exec ~/.config/sway/actions/media-next
 
 #
 # Brightness:
 #
-bindsym --locked XF86MonBrightnessUp exec --no-startup-id ~/.config/sway/actions/brightness-up
-bindsym --locked XF86MonBrightnessDown exec --no-startup-id ~/.config/sway/actions/brightness-down
-# TODO: Add keyboard brightness
+bindsym --locked XF86MonBrightnessUp exec ~/.config/sway/actions/screen-brightness-up
+bindsym --locked XF86MonBrightnessDown exec ~/.config/sway/actions/screen-brightness-down
+bindsym --locked XF86KbdBrightnessUp exec ~/.config/sway/actions/keyboard-brightness-up
+bindsym --locked XF86KbdBrightnessDown exec ~/.config/sway/actions/keyboard-brightness-down
 
 #
 # Screenshots:
 #
-bindsym Print exec --no-startup-id ~/.config/sway/actions/take-screenshot entire-screen
-bindsym Shift+Print exec --no-startup-id ~/.config/sway/actions/take-screenshot box
-bindsym $mod+$alt+3 exec --no-startup-id ~/.config/sway/actions/take-screenshot entire-screen
-bindsym $mod+$alt+4 exec --no-startup-id ~/.config/sway/actions/take-screenshot box
-bindsym $mod+$alt+5 exec --no-startup-id ~/.config/sway/actions/take-screenshot window
+bindsym Print exec ~/.config/sway/actions/take-screenshot entire-screen
+bindsym Shift+Print exec ~/.config/sway/actions/take-screenshot box
+bindsym $mod+$alt+3 exec ~/.config/sway/actions/take-screenshot entire-screen
+bindsym $mod+$alt+4 exec ~/.config/sway/actions/take-screenshot box
+bindsym $mod+$alt+5 exec ~/.config/sway/actions/take-screenshot window
 
 ### Output configuration
 #
@@ -222,10 +223,10 @@ set $mode_power Power Management: (l) lock, (s) sleep, (r) reboot, (p) poweroff
 mode "$mode_power" {
     # (e) logout
     # bindsym e exit
-    bindsym l exec --no-startup-id $lock, mode "default"
-    bindsym s exec --no-startup-id $sleep, mode "default"
-    bindsym r exec --no-startup-id systemctl reboot, mode "default"
-    bindsym p exec --no-startup-id systemctl poweroff, mode "default"
+    bindsym l exec $lock, mode "default"
+    bindsym s exec $sleep, mode "default"
+    bindsym r exec systemctl reboot, mode "default"
+    bindsym p exec systemctl poweroff, mode "default"
 
     # back to normal
     bindsym $mod+Grave mode "default"
@@ -264,7 +265,7 @@ xwayland enable
 input "1452:610:bcm5974" {
     accel_profile adaptive
     pointer_accel 0.25
-    scroll_factor 1.5
+    scroll_factor 1.25
     dwt enabled
     tap enabled
     drag disabled
@@ -282,26 +283,14 @@ input type:keyboard {
 # Status Bar:
 #
 bar {
-    position top
-
-    # Keep in mind that the current directory of this config file is $HOME
-    status_command while ~/.config/sway/status.sh; do sleep 1; done
-
-    # https://i3wm.org/docs/userguide.html#_colors
-    colors {
-        # Text color of status bar
-        statusline #999999
-
-        # Background color of status bar
-        background #333333
-    }
+    swaybar_command waybar
 }
 
 
 #
 # Notifications:
 #
-exec --no-startup-id mako
+exec mako
 
 
 #
@@ -310,7 +299,7 @@ exec --no-startup-id mako
 for_window [app_id="avizo-service"] border pixel 0
 for_window [app_id="avizo-service"] sticky toggle
 no_focus [app_id="avizo-service"]
-exec --no-startup-id avizo-service
+exec avizo-service
 
 
 #
