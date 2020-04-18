@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+
+# Constants
+TOTAL_UNITS=34
+COVERED_UNIT="▓"
+CURRENT_UNIT="▒"
+UNCOVERED_UNIT="░"
+TEMP_FILE="/tmp/notify-progress"
+
+# Helpers
+print_times () {
+    local text="$1"
+    local i="$2"
+    local result=""
+
+    while [[ $i -gt 0 ]]; do
+        result+="$text"
+        i=$[$i-1]
+    done
+
+    echo "$result"
+}
+
+notify () {
+    return $(notify-send.sh --replace-file=$1 "$2" "$3")
+}
+
+# Args
+title="$1"
+progress="$2"
+
+# Main
+
+if [[ $(echo "$progress < 0" | bc -l) -eq 1 ]]; then
+    progress=0
+elif [[ $(echo "$progress > 100" | bc -l) -eq 1 ]]; then
+    progress=100
+fi
+
+covered_units=$(echo "$progress * $TOTAL_UNITS / 100" | bc)
+current_units=0
+uncovered_units=$[$TOTAL_UNITS-$covered_units]
+
+if [[ ("$covered_units" -gt 0 && "$uncovered_units" -ne 0) || \
+      ("$covered_units" -eq 0 && "$progress" -gt 0) ]]; then
+    uncovered_units=$[$uncovered_units-1]
+    current_units=1
+fi
+
+progressbar=""
+progressbar+=$(print_times $COVERED_UNIT $covered_units)
+progressbar+=$(print_times $CURRENT_UNIT $current_units)
+progressbar+=$(print_times $UNCOVERED_UNIT $uncovered_units)
+
+echo $title
+echo $progressbar
+
+notify "$TEMP_FILE" "$title" "$progressbar" || \
+(rm "$TEMP_FILE" && notify "$TEMP_FILE" "$title" "$progressbar")

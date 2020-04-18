@@ -8,5 +8,5 @@ format=<span weight="bold" rise="10000">%s</span>\n%b
 max-icon-size=50
 padding=15
 text-color=#282a36
-width=400
+width=420
 default-timeout=5000
