@@ -18,9 +18,22 @@ set $terminal termite
 set $menu 'rofi -modi run, drun, window  -show drun'
 
 ## Lockscreen
-set $lock '~/.config/sway/actions/lock-screen'
+set $lock ~/.config/sway/actions/lock-screen
 # NOTE: swayidle before-sleep doesn't actually seen to trigger, so....
-set $sleep '~/.config/sway/actions/lock-screen && systemctl hybrid-sleep'
+set $sleep ~/.config/sway/actions/lock-screen && systemctl hybrid-sleep
+
+## Screenshot
+set $screenshot ~/.config/sway/actions/screenshot
+
+## Record
+set $record ~/.config/sway/actions/record
+
+## Stream
+set $stream ~/.config/sway/actions/stream
+
+## Stop Record/Stream
+set $record_stop ~/.config/sway/actions/record-stop
+
 
 #
 # Gaps:
@@ -53,18 +66,91 @@ bindsym --locked XF86KbdBrightnessDown exec ~/.config/sway/actions/keyboard-brig
 #
 # Screenshot:
 #
-bindsym Print exec ~/.config/sway/actions/take-screenshot screen
-bindsym $mod+$alt+3 exec ~/.config/sway/actions/take-screenshot screen
-bindsym $mod+$alt+4 exec ~/.config/sway/actions/take-screenshot box
-bindsym $mod+$alt+5 exec ~/.config/sway/actions/take-screenshot window
+bindsym Print exec $screenshot screen
+bindsym $mod+$alt+3 exec $screenshot screen
+bindsym $mod+$alt+4 exec $screenshot area
+bindsym $mod+$alt+5 exec $screenshot window
 
 #
-# Screencast:
+# Record:
 #
-bindsym $mod+Print exec ~/.config/sway/actions/record-screencast screen
-bindsym $mod+$alt+6 exec ~/.config/sway/actions/record-screencast screen
-bindsym $mod+$alt+7 exec ~/.config/sway/actions/record-screencast box
-bindsym $mod+$alt+8 exec ~/.config/sway/actions/record-screencast window
+bindsym $mod+Print exec $record screen
+bindsym $mod+$alt+6 exec $record screen
+bindsym $mod+$alt+7 exec $record area
+bindsym $mod+$alt+8 exec $record window
+
+#
+# Capture Menu:
+#
+set $mode_capture Capture: (1) Screenshot, (2) Record, (3) Stream, (0) Stop
+
+mode "$mode_capture" {
+    bindsym 1 exec swaymsg mode "\$mode_screenshot"
+    bindsym 2 exec swaymsg mode "\$mode_record"
+    bindsym 3 exec swaymsg mode "\$mode_stream"
+    bindsym 0 exec $record_stop, mode "default"
+
+    # back to normal
+    bindsym $mod+shift+c mode "default"
+    #bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+shift+c mode "$mode_capture"
+
+#
+# Screenshot Menu:
+#
+set $mode_screenshot Screenshot: (1) Screen, (2) Window, (3) Area
+
+mode "$mode_screenshot" {
+    bindsym 1 exec $screenshot screen, mode "default"
+    bindsym 2 exec $screenshot window, mode "default"
+    bindsym 3 exec $screenshot area, mode "default"
+
+    # back to normal
+    bindsym $mod+shift+c mode "default"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+shift+a mode "$mode_screenshot"
+
+#
+# Record Menu:
+#
+set $mode_record Record: (1) Screen, (2) Window, (3) Area, (4) Screen + Audio, (5) Window + Audio, (6) Area + Audio, (0) Stop
+
+mode "$mode_record" {
+    bindsym 1 exec $record screen, mode "default"
+    bindsym 2 exec $record window, mode "default"
+    bindsym 3 exec $record area, mode "default"
+    bindsym 4 exec $record screen --audio, mode "default"
+    bindsym 5 exec $record window --audio, mode "default"
+    bindsym 6 exec $record area --audio, mode "default"
+    bindsym 0 exec $record_stop, mode "default"
+
+    # back to normal
+    bindsym $mod+shift+c mode "default"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+#
+# Stream Menu:
+#
+set $mode_stream Stream: (1) Screen, (2) Window, (3) Area, (4) Screen -> Webcam, (0) Stop
+
+mode "$mode_stream" {
+    bindsym 1 exec $stream screen, mode "default"
+    bindsym 2 exec $stream window, mode "default"
+    bindsym 3 exec $stream area, mode "default"
+    bindsym 4 exec $stream screen --webcam, mode "default"
+    bindsym 0 exec $record_stop, mode "default"
+
+    # back to normal
+    bindsym $mod+shift+c mode "default"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
 
 ### Output configuration
@@ -226,9 +312,9 @@ bindsym $mod+r mode "resize"
 # Power:
 #
 ## Menu
-set $mode_power Power Management: (l) lock, (s) sleep, (r) reboot, (p) poweroff
+set $mode_power "Power Management: (l) lock, (s) sleep, (r) reboot, (p) poweroff"
 
-mode "$mode_power" {
+mode $mode_power {
     # (e) logout
     # bindsym e exit
     bindsym l exec $lock, mode "default"
@@ -241,7 +327,7 @@ mode "$mode_power" {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+Grave mode "$mode_power"
+bindsym $mod+Grave mode $mode_power
 
 ## Lid Controls
 bindswitch lid:on exec ~/.config/sway/actions/lid-close

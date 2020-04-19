@@ -5,6 +5,11 @@ set -e
 mkdir -p ~/Desktop
 
 FILENAME=~/Desktop/"$(date --rfc-3339=seconds)".mp4
+FLAG=""
+
+if [[ $* == *-a* ]]; then
+  FLAG="--audio"
+fi
 
 play_beep () {
   pacat --file-format=wav ~/.config/sway/sounds/volume.wav
@@ -20,21 +25,20 @@ if [[ "$(pgrep wf-recorder)" ]]; then
   exit 0
 fi
 
-
 case "$1" in
 screen)
   play_beep
-  wf-recorder -f "$FILENAME"
+  wf-recorder $FLAG -f "$FILENAME"
   ;;
 
-box)
+area)
   play_beep
-  wf-recorder -g "$(slurp)" -f "$FILENAME"
+  wf-recorder $FLAG -g "$(slurp)" -f "$FILENAME"
   ;;
 
 window)
   play_beep
-  wf-recorder -g "$( \
+  wf-recorder $FLAG -g "$( \
     swaymsg -t get_tree | \
       jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | \
       slurp \

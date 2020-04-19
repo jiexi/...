@@ -6,12 +6,15 @@ mkdir -p ~/Desktop
 
 FILENAME=~/Desktop/"$(date --rfc-3339=seconds)".png
 
+
+# TODO(JL): Add Clipboard option
+
 case "$1" in
 screen)
   grim "$FILENAME"
   ;;
 
-box)
+area)
   slurp | grim -g - "$FILENAME"
   ;;
 

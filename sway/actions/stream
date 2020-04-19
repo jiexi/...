@@ -1,0 +1,19 @@
+#!/usr/bin/env sh
+
+set -e
+
+LOOPBACK=/dev/video1
+
+if ! lsmod | grep v4l2loopback > /dev/null; then
+  # exclusive_caps=1
+	sudo modprobe v4l2loopback  video_nr=1 card_label=v4l2loopback
+fi
+
+if [[ "$(pgrep wf-recorder)" ]]; then
+  killall -s SIGINT wf-recorder
+  exit 0
+fi
+
+wf-recorder --muxer=v4l2 --codec=rawvideo --file="$LOOPBACK" -x yuv420p
+
+pacat --file-format=wav ~/.config/sway/sounds/screenshot.wav
