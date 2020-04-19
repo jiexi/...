@@ -7,7 +7,7 @@ mkdir -p ~/Desktop
 FILENAME=~/Desktop/"$(date --rfc-3339=seconds)".png
 
 case "$1" in
-entire-screen)
+screen)
   grim "$FILENAME"
   ;;
 

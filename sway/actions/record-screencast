@@ -1,0 +1,49 @@
+#!/usr/bin/env sh
+
+set -e
+
+mkdir -p ~/Desktop
+
+FILENAME=~/Desktop/"$(date --rfc-3339=seconds)".mp4
+
+play_beep () {
+  pacat --file-format=wav ~/.config/sway/sounds/volume.wav
+  # sleep 0.5
+  # pacat --file-format=wav ~/.config/sway/sounds/volume.wav
+  # sleep 0.5
+  # pacat --file-format=wav ~/.config/sway/sounds/volume.wav
+  # sleep 0.5
+}
+
+if [[ "$(pgrep wf-recorder)" ]]; then
+  killall -s SIGINT wf-recorder
+  exit 0
+fi
+
+
+case "$1" in
+screen)
+  play_beep
+  wf-recorder -f "$FILENAME"
+  ;;
+
+box)
+  play_beep
+  wf-recorder -g "$(slurp)" -f "$FILENAME"
+  ;;
+
+window)
+  play_beep
+  wf-recorder -g "$( \
+    swaymsg -t get_tree | \
+      jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | \
+      slurp \
+  )" -f "$FILENAME"
+  ;;
+
+*)
+  exit 1
+  ;;
+esac
+
+pacat --file-format=wav ~/.config/sway/sounds/screenshot.wav

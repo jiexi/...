@@ -51,13 +51,21 @@ bindsym --locked XF86KbdBrightnessUp exec ~/.config/sway/actions/keyboard-bright
 bindsym --locked XF86KbdBrightnessDown exec ~/.config/sway/actions/keyboard-brightness-down
 
 #
-# Screenshots:
+# Screenshot:
 #
-bindsym Print exec ~/.config/sway/actions/take-screenshot entire-screen
-bindsym Shift+Print exec ~/.config/sway/actions/take-screenshot box
-bindsym $mod+$alt+3 exec ~/.config/sway/actions/take-screenshot entire-screen
+bindsym Print exec ~/.config/sway/actions/take-screenshot screen
+bindsym $mod+$alt+3 exec ~/.config/sway/actions/take-screenshot screen
 bindsym $mod+$alt+4 exec ~/.config/sway/actions/take-screenshot box
 bindsym $mod+$alt+5 exec ~/.config/sway/actions/take-screenshot window
+
+#
+# Screencast:
+#
+bindsym $mod+Print exec ~/.config/sway/actions/record-screencast screen
+bindsym $mod+$alt+6 exec ~/.config/sway/actions/record-screencast screen
+bindsym $mod+$alt+7 exec ~/.config/sway/actions/record-screencast box
+bindsym $mod+$alt+8 exec ~/.config/sway/actions/record-screencast window
+
 
 ### Output configuration
 #
