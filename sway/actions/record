@@ -7,6 +7,9 @@ mkdir -p ~/Desktop
 FILENAME=~/Desktop/"$(date --rfc-3339=seconds)".mp4
 FLAG=""
 
+# TODO: Swaynag "You're recording your screen"?
+# TODO: Mako notification?
+
 if [[ $* == *-a* ]]; then
   FLAG="--audio"
 fi
@@ -20,10 +23,7 @@ play_beep () {
   # sleep 0.5
 }
 
-if [[ "$(pgrep wf-recorder)" ]]; then
-  killall -s SIGINT wf-recorder
-  exit 0
-fi
+~/.config/sway/actions/record-stop
 
 case "$1" in
 screen)
@@ -38,11 +38,7 @@ area)
 
 window)
   play_beep
-  wf-recorder $FLAG -g "$( \
-    swaymsg -t get_tree | \
-      jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | \
-      slurp \
-  )" -f "$FILENAME"
+  wf-recorder $FLAG -g "$(~/.config/sway/actions/slurp-window)" -f "$FILENAME"
   ;;
 
 *)

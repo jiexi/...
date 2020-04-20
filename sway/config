@@ -40,7 +40,7 @@ set $record_stop ~/.config/sway/actions/record-stop
 #
 
 gaps inner 10
-bindsym $mod+shift+g gaps inner current minus 10
+bindsym $mod+Shift+g gaps inner current minus 10
 bindsym $mod+g gaps inner current plus 10
 
 
@@ -82,54 +82,57 @@ bindsym $mod+$alt+8 exec $record window
 #
 # Capture Menu:
 #
-set $mode_capture Capture: (1) Screenshot, (2) Record, (3) Stream, (0) Stop
+set $mode_capture Capture: (s) screenshot, (r) record, (m) stream, (x) stop
 
 mode "$mode_capture" {
-    bindsym 1 exec swaymsg mode "\$mode_screenshot"
-    bindsym 2 exec swaymsg mode "\$mode_record"
-    bindsym 3 exec swaymsg mode "\$mode_stream"
-    bindsym 0 exec $record_stop, mode "default"
+    bindsym s exec swaymsg mode "\$mode_screenshot"
+    bindsym r exec swaymsg mode "\$mode_record"
+    bindsym m exec swaymsg mode "\$mode_stream"
+    bindsym x exec $record_stop, mode "default"
 
     # back to normal
-    bindsym $mod+shift+c mode "default"
+    bindsym $mod+Shift+c mode "default"
     #bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+shift+c mode "$mode_capture"
+bindsym $mod+Shift+c mode "$mode_capture"
 
 #
 # Screenshot Menu:
 #
-set $mode_screenshot Screenshot: (1) Screen, (2) Window, (3) Area
+set $mode_screenshot Screenshot: (s) screen, (w) window, (a) area | ->Clipboard: (S) screen, (W) window, (A) area
 
 mode "$mode_screenshot" {
-    bindsym 1 exec $screenshot screen, mode "default"
-    bindsym 2 exec $screenshot window, mode "default"
-    bindsym 3 exec $screenshot area, mode "default"
+    bindsym s exec $screenshot screen, mode "default"
+    bindsym w exec $screenshot window, mode "default"
+    bindsym a exec $screenshot area, mode "default"
+    bindsym Shift+s exec $screenshot screen --clipboard, mode "default"
+    bindsym Shift+w exec $screenshot window --clipboard, mode "default"
+    bindsym Shift+a exec $screenshot area --clipboard, mode "default"
 
     # back to normal
-    bindsym $mod+shift+c mode "default"
+    bindsym $mod+Shift+c mode "default"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+shift+a mode "$mode_screenshot"
+bindsym $mod+Shift+a mode "$mode_screenshot"
 
 #
 # Record Menu:
 #
-set $mode_record Record: (1) Screen, (2) Window, (3) Area, (4) Screen + Audio, (5) Window + Audio, (6) Area + Audio, (0) Stop
+set $mode_record Record: (s) screen, (w) window, (a) area | +Audio: (S) screen, (W) window, (A) area | (x) stop
 
 mode "$mode_record" {
-    bindsym 1 exec $record screen, mode "default"
-    bindsym 2 exec $record window, mode "default"
-    bindsym 3 exec $record area, mode "default"
-    bindsym 4 exec $record screen --audio, mode "default"
-    bindsym 5 exec $record window --audio, mode "default"
-    bindsym 6 exec $record area --audio, mode "default"
-    bindsym 0 exec $record_stop, mode "default"
+    bindsym s exec $record screen, mode "default"
+    bindsym w exec $record window, mode "default"
+    bindsym a exec $record area, mode "default"
+    bindsym Shift+s exec $record screen --audio, mode "default"
+    bindsym Shift+w exec $record window --audio, mode "default"
+    bindsym Shift+a exec $record area --audio, mode "default"
+    bindsym x exec $record_stop, mode "default"
 
     # back to normal
-    bindsym $mod+shift+c mode "default"
+    bindsym $mod+Shift+c mode "default"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
@@ -137,17 +140,17 @@ mode "$mode_record" {
 #
 # Stream Menu:
 #
-set $mode_stream Stream: (1) Screen, (2) Window, (3) Area, (4) Screen -> Webcam, (0) Stop
+set $mode_stream Stream: (s) screen, (w) window, (a) area | ->Webcam: (S) screen | (x) stop
 
 mode "$mode_stream" {
-    bindsym 1 exec $stream screen, mode "default"
-    bindsym 2 exec $stream window, mode "default"
-    bindsym 3 exec $stream area, mode "default"
-    bindsym 4 exec $stream screen --webcam, mode "default"
-    bindsym 0 exec $record_stop, mode "default"
+    bindsym s exec $stream screen, mode "default"
+    bindsym w exec $stream window, mode "default"
+    bindsym a exec $stream area, mode "default"
+    bindsym Shift+s exec $stream screen --webcam, mode "default"
+    bindsym x exec $record_stop, mode "default"
 
     # back to normal
-    bindsym $mod+shift+c mode "default"
+    bindsym $mod+Shift+c mode "default"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
@@ -312,7 +315,7 @@ bindsym $mod+r mode "resize"
 # Power:
 #
 ## Menu
-set $mode_power "Power Management: (l) lock, (s) sleep, (r) reboot, (p) poweroff"
+set $mode_power "System: (l) lock, (s) sleep, (r) reboot, (p) poweroff"
 
 mode $mode_power {
     # (e) logout
@@ -343,6 +346,8 @@ exec swayidle -w \
     # NOTE: i think before-sleep is broken
     # after-resume 'echo "am i needed to awake screens after coming back from closed lid action while on multi-monitor?"'
 
+seat seat0 hide_cursor 60000
+
 
 #
 # Wayland:
@@ -359,7 +364,7 @@ xwayland enable
 input "1452:610:bcm5974" {
     accel_profile adaptive
     pointer_accel 0.25
-    scroll_factor 1.25
+    scroll_factor 1
     dwt enabled
     tap enabled
     drag disabled

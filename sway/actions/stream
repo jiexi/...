@@ -4,15 +4,15 @@ set -e
 
 LOOPBACK=/dev/video1
 
+# TODO: Swaynag "You're sharing your screen"?
+# TODO: Mako notification?
+
 if ! lsmod | grep v4l2loopback > /dev/null; then
   # exclusive_caps=1
 	sudo modprobe v4l2loopback  video_nr=1 card_label=v4l2loopback
 fi
 
-if [[ "$(pgrep wf-recorder)" ]]; then
-  killall -s SIGINT wf-recorder
-  exit 0
-fi
+~/.config/sway/actions/record-stop
 
 wf-recorder --muxer=v4l2 --codec=rawvideo --file="$LOOPBACK" -x yuv420p
 

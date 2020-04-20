@@ -5,23 +5,39 @@ set -e
 mkdir -p ~/Desktop
 
 FILENAME=~/Desktop/"$(date --rfc-3339=seconds)".png
-
+CLIPBOARD=0
 
 # TODO(JL): Add Clipboard option
+# TODO: Mako notification?
+
+if [[ $* == *-c* ]]; then
+  CLIPBOARD=1
+fi
+
 
 case "$1" in
 screen)
-  grim "$FILENAME"
+  if [[ $CLIPBOARD -eq 1 ]]; then
+    grim -t png - | wl-copy -t image/png
+  else
+    grim "$FILENAME"
+  fi
   ;;
 
 area)
-  slurp | grim -g - "$FILENAME"
+  if [[ $CLIPBOARD -eq 1 ]]; then
+    grim -g "$(slurp)" -t png - | wl-copy -t image/png
+  else
+    slurp | grim -g - "$FILENAME"
+  fi
   ;;
 
 window)
-  swaymsg -t get_tree | \
-    jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' | \
-    slurp | grim -g - "$FILENAME"
+  if [[ $CLIPBOARD -eq 1 ]]; then
+    grim -g  "$(~/.config/sway/actions/slurp-window)" -t png - | wl-copy -t image/png
+  else
+    ~/.config/sway/actions/slurp-window | grim -g - "$FILENAME"
+  fi
   ;;
 
 *)
