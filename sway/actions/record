@@ -2,9 +2,7 @@
 
 set -e
 
-mkdir -p ~/Desktop
-
-FILENAME=~/Desktop/"$(date --rfc-3339=seconds)".mp4
+FILENAME=~/Desktop/$(date +"%Y-%m-%d-%T").mp4
 FLAG=""
 
 # TODO: Swaynag "You're recording your screen"?

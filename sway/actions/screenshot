@@ -2,47 +2,33 @@
 
 set -e
 
-mkdir -p ~/Desktop
-
-FILENAME=~/Desktop/"$(date --rfc-3339=seconds)".png
-CLIPBOARD=0
+FILENAME=~/Desktop/$(date +"%Y-%m-%d-%T").mp4
 
 # TODO(JL): Add Clipboard option
 # TODO: Mako notification?
 
-if [[ $* == *-c* ]]; then
-  CLIPBOARD=1
-fi
-
-
 case "$1" in
 screen)
-  if [[ $CLIPBOARD -eq 1 ]]; then
-    grim -t png - | wl-copy -t image/png
-  else
-    grim "$FILENAME"
-  fi
+  grim "$FILENAME"
   ;;
 
 area)
-  if [[ $CLIPBOARD -eq 1 ]]; then
-    grim -g "$(slurp)" -t png - | wl-copy -t image/png
-  else
-    slurp | grim -g - "$FILENAME"
-  fi
+  slurp | grim -g - "$FILENAME"
   ;;
 
 window)
-  if [[ $CLIPBOARD -eq 1 ]]; then
-    grim -g  "$(~/.config/sway/actions/slurp-window)" -t png - | wl-copy -t image/png
-  else
-    ~/.config/sway/actions/slurp-window | grim -g - "$FILENAME"
-  fi
+  ~/.config/sway/actions/slurp-window | grim -g - "$FILENAME"
   ;;
 
 *)
   exit 1
   ;;
 esac
+
+if [[ $* == *-c* ]]; then
+  wl-copy < "$FILENAME"
+  rm "$FILENAME"
+fi
+
 
 pacat --file-format=wav ~/.config/sway/sounds/screenshot.wav
