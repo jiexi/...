@@ -5,9 +5,9 @@ me="$(basename "$0")";
 running=$(ps h -C "$me" | grep -wv $$ | wc -l);
 [[ $running > 1 ]] && exit;
 
-time=4
+time=3
 bias=0
-alpha="0.8"
+alpha="0.9"
 
 kbd=$(light -L | grep kbd)
 
