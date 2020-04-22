@@ -20,6 +20,7 @@ configstore/
 dleyna-*
 dconf/
 enchant/
+eog/
 evolution/
 gedit/
 goa-*/
@@ -30,6 +31,7 @@ jesseduffield/
 menus/
 monitors.xml*
 nautilus/
+neofetch/
 pavucontrol.ini
 paperwm/
 pulse/
