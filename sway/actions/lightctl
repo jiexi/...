@@ -4,7 +4,7 @@ me="$(basename "$0")";
 running=$(ps h -C "$me" | grep -wv $$ | wc -l);
 [[ $running > 1 ]] && exit;
 
-
+STEP="3"
 TARGET=$(light -L | grep backlight/auto)
 NAME="Screen"
 LEVEL="Off"
@@ -17,9 +17,9 @@ fi
 
 
 if [[ "$1" == "down" ]]; then
-    light -Us $TARGET 5
+    light -Us $TARGET $STEP
 elif [[ "$1" == "up" ]]; then
-    light -As $TARGET 5
+    light -As $TARGET $STEP
 fi
 
 light=$(light -s $TARGET)

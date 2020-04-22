@@ -4,6 +4,7 @@ me="$(basename "$0")";
 running=$(ps h -C "$me" | grep -wv $$ | wc -l);
 [[ $running > 1 ]] && exit;
 
+STEP="3"
 LEVEL="Mute"
 
 prev_vol=$(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
@@ -14,9 +15,9 @@ if [[ "$1" == "mute" || "$prev_off" == *"off"* ]]; then
 fi
 
 if [[ "$1" == "down" ]]; then
-    echo `amixer set Master 5%-` > /dev/null
+    echo `amixer set Master $STEP%-` > /dev/null
 elif [[ "$1" == "up" ]]; then
-    echo `amixer set Master 5%+` > /dev/null
+    echo `amixer set Master $STEP%+` > /dev/null
 fi
 
 vol=$(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
