@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-
-volumectl lower
-# pamixer -u
-# pamixer -d 5
-pacat --file-format=wav ~/.config/sway/sounds/volume.wav &
-# pkill -RTMIN+1 i3blocks

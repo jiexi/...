@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+me="$(basename "$0")";
+running=$(ps h -C "$me" | grep -wv $$ | wc -l);
+[[ $running > 1 ]] && exit;
+
+LEVEL="Mute"
+
+prev_vol=$(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
+prev_off=$(amixer get Master | grep -o "off" | head -n 1)
+
+if [[ "$1" == "mute" || "$prev_off" == *"off"* ]]; then
+    echo `amixer set Master toggle` > /dev/null
+fi
+
+if [[ "$1" == "down" ]]; then
+    echo `amixer set Master 5%-` > /dev/null
+elif [[ "$1" == "up" ]]; then
+    echo `amixer set Master 5%+` > /dev/null
+fi
+
+vol=$(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
+off=$(amixer get Master | grep -o "off" | head -n 1)
+
+if [[ "$1" == "mute" && "$off" == *"off"* ]]; then
+    LEVEL="Mute"
+    vol="0"
+else
+    scaled=$(echo "scale=2; $vol / 100.0" | bc)
+
+    if [ "$vol" -eq "0" ]; then
+        LEVEL="Off"
+    elif [ "$vol" -lt "34" ]; then
+        LEVEL="Low"
+    elif [ "$vol" -lt "67" ]; then
+        LEVEL="Med"
+    elif [ "$vol" -lt "101" ]; then
+        LEVEL="High"
+    fi
+fi
+
+~/.config/sway/actions/notify-progress "Volume $LEVEL" "$vol"
+
+if [[ "$prev_vol" -ne "$vol" || ("$prev_off" == *"off"* && "$off" != *"off"* ) ]]; then
+    pacat --file-format=wav ~/.config/sway/sounds/volume.wav &
+fi

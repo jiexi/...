@@ -1,5 +1,0 @@
-#!/usr/bin/env sh
-
-lightctl lower
-# light -U 5
-# pkill -RTMIN+1 i3blocks

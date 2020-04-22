@@ -2,7 +2,7 @@
 
 set -e
 
-FILENAME=~/Desktop/$(date +"%Y-%m-%d-%T").mp4
+FILENAME=~/Desktop/$(date +"%Y-%m-%d-%T").png
 
 # TODO(JL): Add Clipboard option
 # TODO: Mako notification?
