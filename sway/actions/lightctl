@@ -4,16 +4,18 @@ me="$(basename "$0")";
 running=$(ps h -C "$me" | grep -wv $$ | wc -l);
 [[ $running > 1 ]] && exit;
 
-STEP="3"
-TARGET=$(light -L | grep backlight/auto)
-NAME="Screen"
-LEVEL="Off"
-
-
-if [[ $* == *-k* ]]; then
+for arg do
+  shift
+  [ "$arg" = "--keyboard" ] && continue
+  set -- "$@" "$arg"
   TARGET=$(light -L | grep kbd)
   NAME="Keyboard"
-fi
+done
+
+
+STEP=${2:-3}
+TARGET=$(light -L | grep backlight/auto)
+NAME="Screen"
 
 
 if [[ "$1" == "down" ]]; then
@@ -26,14 +28,4 @@ light=$(light -s $TARGET)
 light=$(echo $light | awk '{print int($1+0.5)}')
 scaled=$(echo "scale=2; $light / 100.0" | bc)
 
-if [ "$light" -eq "0" ]; then
-    LEVEL="Off"
-elif [ "$light" -lt "34" ]; then
-    LEVEL="Low"
-elif [ "$light" -lt "66" ]; then
-    LEVEL="Med"
-elif [ "$light" -lt "101" ]; then
-    LEVEL="High"
-fi
-
- ~/.config/sway/actions/notify-progress "$NAME Brightness $LEVEL" "$light"
+ ~/.config/sway/actions/notify-progress "$NAME Brightness $light%" "$light"

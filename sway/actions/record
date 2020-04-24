@@ -8,9 +8,12 @@ FLAG=""
 # TODO: Swaynag "You're recording your screen"?
 # TODO: Mako notification?
 
-if [[ $* == *-a* ]]; then
+for arg do
+  shift
+  [ "$arg" = "--audio" ] && continue
   FLAG="--audio"
-fi
+  set -- "$@" "$arg"
+done
 
 play_beep () {
   pacat --file-format=wav ~/.config/sway/sounds/volume.wav

@@ -49,6 +49,8 @@ bindsym $mod+g gaps inner current plus 10
 #
 bindsym --locked XF86AudioRaiseVolume exec ~/.config/sway/actions/volumectl up
 bindsym --locked XF86AudioLowerVolume exec ~/.config/sway/actions/volumectl down
+bindsym --locked Shift+XF86AudioRaiseVolume exec ~/.config/sway/actions/volumectl up 1
+bindsym --locked Shift+XF86AudioLowerVolume exec ~/.config/sway/actions/volumectl down 1
 bindsym --locked XF86AudioMute exec ~/.config/sway/actions/volumectl mute
 bindsym --locked XF86AudioPlay exec ~/.config/sway/actions/media-play
 bindsym --locked XF86AudioStop exec ~/.config/sway/actions/media-stop
@@ -60,8 +62,12 @@ bindsym --locked XF86AudioNext exec ~/.config/sway/actions/media-next
 #
 bindsym --locked XF86MonBrightnessUp exec ~/.config/sway/actions/lightctl up
 bindsym --locked XF86MonBrightnessDown exec ~/.config/sway/actions/lightctl down
+bindsym --locked Shift+XF86MonBrightnessUp exec ~/.config/sway/actions/lightctl up 1
+bindsym --locked Shift+XF86MonBrightnessDown exec ~/.config/sway/actions/lightctl down 1
 bindsym --locked XF86KbdBrightnessUp exec ~/.config/sway/actions/lightctl up --keyboard
 bindsym --locked XF86KbdBrightnessDown exec ~/.config/sway/actions/lightctl down --keyboard
+bindsym --locked Shift+XF86KbdBrightnessUp exec ~/.config/sway/actions/lightctl up 1 --keyboard
+bindsym --locked Shift+XF86KbdBrightnessDown exec ~/.config/sway/actions/lightctl down 1 --keyboard
 
 #
 # Screenshot:

@@ -7,6 +7,14 @@ FILENAME=~/Desktop/$(date +"%Y-%m-%d-%T").png
 # TODO(JL): Add Clipboard option
 # TODO: Mako notification?
 
+CLIPBOARD=0
+for arg do
+  shift
+  [ "$arg" = "--clipboard" ] && continue
+  CLIPBOARD=1
+  set -- "$@" "$arg"
+done
+
 case "$1" in
 screen)
   grim "$FILENAME"
@@ -25,7 +33,7 @@ window)
   ;;
 esac
 
-if [[ $* == *-c* ]]; then
+if [[ $CLIPBOARD -eq 1 ]]; then
   wl-copy < "$FILENAME"
   rm "$FILENAME"
 fi
