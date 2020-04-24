@@ -3,6 +3,7 @@
 #########################################
 set -x PATH ~/.config/bin $PATH
 set -x EDITOR vim
+set -x VISUAL vim
 
 
 #########################################
@@ -68,6 +69,23 @@ end
 function fish_user_key_bindings
   bind ! bind_bang
   bind '$' bind_dollar
+end
+
+# yay with manual intervention check
+function yup
+  if test "$argv"
+    yay $argv
+    return
+  end
+  echo 'Checking news...'
+  set -l news (yay -Pw)
+  if test -z "$news"
+    echo 'No news found.'
+    yay
+    return
+  end
+  echo 'Manual intervention required:'
+  echo "$news"
 end
 
 #########################################
