@@ -77,14 +77,12 @@ function yup
     yay $argv
     return
   end
-  echo 'Checking news...'
   set -l news (yay -Pw)
   if test -z "$news"
-    echo 'No news found.'
     yay
     return
   end
-  echo 'Manual intervention required:'
+  echo 'Manual intervention required!'
   echo "$news"
 end
 
