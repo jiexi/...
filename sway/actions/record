@@ -10,8 +10,10 @@ FLAG=""
 
 for arg do
   shift
-  [ "$arg" = "--audio" ] && continue
-  FLAG="--audio"
+  if [ "$arg" = "--audio" ]; then
+    FLAG="--audio"
+    continue
+  fi
   set -- "$@" "$arg"
 done
 

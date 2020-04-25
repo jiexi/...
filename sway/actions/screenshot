@@ -3,15 +3,17 @@
 set -e
 
 FILENAME=~/Desktop/$(date +"%Y-%m-%d-%T").png
+CLIPBOARD=0
 
 # TODO(JL): Add Clipboard option
 # TODO: Mako notification?
 
-CLIPBOARD=0
 for arg do
   shift
-  [ "$arg" = "--clipboard" ] && continue
-  CLIPBOARD=1
+  if [ "$arg" = "--clipboard" ]; then
+    CLIPBOARD=1
+    continue
+  fi
   set -- "$@" "$arg"
 done
 

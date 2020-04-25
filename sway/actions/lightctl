@@ -4,18 +4,20 @@ me="$(basename "$0")";
 running=$(ps h -C "$me" | grep -wv $$ | wc -l);
 [[ $running > 1 ]] && exit;
 
-for arg do
-  shift
-  [ "$arg" = "--keyboard" ] && continue
-  set -- "$@" "$arg"
-  TARGET=$(light -L | grep kbd)
-  NAME="Keyboard"
-done
-
-
-STEP=${2:-3}
 TARGET=$(light -L | grep backlight/auto)
 NAME="Screen"
+
+for arg do
+  shift
+  if [ "$arg" = "--keyboard" ]; then
+    TARGET=$(light -L | grep kbd)
+    NAME="Keyboard"
+    continue
+  fi
+  set -- "$@" "$arg"
+done
+
+STEP=${2:-4}
 
 
 if [[ "$1" == "down" ]]; then
