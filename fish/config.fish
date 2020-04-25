@@ -71,18 +71,19 @@ function fish_user_key_bindings
   bind '$' bind_dollar
 end
 
-# yay with manual intervention check
-function yup
+# yay
+function yay
+  set -l builtin_yay (which yay)
   if test "$argv"
-    yay $argv
+    $builtin_yay $argv
     return
   end
-  set -l news (yay -Pw)
+  set -l news ($builtin_yay -Pw)
   if test -z "$news"
-    yay
+    $builtin_yay
     return
   end
-  echo 'Manual intervention required!'
+  echo 'Manual intervention required:'
   echo "$news"
 end
 
