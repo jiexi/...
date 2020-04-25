@@ -54,8 +54,5 @@ progressbar+=$(print_times $COVERED_UNIT $covered_units)
 progressbar+=$(print_times $PARTIAL_UNIT $partial_units)
 progressbar+=$(print_times $UNCOVERED_UNIT $uncovered_units)
 
-echo $title
-echo $progressbar
-
 notify "$TEMP_FILE" "$title" "$progressbar" || \
 (rm "$TEMP_FILE" && notify "$TEMP_FILE" "$title" "$progressbar")
