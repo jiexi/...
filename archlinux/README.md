@@ -23,7 +23,7 @@ pacman -Qtd # lists packages installed as dependencies but no longer depended on
 ```
 
 ## Future instructions/script steps
-* Add user to audio and video group (fixes `light` sudo permissions)
+* Add user to audio, video, input group (fixes `light` sudo permissions)
 * Add user to docker group (fixes `docker` sudo permissions)
   * `dockerd` vs `systemctl enable docker`?...
 * Add instructions for tty caps lock escape rebind based on [this arch wiki page](https://wiki.archlinux.org/index.php/Linux_console/Keyboard_configuration#Keymaps)
@@ -38,3 +38,4 @@ pacman -Qtd # lists packages installed as dependencies but no longer depended on
     ```
   * Maybe this isn't needed if modprobe right before stream?...
 * Chrome swipe gestures: `https://github.com/pawelmatyjasik/chrome-gestures`
+* Gluqlo clock
