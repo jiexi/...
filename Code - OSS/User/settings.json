@@ -10,5 +10,6 @@
     "explorer.confirmDragAndDrop": false,
     "editor.dragAndDrop": false,
     "window.zoomLevel": 0,
-    "typescript.updateImportsOnFileMove.enabled": "always"
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "editor.tabSize": 2
 }
