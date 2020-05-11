@@ -1,49 +1,77 @@
 * {
     border: none;
     border-radius: 0;
-    font-family: sans-serif;
+    font-family: SF Pro Mono;
     font-size: 14px;
+    min-height: 0;
 }
 
-window {
-    background: rgba(33, 33, 33, 0.9);
-    color: white;
+window#waybar {
+    font-weight: 500;
+    background: rgba(11, 12, 13, 0.90);
+    border-bottom: 1px solid  rgba(0, 0, 2, 0.53);
+    color: #cfd6e6;
 }
+
 
 #workspaces button {
-    padding: 0;
-    background: transparent;
-    color: white;
-    border-bottom: 2px solid transparent;
+    font-size: 17px;
+    box-shadow: none;
+    text-shadow: none;
+    padding: 0px 3px 0px 3px;
+    color: rgba(95, 111, 128, 0.73);
 }
 
-#workspaces button.icon label {
-    font-size: 10px;
-}
 
 #workspaces button.focused {
-    background: rgba(200, 200, 200, 0.1);
-    border-bottom: 2px solid white;
+    color: #cfd6e6;
+    /* margin: 2px 0px 2px 0px; */
 }
 
-#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-brightness, #custom-spotify {
-    padding: 0 6px;
-    margin: 0 2px;
+#workspaces button:hover {
+    background: rgba(255, 255, 255, 0.00);
+    /* margin: 2px 0px 2px 0px; */
 }
 
-@keyframes blink {
-    to {
-        background-color: #ffffff;
-        color: black;
-    }
+#clock, #battery, #cpu, #memory, #network, #pulseaudio, #custom-spotify, #tray, #mode {
+    font-size: 17px;
+    margin: 0px 5px;
 }
 
-#battery.warning {
-    background: #f53c3c;
-    color: white;
-    animation-name: blink;
-    animation-duration: 0.5s;
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+#tray {
+    margin-right: 0;
+}
+
+#pulseaudio {
+    margin-left: 10px;
+}
+
+#mode {
+    border-bottom: 1px solid white;
+}
+
+
+#battery.critical {
+     color: #e06c75;
+}
+#battery.charging {
+    color: #5288e2;
+}
+#battery.full {
+    margin: 0px 0px 0px 0px;
+}
+
+
+#network {
+    border-top: 1px solid transparent;
+}
+#network.disconnected {
+    margin: 0px 0px 0px 0px;
+    color: rgba(75, 81, 98, 0);
+}
+
+
+#pulseaudio.muted {
+    margin: 0px 0px 0px 0px;
+    color: rgba(75, 81, 98, 0);
 }

@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+set -e
+
+if [[ "$(pgrep waybar)" ]]; then
+  killall -SIGUSR1 waybar
+  exit 0
+fi
+
+exec waybar

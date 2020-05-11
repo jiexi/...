@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+set -e
+
+gluqlo_process=$(pgrep gluqlo | tail -1)
+
+if [[ ! -z "$gluqlo_process" ]]; then
+  kill $gluqlo_process
+  exit 1
+fi
