@@ -1,14 +1,14 @@
 # VSCode
-Code - OSS/*
-!Code - OSS/README.md
-!Code - OSS/init.sh
-!Code - OSS/save-extensions.sh
-!Code - OSS/User
-Code - OSS/User/*
-!Code - OSS/User/
-!Code - OSS/User/snippets/
-!Code - OSS/User/settings.json
-!Code - OSS/User/keybindings.json
+Code/*
+!Code/README.md
+!Code/init.sh
+!Code/save-extensions.sh
+!Code/User
+Code/User/*
+!Code/User/
+!Code/User/snippets/
+!Code/User/settings.json
+!Code/User/keybindings.json
 
 # Others
 Hamsket/
@@ -17,8 +17,9 @@ Postman/
 Unknown Organization/
 autostart/
 configstore/
-dleyna-*
 dconf/
+deluge/
+dleyna-*
 enchant/
 eog/
 evolution/
