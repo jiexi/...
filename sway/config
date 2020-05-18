@@ -19,7 +19,6 @@ set $menu 'rofi -modi run, drun, window  -show drun'
 
 ## Lockscreen
 set $lock ~/.config/sway/actions/lock-screen
-set $unlock ~/.config/sway/actions/unlock-screen
 # NOTE: swayidle before-sleep doesn't actually seen to trigger, so....
 set $sleep ~/.config/sway/actions/lock-screen && systemctl hybrid-sleep
 
@@ -342,11 +341,11 @@ mode $mode_power {
     bindsym p exec systemctl poweroff, mode "default"
 
     # back to normal
-    bindsym $mod+Shift+p mode "default"
+    bindsym $mod+Shift+0 mode "default"
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-bindsym $mod+Shift+p mode $mode_power
+bindsym $mod+Shift+0 mode $mode_power
 
 ## Lid Controls
 bindswitch lid:on exec ~/.config/sway/actions/lid-close
@@ -355,12 +354,11 @@ bindswitch lid:off exec ~/.config/sway/actions/lid-open
 
 ## Idle configuration:
 exec swayidle -w \
-     timeout 600 '$lock' \
-    timeout 1200 'swaymsg "output * dpms off"' \
+     timeout 900 '$lock' \
+    timeout 1800 'swaymsg "output * dpms off"' \
           resume 'swaymsg "output * dpms on"' \
     before-sleep '$lock' \
             lock '$lock' \
-          unlock '$unlock'
 
 # after-resume 'echo "am i needed to awake screens after coming back from closed lid action while on multi-monitor?"'
 

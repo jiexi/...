@@ -27,7 +27,14 @@
 #   rm "${image_prefix}${output}${image_ext}"
 # done
 
+function kill_recent_gluqlo {
+  gluqlo_process=$(pgrep gluqlo | tail -1)
 
-swaylock -f -c 00000000
+  if [[ ! -z "$gluqlo_process" ]]; then
+    kill $gluqlo_process
+  fi
+}
+
 # TODO(JL): Grab resolution from swaymsg
-/usr/lib/xscreensaver/gluqlo -ampm -s 0.9 -r 2880x1800 &
+/usr/lib/xscreensaver/gluqlo -ampm -s 0.95 -r 2880x1800 &
+swaylock -c 00000000 ; kill_recent_gluqlo
