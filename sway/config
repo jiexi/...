@@ -35,6 +35,9 @@ set $stream ~/.config/sway/actions/stream
 ## Stop Record/Stream
 set $record_stop ~/.config/sway/actions/record-stop
 
+## Color Picker
+set $pick_color ~/.config/sway/actions/pick-color
+
 ##  Toggle Statusbar
 set $toggle_waybar ~/.config/sway/actions/toggle-waybar
 
@@ -95,9 +98,10 @@ bindsym $mod+$alt+8 exec $record window
 #
 # Capture Menu:
 #
-set $mode_capture Capture: (s) screenshot, (r) record, (m) stream, (x) stop
+set $mode_capture Capture: (c) color, (s) screenshot, (r) record, (m) stream, (x) stop
 
 mode "$mode_capture" {
+    bindsym c exec swaymsg mode "\$mode_color"
     bindsym s exec swaymsg mode "\$mode_screenshot"
     bindsym r exec swaymsg mode "\$mode_record"
     bindsym m exec swaymsg mode "\$mode_stream"
@@ -109,6 +113,25 @@ mode "$mode_capture" {
     bindsym Escape mode "default"
 }
 bindsym $mod+Shift+c mode "$mode_capture"
+
+#
+# Color Picker Menu:
+#
+set $mode_color Color: (r) rgb, (h) hex, (s) srgb | ->Clipboard: (R) rgb, (H) hex, (S) srgb
+
+mode "$mode_color" {
+    bindsym r exec $pick_color rgb, mode "default"
+    bindsym h exec $pick_color hex, mode "default"
+    bindsym s exec $pick_color srgb, mode "default"
+    bindsym Shift+r exec $pick_color rgb --clipboard, mode "default"
+    bindsym Shift+h exec $pick_color hex --clipboard, mode "default"
+    bindsym Shift+s exec $pick_color srgb --clipboard, mode "default"
+
+    # back to normal
+    bindsym $mod+Shift+c mode "default"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
 
 #
 # Screenshot Menu:
@@ -190,7 +213,7 @@ exec redshift
 # Basics:
 #
     # Start a terminal
-    bindsym $mod+Return exec $term
+    bindsym $mod+Return exec $terminal
 
     # Kill focused window
     bindsym $mod+Shift+q kill

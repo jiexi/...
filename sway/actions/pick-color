@@ -1,0 +1,43 @@
+#!/usr/bin/env sh
+
+set -e
+
+CLIPBOARD=0
+
+# TODO: Mako notification?
+
+for arg do
+  shift
+  if [ "$arg" = "--clipboard" ]; then
+    CLIPBOARD=1
+    continue
+  fi
+  set -- "$@" "$arg"
+done
+
+pixel_colors=$(grim -g "$(slurp -p)" -t ppm - | convert - -format '%[pixel:p{0,0}]' txt:- | tail -n 1)
+pixel_color=""
+
+case "$1" in
+rgb)
+  pixel_color=$(echo "$pixel_colors" | cut -d ' ' -f 2)
+  ;;
+
+hex)
+  pixel_color=$(echo "$pixel_colors" | cut -d ' ' -f 4)
+  ;;
+
+srgb)
+  pixel_color=$(echo "$pixel_colors" | cut -d ' ' -f 6)
+  ;;
+
+*)
+  exit 1
+  ;;
+esac
+
+if [[ $CLIPBOARD -eq 1 ]]; then
+  wl-copy "$pixel_color"
+else
+  echo "$pixel_color"
+fi
