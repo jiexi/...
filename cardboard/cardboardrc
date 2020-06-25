@@ -1,0 +1,46 @@
+#!/bin/sh
+
+alias cutter=$HOME/Downloads/cardboard/build/cutter/cutter
+
+mod=super
+
+cutter config mouse_mod $mod
+
+cutter bind $mod+backspace quit
+cutter bind $mod+return exec termite
+cutter bind $mod+space exec rofi -modi run, drun, window  -show drun
+
+cutter bind $mod+left focus left
+cutter bind $mod+right focus right
+cutter bind $mod+shift+left move -10 0
+cutter bind $mod+shift+right move 10 0
+cutter bind $mod+shift+up move 0 -10
+cutter bind $mod+shift+down move 0 10
+cutter bind $mod+ctrl+left resize -10 0
+cutter bind $mod+ctrl+right resize 10 0
+cutter bind $mod+ctrl+up resize 0 -10
+cutter bind $mod+ctrl+down resize 0 10
+
+cutter bind $mod+h focus left
+cutter bind $mod+l focus right
+cutter bind $mod+shift+h move -10 0
+cutter bind $mod+shift+l move 10 0
+cutter bind $mod+shift+k move 0 -10
+cutter bind $mod+shift+j move 0 10
+cutter bind $mod+ctrl+h resize -10 0
+cutter bind $mod+ctrl+l resize 10 0
+cutter bind $mod+ctrl+k resize 0 -10
+cutter bind $mod+ctrl+j resize 0 10
+
+cutter bind $mod+r cycle_width
+cutter bind $mod+w close
+for i in $(seq 1 6); do
+	cutter bind $mod+$i workspace switch $(( i - 1 ))
+	cutter bind $mod+shift+$i workspace move $(( i - 1 ))
+done
+
+cutter bind $mod+shift+f toggle_floating
+cutter bind $mod+tab focus_cycle
+
+cutter exec swaybg -i ~/.config/sway/wallpaper.jpg
+cutter exec waybar
