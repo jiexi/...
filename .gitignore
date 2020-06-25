@@ -34,10 +34,13 @@ menus/
 monitors.xml*
 nautilus/
 neofetch/
+obs-studio/
 pavucontrol.ini
 paperwm/
 pulse/
+sublime-merge/
 totem/
+truffle/
 user-dirs.*
 vlc/
 yarn/
