@@ -1,40 +1,11 @@
 #!/usr/bin/env sh
 
-# https://github.com/Depau/sway-configs/blob/retrowave/.bin/swaylock-blur
-
-# image_prefix=~/.swaylock.
-# image_ext=".jpg"
-
-# outputs="$(swaymsg -rt get_outputs | jq '.[].name' -r)"
-
-# function get_images_arg {
-#   echo "$outputs" | while read output; do
-#     echo -n "-i $output:${image_prefix}${output}${image_ext} "
-#   done
-# }
-
-# images_arg="$(get_images_arg)"
-
-# echo "$outputs" | parallel \
-#   "grim -t jpeg -q 97 -o {} '${image_prefix}{}${image_ext}';" \
-#   "convert '${image_prefix}{}${image_ext}' -spread 20 '${image_prefix}{}${image_ext}'"
-
-# swaylock $images_arg -f
-
-# sleep 0.5
-
-# echo "$outputs" | while read output; do
-#   rm "${image_prefix}${output}${image_ext}"
-# done
-
-function kill_recent_gluqlo {
-  gluqlo_process=$(pgrep gluqlo | tail -1)
-
-  if [[ ! -z "$gluqlo_process" ]]; then
-    kill $gluqlo_process
-  fi
-}
+swaylock_process=$(pgrep swaylock  | tail -1)
+if [[ ! -z "$swaylock_process" ]]; then
+  exit 0
+fi
 
 # TODO(JL): Grab resolution from swaymsg
-/usr/lib/xscreensaver/gluqlo -ampm -s 0.95 -r 2880x1800 &
-swaylock -c 00000000 ; kill_recent_gluqlo
+# /usr/lib/xscreensaver/gluqlo -ampm -s 1.0 -r 2882x1800 &
+/usr/lib/xscreensaver/gluqlo -ampm -s 0.95 -r 2888x1800 &
+swaylock -c 00000000 ; killall gluqlo
