@@ -17,10 +17,11 @@ set $terminal termite
 ## Launcher
 set $menu 'rofi -modi run, drun, window  -show drun'
 
+## File Explorer
+set $explorer 'nautilus --browser ~'
+
 ## Lockscreen
 set $lock ~/.config/sway/actions/lock-screen
-# NOTE: swayidle before-sleep doesn't actually seen to trigger, so....
-set $sleep ~/.config/sway/actions/lock-screen && systemctl hybrid-sleep
 
 ## Screenshot
 set $screenshot ~/.config/sway/actions/screenshot
@@ -192,6 +193,9 @@ output eDP-1 bg ~/.config/sway/wallpaper.jpg fill
 
     # Start your launcher
     bindsym $mod+Space exec $menu
+
+    # Start a file explorer
+    bindsym $mod+$alt+Space exec $explorer
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
