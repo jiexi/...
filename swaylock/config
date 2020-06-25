@@ -1,6 +1,6 @@
 ignore-empty-password
 
-indicator-radius=25
+indicator-radius=21
 indicator-thickness=7
 
 inside-color=0f0f0f
