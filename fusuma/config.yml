@@ -1,0 +1,58 @@
+tap:
+  # 1:
+  #   command: "echo ----------------tap1----------------------------"
+  # 2:
+  #   command: "echo ----------------tap2----------------------------"
+  # 3:
+  #   command: "echo ----------------tap3----------------------------"
+  4:
+    command: "~/.config/sway/actions/cycle-windows next"
+
+hold:
+  # 1:
+  #   command: "echo ----------------hold1----------------------------"
+  # 2:
+  #   command: "echo ----------------hold2----------------------------"
+  # 3:
+  #   command: "echo ----------------hold3----------------------------"
+  4:
+    command: "~/.config/sway/actions/cycle-windows next"
+  #  command: "echo ----------------hold4----------------------------"
+
+swipe:
+  3:
+    left:
+      command: "xdotool key ctrl+Tab"
+    right:
+      command: "xdotool key ctrl+shift+Tab"
+    up:
+      command: "xdotool key ctrl+shift+t"
+      keypress:
+        LEFTCTRL:
+          command: "xdotool key ctrl+t"
+        # LEFTCTRL+LEFTALT:
+        #   command: "xdotool key ctrl+t"
+    down:
+      command: "xdotool key ctrl+w"
+  4:
+    left:
+      command: "swaymsg workspace next"
+    right:
+      command: "swaymsg workspace prev"
+    # up:
+    #   command: "xdotool key ctrl+alt+Down" # Switch to next workspace
+    # down:
+    #   command: "xdotool key ctrl+alt+Up" # Switch to previous workspace
+
+pinch:
+  in:
+    command: "xdotool key ctrl+plus"
+  out:
+      command: "xdotool key ctrl+minus"
+
+plugin:
+  inputs:
+    libinput_command_input:
+      show-keycodes: true
+      enable-tap: true
+      verbose: true

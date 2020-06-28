@@ -41,6 +41,8 @@ set $pick_color ~/.config/sway/actions/pick-color
 ##  Toggle Statusbar
 set $toggle_waybar ~/.config/sway/actions/toggle-waybar
 
+##  Cycle Windows
+set $cycle_windows ~/.config/sway/actions/cycle-windows
 
 #
 # Gaps:
@@ -264,6 +266,9 @@ exec redshift
     bindsym $mod+Shift+Up move up
     bindsym $mod+Shift+Right move right
 
+    # Cycle Windows
+    bindsym $mod+Tab exec $cycle_windows next
+    bindsym $mod+Shift+Tab exec $cycle_windows prev
 #
 # Workspaces:
 #
@@ -412,7 +417,7 @@ xwayland enable
 ## Macbook Touchpad
 input "1452:610:bcm5974" {
     accel_profile adaptive
-    pointer_accel 0.25
+    pointer_accel 0.33
     scroll_factor 1
     dwt enabled
     tap enabled
@@ -422,7 +427,7 @@ input "1452:610:bcm5974" {
 }
 
 ## Touchpad Gestures
-exec libinput-gestures-setup start
+exec fusuma -d
 
 ## Keyboard
 input type:keyboard {
