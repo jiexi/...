@@ -6,32 +6,33 @@ running=$(ps h -C "$me" | grep -wv $$ | wc -l);
 
 STEP=${2:-3}
 
-prev_vol=$(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
-prev_off=$(amixer get Master | grep -o "off" | head -n 1)
+prev_amixer_result=$(amixer get Master)
+prev_vol=$(echo "$prev_amixer_result" | grep -Po "[0-9]+(?=%)" | tail -1)
+prev_state=$(echo "$prev_amixer_result" | grep -o "off" | head -n 1)
 
-if [[ "$1" == "mute" || "$prev_off" == *"off"* ]]; then
-    echo `amixer set Master toggle` > /dev/null
-fi
+next_amixer_result=""
 
-if [[ "$1" == "down" ]]; then
-    echo `amixer set Master $STEP%-` > /dev/null
+
+if [[ "$1" == "mute" ]]; then
+    next_amixer_result=$(amixer set Master toggle)
+elif [[ "$1" == "down" ]]; then
+    next_amixer_result=$(amixer set Master $STEP%- unmute)
 elif [[ "$1" == "up" ]]; then
-    echo `amixer set Master $STEP%+` > /dev/null
+    next_amixer_result=$(amixer set Master $STEP%+ unmute)
 fi
 
-vol=$(amixer get Master | grep -Po "[0-9]+(?=%)" | tail -1)
-off=$(amixer get Master | grep -o "off" | head -n 1)
+vol=$(echo "$next_amixer_result" | grep -Po "[0-9]+(?=%)" | tail -1)
+state=$(echo "$next_amixer_result" | grep -o "off" | head -n 1)
 
-if [[ "$1" == "mute" && "$off" == *"off"* ]]; then
+if [[ "$state" == *"off"* ]]; then
     level="Mute"
     vol="0"
 else
-    scaled=$(echo "scale=2; $vol / 100.0" | bc)
     level="$vol%"
 fi
 
 ~/.config/sway/actions/notify-progress "Volume $level" "$vol"
 
-if [[ "$prev_vol" -ne "$vol" || ("$prev_off" == *"off"* && "$off" != *"off"* ) ]]; then
+if [[ "$prev_vol" -ne "$vol" || ("$prev_state" == *"off"* && "$state" != *"off"* ) ]]; then
     pacat --file-format=wav ~/.config/sway/sounds/volume.wav &
 fi
