@@ -404,12 +404,10 @@ for_window [app_id="^.*"] inhibit_idle fullscreen
 
 
 #
-# Wayland:
+# X11:
 #
-exec GDK_BACKEND=wayland
-exec CLUTTER_BACKEND=wayland
 xwayland enable
-
+exec "/usr/lib/xdg-desktop-portal -r & /usr/lib/xdg-desktop-portal-wlr"
 
 #
 # Inputs:
