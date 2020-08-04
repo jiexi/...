@@ -1,5 +1,5 @@
 {
-//    "layer": "top", // Waybar at top layer
+        //"layer": "top", // Waybar at top layer
         "height": 26, // Waybar height
         "modules-left": ["sway/workspaces", "sway/mode"],
         "modules-center": ["clock"],
@@ -43,7 +43,7 @@
             },
             "format": "{capacity}% 󰂑",
             //"format-unknown": "{capacity}% 󰂑",
-            //"format-full": "{capacity}% 󰁹",
+            "format-full": "{capacity}% 󰁹",
             //"format-not-charging": "{capacity}% 󰁹",
             "format-discharging-100": "{capacity}% 󰁹",
             "format-discharging-90": "{capacity}% 󰂂",
@@ -70,24 +70,32 @@
             //"format-icons": ["󰂎", "󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
         },
         "network": {
-            "format": "{ifname}",
+            "tooltip": false,
+            "states": {
+                "100": 100,
+                "80": 80,
+                "60": 60,
+                "40": 40,
+                "20": 20,
+                "0": 0
+            },
+            "format": "{signalStrength}% {icon}",
+            //"format-wifi": "{essid} 󰖩",
             "format-ethernet": "󰈀",
-            "format-wifi": "{essid} 󰖩",
             "format-linked": "󰌚",
-            "format-disconnected": "󰌙"
+            //"format-disconnected": "󰌙",
+            "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
             // "on-click": "notify-send -t 2000 \"Connected to $(iw dev wlan0 link | perl -lne 'print $1 if /SSID: (.*)/')\"",
             // "on-click-right": "notify-send -t 2000 \"Connected to $(iw dev wlan0 link | perl -lne 'print $1 if /SSID: (.*)/')\""
         },
         "pulseaudio": {
             "tooltip": false,
-            "format": "{icon}",
+            "format": "{volume}% {icon}",
+            // "format-alt": "{volume}% {icon}",
             "format-bluetooth": "{icon}󰂰",
             "format-muted": "󰝟",
-            "on-right-click": "pavucontrol",
-            "format-alt": "{volume}% {icon}",
             "format-icons": {
                 "headphone": "󰋋",
-                //"speaker": "󰓃",
                 "hdmi": "󰔂",
                 "hands-free": "󰹆",
                 "headset": "󰋎",
@@ -95,8 +103,12 @@
                 "portable": "󰖃",
                 "car": "󰄋",
                 "hifi": "󰗅",
-                "default": ["󰕿","󰖀","󱄠"]
-            }
+                //"speaker": "󰓃",
+                "default": ["󰕿","󰖀","󰕾"]
+            },
+            // "on-click": "toggle mute??",
+            "on-click-right": "pavucontrol",
+            "scroll-step": 0.5
         },
         "tray": {
             "icon-size": 20,
