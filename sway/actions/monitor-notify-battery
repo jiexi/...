@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+LOW_BATTERY_PERCENTAGE=15
+EXPIRE_TIME="0"
+BATTERY=$(upower -e | grep 'BAT')
+
+NOTIFICATION_ID=0
+while :
+do
+    BATTERY_PERCENTAGE=$(upower -i $BATTERY | grep percentage | awk '{ print $2 }' | sed s/'%'/''/g)
+    CABLE=$(upower -d | grep -n2 line-power | grep online | awk '{ print $3 }')
+
+    if [[ "$BATTERY_PERCENTAGE" -le $LOW_BATTERY_PERCENTAGE && $CABLE = "no" ]]; then
+      if [[ $NOTIFICATION_ID -eq 0 ]]; then
+        title="Low Battery"
+        # TODO(JL): Replace this with timeleft until battery out?..
+        message="Your machine will sleep soon unless plugged into a power outlet."
+        NOTIFICATION_ID=$(notify-send.sh --expire-time=$EXPIRE_TIME --urgency=critical --print-id "$title" "$message")
+
+        # notify-send --urgency=critical "WARNING: Battery is about to die"  "Plug in the power cable"
+        # play /usr/share/sounds/KDE-Sys-Warning.ogg &> /dev/null
+      fi
+    elif [[ $NOTIFICATION_ID -ne 0 ]]; then
+      notify-send.sh --close=$NOTIFICATION_ID
+      NOTIFICATION_ID=0
+    fi
+
+sleep 60
+
+done

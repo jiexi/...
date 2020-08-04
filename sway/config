@@ -44,6 +44,9 @@ set $toggle_waybar ~/.config/sway/actions/toggle-waybar
 ##  Cycle Windows
 set $cycle_windows ~/.config/sway/actions/cycle-windows
 
+## Battery Monitor
+set $battery_monitor ~/.config/sway/actions/monitor-notify-battery
+
 #
 # Gaps:
 #
@@ -205,7 +208,6 @@ mode "$mode_stream" {
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 output eDP-1 scale 1
 output eDP-1 bg ~/.config/sway/wallpaper.jpg fill
-#exec GDK_DPI_SCALE=1.5
 
 ## Blue light filter
 exec redshift
@@ -385,6 +387,9 @@ bindsym $mod+Shift+0 mode $mode_power
 ## Lid Controls
 bindswitch lid:on exec ~/.config/sway/actions/lid-close
 bindswitch lid:off exec ~/.config/sway/actions/lid-open
+
+## Notifications
+exec $battery_monitor
 
 
 ## Idle configuration:
