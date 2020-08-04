@@ -2,6 +2,8 @@
 
 set -e
 
+TEMP_FILE="/tmp/pick-color"
+EXPIRE_TIME="10000"
 CLIPBOARD=0
 
 # TODO: Mako notification?
@@ -36,8 +38,10 @@ srgb)
   ;;
 esac
 
+
 if [[ $CLIPBOARD -eq 1 ]]; then
   wl-copy "$pixel_color"
 else
+  notify-send.sh --expire-time=$EXPIRE_TIME --urgency=critical --replace-file=TEMP_FILE "Color Picker" "$1: $pixel_color"
   echo "$pixel_color"
 fi
