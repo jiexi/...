@@ -2,6 +2,11 @@
 
 set -e
 
+if [[ "$(pgrep wlstreamer)" ]]; then
+  killall -s SIGINT wlstreamer
+  exit 1
+fi
+
 if [[ "$(pgrep wf-recorder)" ]]; then
   killall -s SIGINT wf-recorder
   exit 1

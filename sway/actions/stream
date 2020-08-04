@@ -9,11 +9,12 @@ LOOPBACK=/dev/video1
 
 if ! lsmod | grep v4l2loopback > /dev/null; then
   # exclusive_caps=1
-	sudo modprobe v4l2loopback  video_nr=1 card_label=v4l2loopback
+	sudo modprobe v4l2loopback video_nr=1 card_label=v4l2loopback
 fi
 
 ~/.config/sway/actions/record-stop
 
-wf-recorder --muxer=v4l2 --codec=rawvideo --file="$LOOPBACK" -x yuv420p
+# wf-recorder --muxer=v4l2 --codec=rawvideo --file="$LOOPBACK" -x yuv420p
+wlstreamer --output $LOOPBACK || true
 
 pacat --file-format=wav ~/.config/sway/sounds/screenshot.wav
