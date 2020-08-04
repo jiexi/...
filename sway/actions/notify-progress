@@ -23,7 +23,7 @@ print_times () {
 }
 
 notify () {
-    return $(notify-send.sh --expire-time=$EXPIRE_TIME --replace-file=$1 "$2" "$3")
+    return $(notify-send.sh --expire-time=$EXPIRE_TIME --urgency=critical --replace-file=$1 "$2" "$3")
 }
 
 # Args
