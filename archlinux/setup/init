@@ -75,7 +75,7 @@ echo "Arch doesn't have a recovery environment like Windows does"
 echo "We can write this Arch boostrap environment to your drive"
 echo "NOTE: This will shrink the system partition by 1000MB"
 CREATE_RECOVERY="nil"
-while [ "$CREATE_RECOVERY" != "yes" && "$CREATE_RECOVERY" != "no" ]; do
+while [ "$CREATE_RECOVERY" != "yes" ] && [ "$CREATE_RECOVERY" != "no" ]; do
   ask CREATE_RECOVERY "Create Recovery Environment? (yes/no)"
 done
 
@@ -89,12 +89,12 @@ echo "If $DRIVE is an SSD that fully supports TRIM commands"
 echo "and you are aware of the security implications then"
 echo "you can enable TRIM for performance benefits"
 ENABLE_TRIM="nil"
-while [ "$ENABLE_TRIM" != "yes" && "$ENABLE_TRIM" != "no" ]; do
+while [ "$ENABLE_TRIM" != "yes" ] && [ "$ENABLE_TRIM" != "no" ]; do
   ask ENABLE_TRIM "Enable TRIM on $DRIVE? (yes/no)"
 done
 if [ "$ENABLE_TRIM" == "yes" ]; then
   echo "Drive will have TRIM enabled"
-  TRIM_FLAG = ":allow-discards"
+  TRIM_FLAG=":allow-discards"
 else
   echo "Drive will have TRIM disabled"
 fi
@@ -102,11 +102,11 @@ fi
 
 ask SYSTEM_SIZE "System Partition size in MB (e.g. 4000) (leave empty for max)"
 if [ ! -z "$SYSTEM_SIZE"]; then
-  SYSTEM_SIZE = $(($SYSTEM_SIZE - 1000)
-  SYSTEM_SIZE = "+$(echo "$SYSTEM_SIZE")M"
+  SYSTEM_SIZE=$(($SYSTEM_SIZE - 1000)
+  SYSTEM_SIZE="+$(echo "$SYSTEM_SIZE")M"
 else
   if [ "$CREATE_RECOVERY" == "yes" ]; then
-    SYSTEM_SIZE = "-1000M"
+    SYSTEM_SIZE="-1000M"
   fi
 fi
 echo "Using $SYSTEM_SIZE with fdisk for System Partition"
@@ -149,10 +149,10 @@ PARTITIONS=($(lsblk -pln -o name "$DRIVE"))
 
 EFI_PARTITION=${PARTITIONS[1]}
 if [ "$CREATE_RECOVERY" == "yes" ]; then
-  RECOVERY_PARTITION = ${PARTITIONS[-1]}
-  SYSTEM_PARTITION = ${PARTITIONS[-2]}
+  RECOVERY_PARTITION=${PARTITIONS[-1]}
+  SYSTEM_PARTITION=${PARTITIONS[-2]}
 else
-  SYSTEM_PARTITION = ${PARTITIONS[-1]}
+  SYSTEM_PARTITION=${PARTITIONS[-1]}
 fi
 
 section "FORMATTING & MOUNTING DRIVE"
