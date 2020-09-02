@@ -58,7 +58,7 @@ if [ $PARTITION_COUNT -gt 1 ]; then
   echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
   echo "Existing EFI Partition WILL BE OVERWRITTEN!!!"
   echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-  confirm "Continue with partitioning?"
+  confirm "Continue with this drive?"
   echo "This may leave your machine in a broken state."
   confirm "Are you really sure you want to continue?"
 else
@@ -67,7 +67,7 @@ else
   echo "New GPT Partition table will be created"
   echo "New EFI Partition will be created"
   echo "New Partition will be created for Arch"
-  confirm "Continue with partitioning?"
+  confirm "Continue with this drive?"
 fi
 
 # TODO(JL): DRY THIS
@@ -110,10 +110,8 @@ else
   fi
 fi
 echo "Using $SYSTEM_SIZE with fdisk for System Partition"
-echo "About to apply partitions. Last check"
-confirm "Continue with partitioning?"
 
-{
+function fdisk_partition_drives {
   if [ $PARTITION_COUNT -le 1 ]; then
     echo g     # make gpt partition table
 
@@ -140,7 +138,14 @@ confirm "Continue with partitioning?"
   fi
 
   echo w       # write
-} | fdisk "$DRIVE"
+}
+
+echo "Running fdisk with these commands:"
+fdisk_partition_drives
+echo "Final Check."
+confirm "Continue with partitioning?"
+
+fdisk_partition_drives | fdisk "$DRIVE"
 fdisk -l
 echo "Drive has been partitioned"
 confirm "Continue with these partitions?"
