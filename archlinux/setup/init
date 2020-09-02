@@ -101,7 +101,7 @@ fi
 
 
 ask SYSTEM_SIZE "System Partition size in MB (e.g. 4000) (leave empty for max)"
-if [[ "$SYSTEM_SIZE" ]]; then
+if [[ $(echo "$SYSTEM_SIZE") ]]; then
   SYSTEM_SIZE=$($SYSTEM_SIZE - 1000)
   SYSTEM_SIZE="+$(echo "$SYSTEM_SIZE")M"
 else
