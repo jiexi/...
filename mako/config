@@ -1,13 +1,20 @@
 layer=overlay
-background-color=#eeeeeeee
-border-color=#282a36
-border-radius=5
-border-size=0
 icons=1
-font=pango:SFNS Display 14px
-format=<span weight="bold" rise="10000">%s</span>\n%b
 max-icon-size=50
-padding=15
-text-color=#282a36
-width=410
-default-timeout=5000
+font=pango:SF Pro Display 14px
+format=<b>%s</b>\n%b
+
+width=400
+padding=10
+margin=9
+border-size=3
+border-radius=3
+default-timeout=7500
+
+background-color=#EAEDEE
+# border-color=#d26273
+text-color=#585858
+
+[urgency=high]
+# text-color=#CB4B16
+border-color=#d26273

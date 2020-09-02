@@ -1,0 +1,25 @@
+---
+outputMode: active
+scale: 2
+background:
+  red: 0.0
+  green: 0.0
+  blue: 0.0
+  opacity: 0.9
+widget:
+  margin:
+    margins:
+      - 20
+      - 20
+      - 20
+      - 20
+    widget:
+      verticalLayout:
+        - calendar:
+            font_primary: ~
+            font_secondary: ~
+            font_size: 24.0
+            sections: 3
+fonts:
+  mono: mono
+  sans: sans

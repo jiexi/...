@@ -51,12 +51,12 @@ set $battery_monitor ~/.config/sway/actions/monitor-notify-battery
 # Gaps:
 #
 
-gaps inner 10
-bindsym $mod+Shift+i gaps inner current minus 10
-bindsym $mod+i gaps inner current plus 10
+gaps inner 5
+bindsym $mod+Shift+i gaps inner current minus 5
+bindsym $mod+i gaps inner current plus 5
 gaps outer 0
-bindsym $mod+Shift+o gaps outer current minus 10
-bindsym $mod+o gaps outer current plus 10
+bindsym $mod+Shift+o gaps outer current minus 5
+bindsym $mod+o gaps outer current plus 5
 
 
 #
@@ -207,7 +207,8 @@ mode "$mode_stream" {
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
 output eDP-1 scale 1
-output eDP-1 bg ~/.config/sway/wallpaper.jpg fill
+#output eDP-1 bg ~/.config/sway/wallpaper.jpg fill
+output eDP-1 bg ~/Downloads/fuji.jpg fill
 
 ## Blue light filter
 exec redshift
@@ -391,7 +392,6 @@ bindswitch lid:off exec ~/.config/sway/actions/lid-open
 ## Notifications
 exec $battery_monitor
 
-
 ## Idle configuration:
 exec swayidle -w \
      timeout 900 '$lock' \
@@ -458,5 +458,12 @@ exec mako
 focus_follows_mouse no
 focus_wrapping false
 focus_on_window_activation focus
+
+#exec_always flashfocus
+
+#
+# Appearance:
+#
+
 
 include @sysconfdir@/sway/config.d/*
