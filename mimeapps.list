@@ -3,6 +3,10 @@ text/html=google-chrome.desktop
 x-scheme-handler/webcal=google-chrome.desktop
 x-scheme-handler/mailto=google-chrome.desktop
 x-scheme-handler/postman=Postman.desktop
+x-scheme-handler/gitkraken=GitKraken.desktop
 
 [Added Associations]
 video/mp4=vlc.desktop;
+video/x-matroska=vlc.desktop;
+application/pdf=org.gnome.Evince.desktop;
+image/png=org.gnome.eog.desktop;

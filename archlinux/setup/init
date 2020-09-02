@@ -48,15 +48,15 @@ confirm "Continue with this mirror list?"
 section "PARTITIONING DRIVE"
 fdisk -l
 ask DRIVE "Select a drive"
-PARITION_COUNT=$(lsblk -pln -io name "$DRIVE" | wc -l)
+PARTITION_COUNT=$(lsblk -pln -io name "$DRIVE" | wc -l)
 # TODO(JL): DRY this condition
-if [ "$PARITION_COUNT" -gt 1 ]; then
+if [ $PARTITION_COUNT -gt 1 ]; then
   echo "Drive is already partitioned"
   confirm "Is this correct?"
   echo "Existing Partition table will be used"
   echo "New Partition will be created for Arch"
   echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-  echo "Existing EFI Parition WILL BE OVERWRITTEN!!!"
+  echo "Existing EFI Partition WILL BE OVERWRITTEN!!!"
   echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
   confirm "Continue with partitioning?"
   echo "This may leave your machine in a broken state."
@@ -114,7 +114,7 @@ echo "About to apply partitions. Last check"
 confirm "Continue with partitioning?"
 
 {
-  if [ "$PARITION_COUNT" -le 1 ]; then
+  if [ $PARTITION_COUNT -le 1 ]; then
     echo g     # make gpt partition table
 
     echo n     # Add new partition (/boot)
@@ -133,9 +133,9 @@ confirm "Continue with partitioning?"
   echo "$SYSTEM_SIZE"
 
   if [ "$CREATE_RECOVERY" == "yes" ]; then
-    echo n     # Add new partition (/boot)
+    echo n     # Add new partition (recovery)
     echo       # (default 1)
-    echo       # (default 2048)
+    echo       # (default)
     echo "+1000M"
   fi
 
