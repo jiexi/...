@@ -143,10 +143,9 @@ function fdisk_partition_drives {
   fi
 }
 
-echo "Running fdisk with these commands:"
-fdisk_partition_drives
-
 if [[ $(fdisk_partition_drives) ]]; then
+  echo "fdisk will be run with commands:"
+  fdisk_partition_drives
   echo "Drive will be modified"
   confirm "Continue with partitioning?"
   fdisk_partition_drives | fdisk "$DRIVE"
@@ -158,7 +157,6 @@ fi
 
 
 section "FORMATTING & MOUNTING DRIVE"
-fdisk -l "$DRIVE"
 PARTITIONS=($(lsblk -pln -o name "$DRIVE"))
 EFI_PARTITION=${PARTITIONS[1]}
 if [ "$CREATE_RECOVERY" == "yes" ]; then
@@ -182,12 +180,12 @@ function input_partition_selection {
 }
 
 while :; do
+  fdisk -l "$DRIVE"
   print_partition_selection
   MODIFY_PARTITION_SELECTION="nil"
   askyesno MODIFY_PARTITION_SELECTION "Modify these selections?"
   if [ "$MODIFY_PARTITION_SELECTION" == "yes" ]; then
     input_partition_selection
-    echo
   else
     break
   fi
