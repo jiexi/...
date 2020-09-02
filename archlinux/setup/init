@@ -198,7 +198,7 @@ confirm "Continue with formatting?"
 cryptsetup luksFormat --type luks "$SYSTEM_PARTITION"
 cryptsetup luksOpen "$SYSTEM_PARTITION" root
 mkfs.vfat -F32 "$EFI_PARTITION"
-mkfs.ext4 -L arch-root -F /dev/mapper/root
+mkfs.ext4 -F /dev/mapper/root
 mount /dev/mapper/root /mnt
 mkdir /mnt/boot
 mount "$EFI_PARTITION" /mnt/boot
@@ -235,14 +235,16 @@ else
   echo "Drive will have TRIM disabled"
 fi
 
+PARTUUID=$(lsblk -dno PARTUUID $SYSTEM_PARTITION)
 efibootmgr \
   --disk "$DRIVE" \
   --create \
   --label "Arch Linux" \
   --loader /vmlinuz-linux \
-  --unicode "cryptdevice=LABEL=arch-root:root$TRIM_FLAG root=/dev/mapper/root rw initrd=\\initramfs-linux.img" \
+  --unicode "cryptdevice=PARTUUID=$PARTUUID:root$TRIM_FLAG root=/dev/mapper/root rw initrd=\\initramfs-linux.img" \
   --verbose \
   ;
+echo "Entry created for $SYSTEM_PARTITION with PARTUUID $PARTUUID"
 
 section "CLEANING UP"
 cleanup
