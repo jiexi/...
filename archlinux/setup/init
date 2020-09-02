@@ -48,8 +48,7 @@ confirm "Continue with this mirror list?"
 section "PARTITIONING DRIVE"
 fdisk -l
 ask DRIVE "Select a drive"
-PARTITIONS=$(lsblk -pln -io name "$DRIVE")
-PARITION_COUNT=$(echo "$PARTITIONS" | wc -l)
+PARITION_COUNT=$(lsblk -pln -io name "$DRIVE" | wc -l)
 # TODO(JL): DRY this condition
 if [ "$PARITION_COUNT" -gt 1 ]; then
   echo "Drive is already partitioned"
