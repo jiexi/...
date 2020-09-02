@@ -2,6 +2,13 @@
 
 set -e
 
+function cleanup {
+  umount /mnt/boot
+  umount /mnt
+  cryptsetup close main
+}
+trap cleanup EXIT
+
 function section {
   echo
   echo
@@ -167,7 +174,6 @@ else
 fi
 
 function print_partition_selection {
-  echo "Using Partitions"
   echo "EFI Partition $EFI_PARTITION"
   echo "System Partition $SYSTEM_PARTITION"
   echo "Recovery Partition $RECOVERY_PARTITION"
@@ -243,8 +249,11 @@ efibootmgr \
   ;
 
 section "CLEANING UP"
-umount /mnt/boot
-umount /mnt
-cryptsetup close main
+cleanup
+REBOOT_MACHINE="nil"
+askyesno REBOOT_MACHINE "Reboot?"
+if [ "$REBOOT_MACHINE" == "yes" ]; then
+  reboot
+fi
 
 # TODO(JL): Swapfile for hibernation. Actually create recovery environment
