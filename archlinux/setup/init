@@ -20,7 +20,7 @@ function ask {
 function askyesno {
   AFFIRMATIVE=${3:-yes}
   NEGATIVE=${4:-no}
-  while [ "$(echo $1)" != "$AFFIRMATIVE" ] && [ "$(echo $1)" != "$NEGATIVE" ]; do
+  while [ "$(!1)" != "$AFFIRMATIVE" ] && [ "$(!1)" != "$NEGATIVE" ]; do
     ask $1 "$2 ($AFFIRMATIVE/$NEGATIVE)"
   done
 }
