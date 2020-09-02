@@ -78,7 +78,6 @@ CREATE_RECOVERY="nil"
 while [ "$CREATE_RECOVERY" != "yes" ] && [ "$CREATE_RECOVERY" != "no" ]; do
   ask CREATE_RECOVERY "Create Recovery Environment? (yes/no)"
 done
-
 if [ "$CREATE_RECOVERY" == "yes" ]; then
   echo "Recovery Environment will be created"
 else
@@ -142,13 +141,26 @@ function fdisk_partition_drives {
 
 echo "Running fdisk with these commands:"
 fdisk_partition_drives
-echo "Final Check."
-confirm "Continue with partitioning?"
 
-fdisk_partition_drives | fdisk "$DRIVE"
-fdisk -l
-echo "Drive has been partitioned"
-confirm "Continue with these partitions?"
+SKIP_PARTITIONING="nil"
+while [ "$SKIP_PARTITIONING" != "YES, I KNOW WHAT I AM DOING" ] && [ "$SKIP_PARTITIONING" != "no" ]; do
+  ask SKIP_PARTITIONING "Skip fdisk. Are partitions already setup? (YES, I KNOW WHAT I AM DOING/no)"
+done
+if [ "$SKIP_PARTITIONING" == "YES, I KNOW WHAT I AM DOING" ]; then
+  echo "Skipping Partitioning"
+else
+  echo "Drive will be modified. Final Check."
+  confirm "Continue with partitioning?"
+
+  fdisk_partition_drives | fdisk "$DRIVE"
+  fdisk -l
+  echo
+  echo
+  echo
+  echo "Drive has been partitioned"
+  confirm "Continue with these partitions?"
+fi
+
 
 PARTITIONS=($(lsblk -pln -o name "$DRIVE"))
 
@@ -159,6 +171,11 @@ if [ "$CREATE_RECOVERY" == "yes" ]; then
 else
   SYSTEM_PARTITION=${PARTITIONS[-1]}
 fi
+
+echo "EFI Partition: $EFI_PARTITION"
+echo "System Partition: $SYSTEM_PARTITION"
+echo "Recovery Partition: $RECOVERY_PARTITION"
+confirm "Continue with these partitions?"
 
 section "FORMATTING & MOUNTING DRIVE"
 cryptsetup luksFormat --type luks "$SYSTEM_PARTITION"
@@ -181,12 +198,12 @@ pacstrap /mnt base linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "/var/swap none swap defaults 0 0" >> /mnt/etc/fstab
 
-section "KICKING OFF CHROOT SCRIPT"
+section "STARTING CHROOT SCRIPT"
 mv chroot /mnt/chroot
 arch-chroot /mnt bash /chroot
 rm /mnt/chroot
 
-section "CREATING EFISTUB BOOT ENTRY"
+section "CREATING BOOT ENTRY"
 PARTUUID=$(lsblk -dno PARTUUID $SYSTEM_PARTITION)
 efibootmgr \
   --disk "$DRIVE" \
