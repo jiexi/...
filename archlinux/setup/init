@@ -219,7 +219,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 echo "/var/swap none swap defaults 0 0" >> /mnt/etc/fstab
 
 
-section "STARTING CHROOT SCRIPT"
+section "RUNNING CHROOT SCRIPT"
 mv chroot /mnt/chroot
 arch-chroot /mnt bash /chroot
 rm /mnt/chroot
@@ -250,6 +250,7 @@ efibootmgr \
 
 section "CLEANING UP"
 cleanup
+echo "Done"
 REBOOT_MACHINE="nil"
 askyesno REBOOT_MACHINE "Reboot?"
 if [ "$REBOOT_MACHINE" == "yes" ]; then

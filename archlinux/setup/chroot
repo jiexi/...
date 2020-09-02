@@ -32,10 +32,10 @@ section "ADDING ENCRYPT TO MKINITCPIO"
 # https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Configuring_mkinitcpio
 # TODO(JL): Make this with insert automated
 echo "Manual step"
-echo "Vim will be opened on /etc/mkinitcpio.conf"
-echo "Ensure `keyboard`, `keymap`, and `encrypt` exist in HOOKS()"
+echo "Vi will be opened on /etc/mkinitcpio.conf"
+echo "Ensure 'keyboard', 'keymap', and 'encrypt' exist in HOOKS()"
 ask TMP "Press any key to continue"
-vim /etc/mkinitcpio.conf
+vi /etc/mkinitcpio.conf
 mkinitcpio -p linux
 
 section "SETTING LOCALE"
