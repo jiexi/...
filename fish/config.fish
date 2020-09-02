@@ -18,6 +18,12 @@ alias config "cd ~/.config"
 alias dotfiles "cd ~/.config"
 alias reload "source ~/.config/fish/config.fish"
 
+# sudo
+alias please "sudo"
+
+# fuck
+thefuck --alias | source
+
 # cd
 alias ..  "cd .."
 alias ... "cd ../.."
