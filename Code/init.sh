@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 code --install-extension johnpapa.vscode-peacock
 code --install-extension JuanBlanco.solidity
-code --install-extension karigari.chat
+code --install-extension kumar-harsh.graphql-for-vscode
 code --install-extension ms-azuretools.vscode-docker
 code --install-extension ms-vsliveshare.vsliveshare
 code --install-extension ms-vsliveshare.vsliveshare-audio
