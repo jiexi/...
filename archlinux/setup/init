@@ -147,7 +147,12 @@ while [ "$SKIP_PARTITIONING" != "YES, I KNOW WHAT I AM DOING" ] && [ "$SKIP_PART
   ask SKIP_PARTITIONING "Skip fdisk. Are partitions already setup? (YES, I KNOW WHAT I AM DOING/no)"
 done
 if [ "$SKIP_PARTITIONING" == "YES, I KNOW WHAT I AM DOING" ]; then
-  echo "Skipping Partitioning"
+  fdisk -l
+  echo
+  echo
+  echo
+  echo "Partitioning was skipped"
+  confirm "Continue with these partitions?"
 else
   echo "Drive will be modified. Final Check."
   confirm "Continue with partitioning?"
