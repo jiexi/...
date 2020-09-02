@@ -29,6 +29,7 @@ pacman -S \
   ;
 
 section "ADDING ENCRYPT TO MKINITCPIO"
+# TODO(JL): MENTION WTF TO ADD HERE... AND THEN CONFIRM LOOP
 vi /etc/mkinitcpio.conf
 mkinitcpio -p linux
 
@@ -40,6 +41,8 @@ export LANG=en_US.UTF-8
 ln -f -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
 ask HOSTNAME "Hostname"
 echo "$HOSTNAME" > /etc/hostname
+
+# TODO(JL): Add /etc/hosts?
 
 section "SETTING ROOT PASSWORD"
 passwd

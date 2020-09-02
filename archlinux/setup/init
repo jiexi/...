@@ -17,27 +17,22 @@ function ask {
   read $1
 }
 
-function confirm {
-  QUESTION="$1"
-  CONTINUE="nil"
-  while [ "$CONTINUE" != "yes" ]; do
-    ask CONTINUE "$1 (yes/no)"
-    if [ "$CONTINUE" == "no" ]; then
-      exit 1
-    fi
+function askyesno {
+  AFFIRMATIVE=${3:-yes}
+  NEGATIVE=${4:-no}
+  while [ "$1" != "$AFFIRMATIVE" ] && [ "$1" != "$NEGATIVE" ]; do
+    ask $1 "$2 ($AFFIRMATIVE/$NEGATIVE)"
   done
 }
 
 function confirm {
-  QUESTION="$1"
   CONTINUE="nil"
-  while [ "$CONTINUE" != "yes" ]; do
-    ask CONTINUE "$1 (yes/no)"
-    if [ "$CONTINUE" == "no" ]; then
-      exit 1
-    fi
-  done
+  askyesno CONTINUE "$1"
+  if [ "$CONTINUE" == "no" ]; then
+    exit 1
+  fi
 }
+
 
 section "GENERATING AND UPDATING MIRROR LIST"
 curl "https://www.archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4" | sed -E 's/^#//' > /etc/pacman.d/mirrorlist
@@ -48,124 +43,123 @@ confirm "Continue with this mirror list?"
 section "PARTITIONING DRIVE"
 fdisk -l
 ask DRIVE "Select a drive"
+CREATE_GPT="no"
+CREATE_EFI="no"
+CREATE_SYSTEM="no"
+CREATE_RECOVERY="nil"
 PARTITION_COUNT=$(lsblk -pln -io name "$DRIVE" | wc -l)
-# TODO(JL): DRY this condition
 if [ $PARTITION_COUNT -gt 1 ]; then
   echo "Drive is already partitioned"
   confirm "Is this correct?"
-  echo "Existing Partition table will be used"
-  echo "New Partition will be created for Arch"
-  echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-  echo "Existing EFI Partition WILL BE OVERWRITTEN!!!"
-  echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-  confirm "Continue with this drive?"
-  echo "This may leave your machine in a broken state."
-  confirm "Are you really sure you want to continue?"
+  CREATE_GPT="no"
+  CREATE_EFI="no"
+  EXISTS_SYSTEM_PARTITION="nil"
+  askyesno EXISTS_SYSTEM_PARTITION "Does a Partition for Arch already exist?"
+  if [ "$EXISTS_SYSTEM_PARTITION" == "no" ]; then
+    CREATE_SYSTEM="yes"
+  else
+    CREATE_SYSTEM="no"
+  fi
 else
   echo "Drive is not partitioned"
   confirm "Is this correct?"
-  echo "New GPT Partition table will be created"
-  echo "New EFI Partition will be created"
-  echo "New Partition will be created for Arch"
-  confirm "Continue with this drive?"
+  CREATE_GPT="yes"
+  CREATE_EFI="yes"
+  CREATE_SYSTEM="yes"
 fi
 
-# TODO(JL): DRY THIS
-echo "Arch doesn't have a recovery environment like Windows does"
-echo "We can write this Arch boostrap environment to your drive"
-echo "NOTE: This will shrink the system partition by 1000MB"
-CREATE_RECOVERY="nil"
-while [ "$CREATE_RECOVERY" != "yes" ] && [ "$CREATE_RECOVERY" != "no" ]; do
-  ask CREATE_RECOVERY "Create Recovery Environment? (yes/no)"
-done
+if [ "$CREATE_GPT" == "yes"]; then
+  echo "New GPT Partition table will be created"
+else
+  echo "Existing Partition table will be used"
+fi
+
+if [ "$CREATE_EFI" == "yes"]; then
+  echo "New EFI Partition will be created"
+else
+  echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+  echo "Existing EFI Partition will be used"
+  echo "This may leave your machine in a broken state!"
+  echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+fi
+
+if [ "$CREATE_SYSTEM" == "yes"]; then
+  echo "New System Partition will be created"
+  ask SYSTEM_SIZE "System Partition size in MB (leave empty for max)"
+  echo
+  echo "Arch doesn't have a recovery environment like Windows does"
+  echo "We can write this Arch boostrap environment to your drive"
+  echo "NOTE: This will shrink the system partition by 1000MB"
+  askyesno CREATE_RECOVERY "Create Recovery Environment?"
+  if [[ $(echo "$SYSTEM_SIZE") ]]; then
+    SYSTEM_SIZE=$(expr $SYSTEM_SIZE - 1000)
+    SYSTEM_SIZE="+$(echo "$SYSTEM_SIZE")M"
+  else
+    if [ "$CREATE_RECOVERY" == "yes" ]; then
+      SYSTEM_SIZE="-1000M"
+    fi
+  fi
+else
+  echo "Existing System Partition will be used"
+fi
+
 if [ "$CREATE_RECOVERY" == "yes" ]; then
   echo "Recovery Environment will be created"
 else
   echo "Skipping Recovery Environment"
 fi
 
-echo "If $DRIVE is an SSD that fully supports TRIM commands"
-echo "and you are aware of the security implications then"
-echo "you can enable TRIM for performance benefits"
-ENABLE_TRIM="nil"
-while [ "$ENABLE_TRIM" != "yes" ] && [ "$ENABLE_TRIM" != "no" ]; do
-  ask ENABLE_TRIM "Enable TRIM on $DRIVE? (yes/no)"
-done
-if [ "$ENABLE_TRIM" == "yes" ]; then
-  echo "Drive will have TRIM enabled"
-  TRIM_FLAG=":allow-discards"
-else
-  echo "Drive will have TRIM disabled"
-fi
-
-
-ask SYSTEM_SIZE "System Partition size in MB (e.g. 4000) (leave empty for max)"
-if [[ $(echo "$SYSTEM_SIZE") ]]; then
-  SYSTEM_SIZE=$(expr $SYSTEM_SIZE - 1000)
-  SYSTEM_SIZE="+$(echo "$SYSTEM_SIZE")M"
-else
-  if [ "$CREATE_RECOVERY" == "yes" ]; then
-    SYSTEM_SIZE="-1000M"
-  fi
-fi
-echo "Using $SYSTEM_SIZE with fdisk for System Partition"
-
 function fdisk_partition_drives {
-  if [ $PARTITION_COUNT -le 1 ]; then
+  if [ "$CREATE_GPT" == "yes" ]; then
     echo g     # make gpt partition table
-
+  fi
+  if [ "$CREATE_EFI" == "yes" ]; then
     echo n     # Add new partition (/boot)
     echo       # (default 1)
     echo       # (default 2048)
     echo "+512M"
-
     echo t     # Change partition type
     echo 1     # Partition number 1 (/boot)
     echo 1     # EFI System
   fi
-
-  echo n       # Add new partition (linux)
-  echo         # (default 2)
-  echo         # (default)
-  echo "$SYSTEM_SIZE"
-
+  if [ "$CREATE_SYSTEM" == "yes" ]; then
+    echo n     # Add new partition (linux)
+    echo       # (default 2)
+    echo       # (default)
+    echo "$SYSTEM_SIZE"
+  fi
   if [ "$CREATE_RECOVERY" == "yes" ]; then
     echo n     # Add new partition (recovery)
-    echo       # (default 1)
+    echo       # (default 3)
     echo       # (default)
     echo "+1000M"
   fi
 
-  echo w       # write
+  if [ "$CREATE_GPT" == "yes" ] || \
+     [ "$CREATE_EFI" == "yes" ] || \
+     [ "$CREATE_SYSTEM" == "yes" ] || \
+     [ "$CREATE_RECOVERY" == "yes" ]; then
+    echo w     # write
+  fi
 }
 
 echo "Running fdisk with these commands:"
 fdisk_partition_drives
 
-SKIP_PARTITIONING="nil"
-while [ "$SKIP_PARTITIONING" != "YES, I KNOW WHAT I AM DOING" ] && [ "$SKIP_PARTITIONING" != "no" ]; do
-  ask SKIP_PARTITIONING "Were partitions already setup previously? Skip fdisk? (YES, I KNOW WHAT I AM DOING/no)"
-done
-if [ "$SKIP_PARTITIONING" == "YES, I KNOW WHAT I AM DOING" ]; then
-  fdisk -l
-  echo
-  echo
-  echo
-  echo "Partitioning was skipped"
-else
+if [[ $(fdisk_partition_drives) ]]; then
   echo "Drive will be modified. Final Check."
   confirm "Continue with partitioning?"
-
   fdisk_partition_drives | fdisk "$DRIVE"
-  fdisk -l
-  echo
-  echo
-  echo
-  echo "Drive has been partitioned"
+  echo "Partitioning complete"
+else
+  echo "Drive will not be modified"
+  echo "Partitioning skipped"
 fi
 
-PARTITIONS=($(lsblk -pln -o name "$DRIVE" | grep "$DRIVE"))
 
+section "FORMATTING & MOUNTING DRIVE"
+fdisk -l "$DRIVE"
+PARTITIONS=($(lsblk -pln -o name "$DRIVE"))
 EFI_PARTITION=${PARTITIONS[1]}
 if [ "$CREATE_RECOVERY" == "yes" ]; then
   RECOVERY_PARTITION=${PARTITIONS[-1]}
@@ -174,12 +168,30 @@ else
   SYSTEM_PARTITION=${PARTITIONS[-1]}
 fi
 
-echo "EFI Partition: $EFI_PARTITION"
-echo "System Partition: $SYSTEM_PARTITION"
-echo "Recovery Partition: $RECOVERY_PARTITION"
-confirm "Continue with these partitions?"
+function print_partition_selection {
+  echo "EFI Partition: $EFI_PARTITION"
+  echo "System Partition: $SYSTEM_PARTITION"
+  echo "Recovery Partition: $RECOVERY_PARTITION"
+}
 
-section "FORMATTING & MOUNTING DRIVE"
+function input_partition_selection {
+  ask EFI_PARTITION "EFI Partition"
+  ask SYSTEM_PARTITION "System Partition"
+  ask RECOVERY_PARTITION "Recovery Partition"
+}
+
+while :; do
+  print_partition_selection
+  MODIFY_PARTITION_SELECTION="nil"
+  askyesno MODIFY_PARTITION_SELECTION "Modify these selections?"
+  if [ "$MODIFY_PARTITION_SELECTION" == "yes"]; then
+    input_partition_selection
+  else
+    break
+  fi
+done
+confirm "Continue with formatting?"
+
 cryptsetup luksFormat --type luks "$SYSTEM_PARTITION"
 cryptsetup luksOpen "$SYSTEM_PARTITION" main
 mkfs.vfat -F32 "$EFI_PARTITION"
@@ -188,24 +200,38 @@ mount /dev/mapper/main /mnt
 mkdir /mnt/boot
 mount "$EFI_PARTITION" /mnt/boot
 
-section "CREATING SWAPFILE"
-ask SWAPSIZE "Swapfile size in MB (e.g. 4000)"
+ask SWAPSIZE "Swapfile size in MB"
 mkdir /mnt/var
 dd if=/dev/zero of=/mnt/var/swap count="$SWAPSIZE" bs=1MiB
 chmod 600 /mnt/var/swap
 mkswap /mnt/var/swap
+
 
 section "INSTALLING BASE"
 pacstrap /mnt base linux linux-firmware
 genfstab -U /mnt >> /mnt/etc/fstab
 echo "/var/swap none swap defaults 0 0" >> /mnt/etc/fstab
 
+
 section "STARTING CHROOT SCRIPT"
 mv chroot /mnt/chroot
 arch-chroot /mnt bash /chroot
 rm /mnt/chroot
 
+
 section "CREATING BOOT ENTRY"
+echo "Is $DRIVE an SSD that fully supports TRIM commands?"
+echo "If you are aware of the security implications,"
+echo "you can enable TRIM for performance benefits."
+ENABLE_TRIM="nil"
+askyesno ENABLE_TRIM "Enable TRIM on $DRIVE?"
+if [ "$ENABLE_TRIM" == "yes" ]; then
+  echo "Drive will have TRIM enabled"
+  TRIM_FLAG=":allow-discards"
+else
+  echo "Drive will have TRIM disabled"
+fi
+
 PARTUUID=$(lsblk -dno PARTUUID $SYSTEM_PARTITION)
 efibootmgr \
   --disk "$DRIVE" \
