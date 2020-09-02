@@ -144,7 +144,7 @@ fdisk_partition_drives
 
 SKIP_PARTITIONING="nil"
 while [ "$SKIP_PARTITIONING" != "YES, I KNOW WHAT I AM DOING" ] && [ "$SKIP_PARTITIONING" != "no" ]; do
-  ask SKIP_PARTITIONING "Skip fdisk. Are partitions already setup? (YES, I KNOW WHAT I AM DOING/no)"
+  ask SKIP_PARTITIONING "Were partitions already setup previously? Skip fdisk? (YES, I KNOW WHAT I AM DOING/no)"
 done
 if [ "$SKIP_PARTITIONING" == "YES, I KNOW WHAT I AM DOING" ]; then
   fdisk -l
@@ -189,7 +189,7 @@ mkfs.vfat -F32 "$EFI_PARTITION"
 mkfs.ext4 -F /dev/mapper/main
 mount /dev/mapper/main /mnt
 mkdir /mnt/boot
-mount "$SYSTEM_PARTITION" /mnt/boot
+mount "$EFI_PARTITION" /mnt/boot
 
 section "CREATING SWAPFILE"
 ask SWAPSIZE "Swapfile size in MB (e.g. 4000)"
