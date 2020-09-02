@@ -5,7 +5,7 @@ set -e
 function cleanup {
   umount /mnt/boot
   umount /mnt
-  cryptsetup close main
+  cryptsetup close root
 }
 trap cleanup EXIT
 
@@ -72,9 +72,6 @@ else
   CREATE_EFI="yes"
   CREATE_SYSTEM="yes"
 fi
-
-echo
-echo
 
 if [ "$CREATE_GPT" == "yes" ]; then
   echo "New GPT Partition table will be created"
@@ -188,9 +185,9 @@ function input_partition_selection {
 while :; do
   fdisk -l "$DRIVE"
   print_partition_selection
-  MODIFY_PARTITION_SELECTION="nil"
-  askyesno MODIFY_PARTITION_SELECTION "Modify these selections?"
-  if [ "$MODIFY_PARTITION_SELECTION" == "yes" ]; then
+  USE_PARTITION_SELECTION="nil"
+  askyesno USE_PARTITION_SELECTION "Are these correct?"
+  if [ "$USE_PARTITION_SELECTION" == "no" ]; then
     input_partition_selection
   else
     break
@@ -199,10 +196,10 @@ done
 confirm "Continue with formatting?"
 
 cryptsetup luksFormat --type luks "$SYSTEM_PARTITION"
-cryptsetup luksOpen "$SYSTEM_PARTITION" main
+cryptsetup luksOpen "$SYSTEM_PARTITION" root
 mkfs.vfat -F32 "$EFI_PARTITION"
-mkfs.ext4 -F /dev/mapper/main
-mount /dev/mapper/main /mnt
+mkfs.ext4 -L arch-root -F /dev/mapper/root
+mount /dev/mapper/root /mnt
 mkdir /mnt/boot
 mount "$EFI_PARTITION" /mnt/boot
 
@@ -238,13 +235,12 @@ else
   echo "Drive will have TRIM disabled"
 fi
 
-PARTUUID=$(lsblk -dno PARTUUID $SYSTEM_PARTITION)
 efibootmgr \
   --disk "$DRIVE" \
   --create \
-  --label EFI \
+  --label "Arch Linux" \
   --loader /vmlinuz-linux \
-  --unicode "cryptdevice=PARTUUID=$PARTUUID:root$TRIM_FLAG root=/dev/mapper/root rw initrd=\\initramfs-linux.img" \
+  --unicode "cryptdevice=LABEL=arch-root:root$TRIM_FLAG root=/dev/mapper/root rw initrd=\\initramfs-linux.img" \
   --verbose \
   ;
 
