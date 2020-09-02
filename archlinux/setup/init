@@ -86,6 +86,21 @@ else
   echo "Skipping Recovery Environment"
 fi
 
+echo "If $DRIVE is an SSD that fully supports TRIM commands"
+echo "and you are aware of the security implications then"
+echo "you can enable TRIM for performance benefits"
+ENABLE_TRIM="nil"
+while [ "$ENABLE_TRIM" != "yes" && "$ENABLE_TRIM" != "no" ]; do
+  ask ENABLE_TRIM "Enable TRIM on $DRIVE? (yes/no)"
+done
+if [ "$ENABLE_TRIM" == "yes" ]; then
+  echo "Drive will have TRIM enabled"
+  TRIM_FLAG = ":allow-discards"
+else
+  echo "Drive will have TRIM disabled"
+fi
+
+
 ask SYSTEM_SIZE "System Partition size in MB (e.g. 4000) (leave empty for max)"
 if [ ! -z "$SYSTEM_SIZE"]; then
   SYSTEM_SIZE = $(($SYSTEM_SIZE - 1000)
@@ -175,7 +190,7 @@ efibootmgr \
   --create \
   --label "$EFILABEL" \
   --loader /vmlinuz-linux \
-  --unicode "cryptdevice=PARTUUID=$PARTUUID:root root=/dev/mapper/root rw initrd=\\initramfs-linux.img" \
+  --unicode "cryptdevice=PARTUUID=$PARTUUID:root$TRIM_FLAG root=/dev/mapper/root rw initrd=\\initramfs-linux.img" \
   --verbose \
   ;
 
