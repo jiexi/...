@@ -48,7 +48,7 @@ confirm "Continue with this mirror list?"
 section "PARTITIONING DRIVE"
 fdisk -l
 ask DRIVE "Select a drive"
-PARTITIONS=(lsblk -pln -io name "$DRIVE")
+PARTITIONS=$(lsblk -pln -io name "$DRIVE")
 PARITION_COUNT=$(echo "$PARTITIONS" | wc -l)
 # TODO(JL): DRY this condition
 if [ "$PARITION_COUNT" -gt 1 ]; then
@@ -183,12 +183,11 @@ arch-chroot /mnt bash /chroot
 rm /mnt/chroot
 
 section "CREATING EFISTUB BOOT ENTRY"
-ask EFILABEL "EFI label"
 PARTUUID=$(lsblk -dno PARTUUID $SYSTEM_PARTITION)
 efibootmgr \
   --disk "$DRIVE" \
   --create \
-  --label "$EFILABEL" \
+  --label EFI \
   --loader /vmlinuz-linux \
   --unicode "cryptdevice=PARTUUID=$PARTUUID:root$TRIM_FLAG root=/dev/mapper/root rw initrd=\\initramfs-linux.img" \
   --verbose \
