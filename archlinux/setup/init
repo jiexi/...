@@ -169,9 +169,10 @@ else
 fi
 
 function print_partition_selection {
-  echo "EFI Partition: $EFI_PARTITION"
-  echo "System Partition: $SYSTEM_PARTITION"
-  echo "Recovery Partition: $RECOVERY_PARTITION"
+  echo "Using Partitions"
+  echo "EFI Partition $EFI_PARTITION"
+  echo "System Partition $SYSTEM_PARTITION"
+  echo "Recovery Partition $RECOVERY_PARTITION"
 }
 
 function input_partition_selection {
@@ -186,6 +187,7 @@ while :; do
   askyesno MODIFY_PARTITION_SELECTION "Modify these selections?"
   if [ "$MODIFY_PARTITION_SELECTION" == "yes" ]; then
     input_partition_selection
+    echo
   else
     break
   fi
