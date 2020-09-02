@@ -49,8 +49,7 @@ CREATE_SYSTEM="no"
 CREATE_RECOVERY="nil"
 PARTITION_COUNT=$(lsblk -pln -io name "$DRIVE" | wc -l)
 if [ $PARTITION_COUNT -gt 1 ]; then
-  echo "Drive is already partitioned"
-  confirm "Is this correct?"
+  confirm "Drive is already partitioned. Is this correct?"
   CREATE_GPT="no"
   CREATE_EFI="no"
   EXISTS_SYSTEM_PARTITION="nil"
@@ -61,12 +60,14 @@ if [ $PARTITION_COUNT -gt 1 ]; then
     CREATE_SYSTEM="no"
   fi
 else
-  echo "Drive is not partitioned"
-  confirm "Is this correct?"
+  confirm "Drive is not partitioned. Is this correct?"
   CREATE_GPT="yes"
   CREATE_EFI="yes"
   CREATE_SYSTEM="yes"
 fi
+
+echo
+echo
 
 if [ "$CREATE_GPT" == "yes" ]; then
   echo "New GPT Partition table will be created"
@@ -86,7 +87,6 @@ fi
 if [ "$CREATE_SYSTEM" == "yes" ]; then
   echo "New System Partition will be created"
   ask SYSTEM_SIZE "System Partition size in MB (leave empty for max)"
-  echo
   echo "Arch doesn't have a recovery environment like Windows does"
   echo "We can write this Arch boostrap environment to your drive"
   echo "NOTE: This will shrink the system partition by 1000MB"
@@ -147,7 +147,7 @@ echo "Running fdisk with these commands:"
 fdisk_partition_drives
 
 if [[ $(fdisk_partition_drives) ]]; then
-  echo "Drive will be modified. Final Check."
+  echo "Drive will be modified"
   confirm "Continue with partitioning?"
   fdisk_partition_drives | fdisk "$DRIVE"
   echo "Partitioning complete"
@@ -184,7 +184,7 @@ while :; do
   print_partition_selection
   MODIFY_PARTITION_SELECTION="nil"
   askyesno MODIFY_PARTITION_SELECTION "Modify these selections?"
-  if [ "$MODIFY_PARTITION_SELECTION" == "yes"]; then
+  if [ "$MODIFY_PARTITION_SELECTION" == "yes" ]; then
     input_partition_selection
   else
     break
