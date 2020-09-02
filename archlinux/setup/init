@@ -1,0 +1,187 @@
+#!/usr/bin/env bash
+
+set -e
+
+function section {
+  echo
+  echo
+  echo
+  echo "########################################"
+  echo "$1"
+  echo "########################################"
+  echo
+}
+
+function ask {
+  printf "%s: " "$2"
+  read $1
+}
+
+function confirm {
+  QUESTION="$1"
+  CONTINUE="nil"
+  while [ "$CONTINUE" != "yes" ]; do
+    ask CONTINUE "$1 (yes/no)"
+    if [ "$CONTINUE" == "no" ]; then
+      exit 1
+    fi
+  done
+}
+
+function confirm {
+  QUESTION="$1"
+  CONTINUE="nil"
+  while [ "$CONTINUE" != "yes" ]; do
+    ask CONTINUE "$1 (yes/no)"
+    if [ "$CONTINUE" == "no" ]; then
+      exit 1
+    fi
+  done
+}
+
+section "GENERATING AND UPDATING MIRROR LIST"
+curl "https://www.archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4" | sed -E 's/^#//' > /etc/pacman.d/mirrorlist
+cat /etc/pacman.d/mirrorlist
+confirm "Continue with this mirror list?"
+
+
+section "PARTITIONING DRIVE"
+fdisk -l
+ask DRIVE "Select a drive"
+PARTITIONS=(lsblk -pln -io name "$DRIVE")
+PARITION_COUNT=$(echo "$PARTITIONS" | wc -l)
+# TODO(JL): DRY this condition
+if [ "$PARITION_COUNT" -gt 1 ]; then
+  echo "Drive is already partitioned"
+  confirm "Is this correct?"
+  echo "Existing Partition table will be used"
+  echo "New Partition will be created for Arch"
+  echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+  echo "Existing EFI Parition WILL BE OVERWRITTEN!!!"
+  echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+  confirm "Continue with partitioning?"
+  echo "This may leave your machine in a broken state."
+  confirm "Are you really sure you want to continue?"
+else
+  echo "Drive is not partitioned"
+  confirm "Is this correct?"
+  echo "New GPT Partition table will be created"
+  echo "New EFI Partition will be created"
+  echo "New Partition will be created for Arch"
+  confirm "Continue with partitioning?"
+fi
+
+# TODO(JL): DRY THIS
+echo "Arch doesn't have a recovery environment like Windows does"
+echo "We can write this Arch boostrap environment to your drive"
+echo "NOTE: This will shrink the system partition by 1000MB"
+CREATE_RECOVERY="nil"
+while [ "$CREATE_RECOVERY" != "yes" && "$CREATE_RECOVERY" != "no" ]; do
+  ask CREATE_RECOVERY "Create Recovery Environment? (yes/no)"
+done
+
+if [ "$CREATE_RECOVERY" == "yes" ]; then
+  echo "Recovery Environment will be created"
+else
+  echo "Skipping Recovery Environment"
+fi
+
+ask SYSTEM_SIZE "System Partition size in MB (e.g. 4000) (leave empty for max)"
+if [ ! -z "$SYSTEM_SIZE"]; then
+  SYSTEM_SIZE = $(($SYSTEM_SIZE - 1000)
+  SYSTEM_SIZE = "+$(echo "$SYSTEM_SIZE")M"
+else
+  if [ "$CREATE_RECOVERY" == "yes" ]; then
+    SYSTEM_SIZE = "-1000M"
+  fi
+fi
+echo "Using $SYSTEM_SIZE with fdisk for System Partition"
+echo "About to apply partitions. Last check"
+confirm "Continue with partitioning?"
+
+{
+  if [ "$PARITION_COUNT" -le 1 ]; then
+    echo g     # make gpt partition table
+
+    echo n     # Add new partition (/boot)
+    echo       # (default 1)
+    echo       # (default 2048)
+    echo "+512M"
+
+    echo t     # Change partition type
+    echo 1     # Partition number 1 (/boot)
+    echo 1     # EFI System
+  fi
+
+  echo n       # Add new partition (linux)
+  echo         # (default 2)
+  echo         # (default)
+  echo "$SYSTEM_SIZE"
+
+  if [ "$CREATE_RECOVERY" == "yes" ]; then
+    echo n     # Add new partition (/boot)
+    echo       # (default 1)
+    echo       # (default 2048)
+    echo "+1000M"
+  fi
+
+  echo w       # write
+} | fdisk "$DRIVE"
+fdisk -l
+echo "Drive has been partitioned"
+confirm "Continue with these partitions?"
+
+PARTITIONS=($(lsblk -pln -o name "$DRIVE"))
+
+EFI_PARTITION=${PARTITIONS[1]}
+if [ "$CREATE_RECOVERY" == "yes" ]; then
+  RECOVERY_PARTITION = ${PARTITIONS[-1]}
+  SYSTEM_PARTITION = ${PARTITIONS[-2]}
+else
+  SYSTEM_PARTITION = ${PARTITIONS[-1]}
+fi
+
+section "FORMATTING & MOUNTING DRIVE"
+cryptsetup luksFormat --type luks "$SYSTEM_PARTITION"
+cryptsetup luksOpen "$SYSTEM_PARTITION" main
+mkfs.vfat -F32 "$EFI_PARTITION"
+mkfs.ext4 -F /dev/mapper/main
+mount /dev/mapper/main /mnt
+mkdir /mnt/boot
+mount "$SYSTEM_PARTITION" /mnt/boot
+
+section "CREATING SWAPFILE"
+ask SWAPSIZE "Swapfile size in MB (e.g. 4000)"
+mkdir /mnt/var
+dd if=/dev/zero of=/mnt/var/swap count="$SWAPSIZE" bs=1MiB
+chmod 600 /mnt/var/swap
+mkswap /mnt/var/swap
+
+section "INSTALLING BASE"
+pacstrap /mnt base linux linux-firmware
+genfstab -U /mnt >> /mnt/etc/fstab
+echo "/var/swap none swap defaults 0 0" >> /mnt/etc/fstab
+
+section "KICKING OFF CHROOT SCRIPT"
+mv chroot /mnt/chroot
+arch-chroot /mnt bash /chroot
+rm /mnt/chroot
+
+section "CREATING EFISTUB BOOT ENTRY"
+ask EFILABEL "EFI label"
+PARTUUID=$(lsblk -dno PARTUUID $SYSTEM_PARTITION)
+efibootmgr \
+  --disk "$DRIVE" \
+  --create \
+  --label "$EFILABEL" \
+  --loader /vmlinuz-linux \
+  --unicode "cryptdevice=PARTUUID=$PARTUUID:root root=/dev/mapper/root rw initrd=\\initramfs-linux.img" \
+  --verbose \
+  ;
+
+section "CLEANING UP"
+umount /mnt/boot
+umount /mnt
+cryptsetup close main
+
+# TODO(JL): Swapfile for hibernation. Actually create recovery environment
