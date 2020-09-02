@@ -3,8 +3,8 @@
 ### Download:
 
 ```shell
-wget https:/raw.githubusercontent.com/jiexi/.../master/archlinux/setup/init
-wget https:/raw.githubusercontent.com/jiexi/.../master/archlinux/setup/chroot
+curl -4 https:/raw.githubusercontent.com/jiexi/.../master/archlinux/setup/init -o init
+curl -4 https:/raw.githubusercontent.com/jiexi/.../master/archlinux/setup/chroot -o chroot
 ```
 
 ### Verify:
