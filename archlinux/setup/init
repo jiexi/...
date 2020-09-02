@@ -101,8 +101,8 @@ fi
 
 
 ask SYSTEM_SIZE "System Partition size in MB (e.g. 4000) (leave empty for max)"
-if [ ! -z "$SYSTEM_SIZE"]; then
-  SYSTEM_SIZE=$(($SYSTEM_SIZE - 1000)
+if [[ "$SYSTEM_SIZE" ]]; then
+  SYSTEM_SIZE=$($SYSTEM_SIZE - 1000)
   SYSTEM_SIZE="+$(echo "$SYSTEM_SIZE")M"
 else
   if [ "$CREATE_RECOVERY" == "yes" ]; then
