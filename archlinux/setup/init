@@ -20,7 +20,7 @@ function ask {
 function askyesno {
   AFFIRMATIVE=${3:-yes}
   NEGATIVE=${4:-no}
-  while [ "$(!1)" != "$AFFIRMATIVE" ] && [ "$(!1)" != "$NEGATIVE" ]; do
+  while [ "${!1}" != "$AFFIRMATIVE" ] && [ "${!1}" != "$NEGATIVE" ]; do
     ask $1 "$2 ($AFFIRMATIVE/$NEGATIVE)"
   done
 }
@@ -54,7 +54,7 @@ if [ $PARTITION_COUNT -gt 1 ]; then
   CREATE_GPT="no"
   CREATE_EFI="no"
   EXISTS_SYSTEM_PARTITION="nil"
-  askyesno EXISTS_SYSTEM_PARTITION "Does a Partition for Arch already exist?"
+  askyesno EXISTS_SYSTEM_PARTITION "Does a partition for Arch already exist?"
   if [ "$EXISTS_SYSTEM_PARTITION" == "no" ]; then
     CREATE_SYSTEM="yes"
   else
@@ -68,13 +68,13 @@ else
   CREATE_SYSTEM="yes"
 fi
 
-if [ "$CREATE_GPT" == "yes"]; then
+if [ "$CREATE_GPT" == "yes" ]; then
   echo "New GPT Partition table will be created"
 else
   echo "Existing Partition table will be used"
 fi
 
-if [ "$CREATE_EFI" == "yes"]; then
+if [ "$CREATE_EFI" == "yes" ]; then
   echo "New EFI Partition will be created"
 else
   echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
@@ -83,7 +83,7 @@ else
   echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 fi
 
-if [ "$CREATE_SYSTEM" == "yes"]; then
+if [ "$CREATE_SYSTEM" == "yes" ]; then
   echo "New System Partition will be created"
   ask SYSTEM_SIZE "System Partition size in MB (leave empty for max)"
   echo
