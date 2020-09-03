@@ -49,12 +49,12 @@ mkinitcpio -p linux
 # https://wiki.archlinux.org/index.php/System_time#Time_standard
 section "SETTING TIME"
 # NOTE(JL): This is all probably very very very redundant
-ln -f -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
-hwclock --systohc --utc
+# ln -f -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+# hwclock --systohc --utc
+# systemctl enable systemd-timesyncd.service
 timedatectl set-timezone America/Los_Angeles
 timedatectl set-local-rtc false
 timedatectl set-ntp true
-systemctl enable systemd-timesyncd.service
 
 # https://wiki.archlinux.org/index.php/Installation_guide#Localization
 section "SETTING LOCALE"
