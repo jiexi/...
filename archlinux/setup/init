@@ -218,7 +218,6 @@ mkdir /mnt/var
 dd if=/dev/zero of=/mnt/var/swap count="$SWAPSIZE" bs=1MiB
 chmod 600 /mnt/var/swap
 mkswap /mnt/var/swap
-swapon /mnt/var/swap
 
 
 section "INSTALLING BASE"
