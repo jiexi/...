@@ -24,6 +24,7 @@ function ask {
   read $1
 }
 
+# TODO(JL): Change this to "askoptions" and use array of string instead of just affirmative negative
 function askyesno {
   AFFIRMATIVE=${3:-yes}
   NEGATIVE=${4:-no}
@@ -40,6 +41,9 @@ function confirm {
   fi
 }
 
+# https://wiki.archlinux.org/index.php/Installation_guide#Update_the_system_clock
+section "UPDATING SYSTEM CLOCK"
+timedatectl set-ntp true
 
 section "GENERATING AND UPDATING MIRROR LIST"
 curl "https://www.archlinux.org/mirrorlist/?country=US&protocol=https&ip_version=4" | sed -E 's/^#//' > /etc/pacman.d/mirrorlist
@@ -57,6 +61,7 @@ CREATE_RECOVERY="nil"
 PARTITION_COUNT=$(lsblk -pln -io name "$DRIVE" | wc -l)
 if [ $PARTITION_COUNT -gt 1 ]; then
   confirm "Drive is already partitioned. Is this correct?"
+  # TODO(JL): Actually verify that GPT Partition Table exists... lol
   CREATE_GPT="no"
   CREATE_EFI="no"
   EXISTS_SYSTEM_PARTITION="nil"
@@ -74,9 +79,9 @@ else
 fi
 
 if [ "$CREATE_GPT" == "yes" ]; then
-  echo "New GPT Partition table will be created"
+  echo "New GPT Partition Table will be created"
 else
-  echo "Existing Partition table will be used"
+  echo "Existing Partition Table will be used"
 fi
 
 if [ "$CREATE_EFI" == "yes" ]; then
@@ -113,6 +118,8 @@ else
   echo "Skipping Recovery Environment"
 fi
 
+# https://wiki.archlinux.org/index.php/Installation_guide#Partition_the_disks
+# https://wiki.archlinux.org/index.php/Dual_boot_with_Windows
 function fdisk_partition_drives {
   if [ "$CREATE_GPT" == "yes" ]; then
     echo g     # make gpt partition table
@@ -195,6 +202,9 @@ while :; do
 done
 confirm "Continue with formatting?"
 
+
+# https://wiki.archlinux.org/index.php/Installation_guide#Format_the_partitions
+# https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#LUKS_on_a_partition
 cryptsetup luksFormat --type luks "$SYSTEM_PARTITION"
 cryptsetup luksOpen "$SYSTEM_PARTITION" root
 mkfs.vfat -F32 "$EFI_PARTITION"
@@ -208,11 +218,16 @@ mkdir /mnt/var
 dd if=/dev/zero of=/mnt/var/swap count="$SWAPSIZE" bs=1MiB
 chmod 600 /mnt/var/swap
 mkswap /mnt/var/swap
+swapon /mnt/var/swap
 
 
 section "INSTALLING BASE"
-pacstrap /mnt base linux linux-firmware
+# https://wiki.archlinux.org/index.php/Installation_guide#Installation
+pacstrap /mnt base linux linux-firmware # refind-efi os-prober
+# https://wiki.archlinux.org/index.php/Installation_guide#Configure_the_system
 genfstab -U /mnt >> /mnt/etc/fstab
+# NOTE(JL): Is this correct?
+# https://github.com/helmuthdu/aui/blob/master/fifo#L558
 echo "/var/swap none swap defaults 0 0" >> /mnt/etc/fstab
 
 
@@ -227,6 +242,7 @@ echo "Is $DRIVE an SSD that fully supports TRIM commands?"
 echo "If you are aware of the security implications,"
 echo "you can enable TRIM for performance benefits."
 ENABLE_TRIM="nil"
+# https://wiki.archlinux.org/index.php/Dm-crypt/Specialties#Discard/TRIM_support_for_solid_state_drives_(SSD)
 askyesno ENABLE_TRIM "Enable TRIM on $DRIVE?"
 if [ "$ENABLE_TRIM" == "yes" ]; then
   echo "Drive will have TRIM enabled"
@@ -236,12 +252,13 @@ else
 fi
 
 PARTUUID=$(lsblk -dno PARTUUID $SYSTEM_PARTITION)
+# TODO(JL): REFIND setup
 efibootmgr \
   --disk "$DRIVE" \
   --create \
   --label "Arch Linux" \
   --loader /vmlinuz-linux \
-  --unicode "cryptdevice=PARTUUID=$PARTUUID:root$TRIM_FLAG root=/dev/mapper/root rw initrd=\\initramfs-linux.img" \
+  --unicode "cryptdevice=PARTUUID=$PARTUUID:root$TRIM_FLAG root=/dev/mapper/root resume=/dev/mapper/root/var/swap rw initrd=\\initramfs-linux.img" \
   --verbose \
   ;
 echo "Entry created for $SYSTEM_PARTITION with PARTUUID $PARTUUID"
@@ -255,4 +272,4 @@ if [ "$REBOOT_MACHINE" == "yes" ]; then
   reboot
 fi
 
-# TODO(JL): Swapfile for hibernation. Actually create recovery environment
+# TODO(JL): Actually create recovery environment
