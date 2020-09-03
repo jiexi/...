@@ -31,7 +31,6 @@ pacman -S \
   dhcpcd \
   netctl \
   sudo \
-  utils-linux \ # needed for fstrim.service
   vim \
   ;
 ask WIFI "Install wifi-menu? (yes/no)"
