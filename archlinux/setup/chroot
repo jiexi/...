@@ -29,12 +29,15 @@ function askyesno {
 section "INSTALLING PACKAGES"
 pacman -S \
   dhcpcd \
+  git \
   netctl \
   sudo \
   vim \
   ;
-ask WIFI "Install wifi-menu? (yes/no)"
-[ "$WIFI" == "yes" ] && pacman -S dialog wpa_supplicant
+askyesno WIFI "Install wifi-menu?"
+if [ "$WIFI" == "yes" ]; then
+  pacman -S dialog wpa_supplicant
+fi
 
 # https://wiki.archlinux.org/index.php/Installation_guide#Initramfs
 # https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Configuring_mkinitcpio
@@ -103,21 +106,25 @@ section "SETTING MAINTENANCE"
 # https://wiki.archlinux.org/index.php/Solid_state_drive#Periodic_TRIM
 systemctl enable fstrim.timer
 
-# LAPTOP
+
+# section "SETTING CONFIG"
+# echo "Configuring dotfiles at /home/$USERNAME/.config"
+# git clone https://github.com/jiexi/....git "/home/$USERNAME/.config"
+
 # Pacman -Sy intel-ucode
+
+# Consider https://wiki.archlinux.org/index.php/Laptop
+# LAPTOP
 # Set this in boot entry!
 # Pacman -Sy fwupd
 # fwupdmgr refresh
 # fwupdmgr get-updates
 # fwupdmgr update # Make sure to do this plugged in
+# TLP
 
 # Install yay?
-# Consider https://wiki.archlinux.org/index.php/Laptop
 # Lenovo audio and mic mute LED
 # https://github.com/helmuthdu/aui/blob/master/fifo#L592
 
-# pacman -Sy utils-linux
-
-# TLP
 
 # Autologin user since encrypted drive anyway?..

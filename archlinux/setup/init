@@ -3,6 +3,7 @@
 set -e
 
 function cleanup {
+  swapoff -a
   umount /mnt/boot
   umount /mnt
   cryptsetup close root
@@ -218,6 +219,7 @@ mkdir /mnt/var
 dd if=/dev/zero of=/mnt/var/swap count="$SWAPSIZE" bs=1MiB
 chmod 600 /mnt/var/swap
 mkswap /mnt/var/swap
+swapon /mnt/var/swap
 
 
 section "INSTALLING BASE"
@@ -252,12 +254,13 @@ fi
 
 PARTUUID=$(lsblk -dno PARTUUID $SYSTEM_PARTITION)
 # TODO(JL): REFIND setup
+# Delete existing boot entry match Arch Linux?..
 efibootmgr \
   --disk "$DRIVE" \
   --create \
   --label "Arch Linux" \
   --loader /vmlinuz-linux \
-  --unicode "cryptdevice=PARTUUID=$PARTUUID:root$TRIM_FLAG root=/dev/mapper/root resume=/dev/mapper/root/var/swap rw initrd=\\initramfs-linux.img" \
+  --unicode "cryptdevice=PARTUUID=$PARTUUID:root$TRIM_FLAG root=/dev/mapper/root resume=/var/swap rw initrd=\\initramfs-linux.img" \
   --verbose \
   ;
 echo "Entry created for $SYSTEM_PARTITION with PARTUUID $PARTUUID"
