@@ -12,51 +12,113 @@ function section {
   echo
 }
 
-
 function ask {
   printf "%s: " "$2"
   read $1
 }
 
-section "INSTALLING PACKAGES NEEDED AFTER REBOOT"
-ask WIFI "Install wifi-menu? (yes/no)"
-[ "$WIFI" == "yes" ] && pacman -S dialog wpa_supplicant
+# TODO(JL): Change this to "askoptions" and use array of string instead of just affirmative negative
+function askyesno {
+  AFFIRMATIVE=${3:-yes}
+  NEGATIVE=${4:-no}
+  while [ "${!1}" != "$AFFIRMATIVE" ] && [ "${!1}" != "$NEGATIVE" ]; do
+    ask $1 "$2 ($AFFIRMATIVE/$NEGATIVE)"
+  done
+}
+
+section "INSTALLING PACKAGES"
 pacman -S \
   dhcpcd \
   netctl \
   sudo \
-  vi \
+  utils-linux \ # needed for fstrim.service
+  vim \
   ;
+ask WIFI "Install wifi-menu? (yes/no)"
+[ "$WIFI" == "yes" ] && pacman -S dialog wpa_supplicant
 
-section "ADDING ENCRYPT TO MKINITCPIO"
+# https://wiki.archlinux.org/index.php/Installation_guide#Initramfs
 # https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Configuring_mkinitcpio
-# TODO(JL): Make this with insert automated
-echo "Manual step"
-echo "Vi will be opened on /etc/mkinitcpio.conf"
-echo "Ensure 'keyboard', 'keymap', and 'encrypt' exist in HOOKS()"
-ask TMP "Press any key to continue"
-vi /etc/mkinitcpio.conf
+section "ADDING ENCRYPT TO MKINITCPIO"
+sed -i '/^HOOKS=/s/.*/HOOKS=(base udev autodetect keyboard keymap modconf block encrypt filesystems resume fsck)/' /etc/mkinitcpio.conf
 mkinitcpio -p linux
 
+# https://wiki.archlinux.org/index.php/Installation_guide#Time_zone
+# https://wiki.archlinux.org/index.php/System_time#Time_standard
+section "SETTING TIME"
+# NOTE(JL): This is all probably very very very redundant
+ln -f -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+hwclock --systohc --utc
+timedatectl set-timezone America/Los_Angeles
+timedatectl set-local-rtc false
+timedatectl set-ntp true
+systemctl enable systemd-timesyncd.service
+
+# https://wiki.archlinux.org/index.php/Installation_guide#Localization
 section "SETTING LOCALE"
 echo "en_US.UTF-8 UTF-8" > /etc/locale.gen
 locale-gen
 echo "LANG=en_US.UTF-8" > /etc/locale.conf
 export LANG=en_US.UTF-8
-ln -f -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+# Rebind Caps Lock to Escape in TTY
+# https://wiki.archlinux.org/index.php/Linux_console/Keyboard_configuration#Creating_a_custom_keymap
+mkdir -p /usr/local/share/kbd/keymaps
+echo "keycode 58 = Escape" > /usr/local/share/kbd/keymaps/personal.map
+echo "KEYMAP=/usr/local/share/kbd/keymaps/personal.map" > /etc/vconsole.conf
+
+# https://wiki.archlinux.org/index.php/Installation_guide#Network_configuration
+section "SETTING NETWORK"
 ask HOSTNAME "Hostname"
 echo "$HOSTNAME" > /etc/hostname
-
-# TODO(JL): Add /etc/hosts?
-
-section "SETTING ROOT PASSWORD"
-passwd
-
-section "CREATING MAIN USER"
-ask USERNAME "Username"
-useradd -m -g users -G wheel "$USERNAME"
-passwd "$USERNAME"
-
-section "SETTING UP SIMPLE FIREWALL"
+cat >> /etc/hosts <<EOL
+127.0.0.1 localhost
+::1       localhost
+127.0.0.1 ${HOSTNAME}.localdomain ${HOSTNAME}
+EOL
+# TODO(JL): Where is this from?
 cp /etc/iptables/simple_firewall.rules /etc/iptables/iptables.rules
 systemctl enable iptables.service
+
+section "SETTING USER"
+# https://wiki.archlinux.org/index.php/Installation_guide#Root_password
+echo "Setting root password"
+passwd
+# https://wiki.archlinux.org/index.php/Users_and_groups#Example_adding_a_user
+echo "Creating regular user account"
+ask USERNAME "Username"
+# https://wiki.archlinux.org/index.php/Users_and_groups#User_groups
+# docker group?..
+# sys group? (printers)
+useradd -m -g users -G wheel,storage,power,audio,video,input "$USERNAME"
+passwd "$USERNAME"
+echo "Adding wheel group to sudoers"
+sed -i '/%wheel ALL=(ALL) ALL/s/^#//' /etc/sudoers
+cat >> /etc/sudoers <<EOL
+Defaults timestamp_timeout=15
+Defaults passprompt="[sudo] password for %u: "
+Defaults lecture=never
+EOL
+# jiexi ALL=(ALL) NOPASSWD: /usr/bin/light ?
+
+section "SETTING MAINTENANCE"
+# https://wiki.archlinux.org/index.php/Solid_state_drive#Periodic_TRIM
+systemctl enable fstrim.timer
+
+# LAPTOP
+# Pacman -Sy intel-ucode
+# Set this in boot entry!
+# Pacman -Sy fwupd
+# fwupdmgr refresh
+# fwupdmgr get-updates
+# fwupdmgr update # Make sure to do this plugged in
+
+# Install yay?
+# Consider https://wiki.archlinux.org/index.php/Laptop
+# Lenovo audio and mic mute LED
+# https://github.com/helmuthdu/aui/blob/master/fifo#L592
+
+# pacman -Sy utils-linux
+
+# TLP
+
+# Autologin user since encrypted drive anyway?..
