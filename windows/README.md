@@ -29,6 +29,7 @@ Tools, notes, and shared packages for [Windows](https://www.microsoft.com/en-us/
   * `reg add "HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\TimeZoneInformation" /v RealTimeIsUniversal /d 1 /t REG_QWORD /f`
 * BIOS
   * Config -> Power -> Sleep State -> Set to: `Linux`
+    * This might break wake by HID though...
 
 
 ### Thinkpad

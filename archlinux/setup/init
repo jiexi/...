@@ -25,7 +25,6 @@ function ask {
   read $1
 }
 
-# TODO(JL): Change this to "askoptions" and use array of string instead of just affirmative negative
 function askyesno {
   AFFIRMATIVE=${3:-yes}
   NEGATIVE=${4:-no}
@@ -81,7 +80,10 @@ fi
 if [ "$CREATE_GPT" == "yes" ]; then
   echo "New GPT Partition Table will be created"
 else
+  echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
   echo "Existing Partition Table will be used"
+  echo "This must be GPT! (We did not check for you)"
+  echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
 fi
 
 if [ "$CREATE_EFI" == "yes" ]; then
@@ -178,12 +180,15 @@ confirm "Continue with formatting?"
 # https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#LUKS_on_a_partition
 cryptsetup luksFormat --type luks "$SYSTEM_PARTITION"
 cryptsetup luksOpen "$SYSTEM_PARTITION" root
-mkfs.vfat -F32 "$EFI_PARTITION"
+if [ "$CREATE_EFI" == "yes" ]; then
+  mkfs.vfat -F32 "$EFI_PARTITION"
+fi
 mkfs.ext4 -F /dev/mapper/root
 mount /dev/mapper/root /mnt
 mkdir /mnt/boot
 mount "$EFI_PARTITION" /mnt/boot
 
+# https://wiki.archlinux.org/index.php/swap#Manually
 ask SWAPSIZE "Swapfile size in MB"
 mkdir /mnt/var
 dd if=/dev/zero of=/mnt/var/swap count="$SWAPSIZE" bs=1MiB
@@ -191,14 +196,21 @@ chmod 600 /mnt/var/swap
 mkswap /mnt/var/swap
 swapon /mnt/var/swap
 
-
 section "INSTALLING BASE"
 # https://wiki.archlinux.org/index.php/Installation_guide#Installation
-pacstrap /mnt base linux linux-firmware # refind-efi os-prober
+# NOTE(JL): Assumes intel machine
+pacstrap /mnt \
+  base \
+  base-devel \
+  intel-ucode \
+  linux \
+  linux-firmware \
+  refind-efi \
+  os-prober \
+  ;
 # https://wiki.archlinux.org/index.php/Installation_guide#Configure_the_system
 genfstab -U /mnt >> /mnt/etc/fstab
-# NOTE(JL): Is this correct?
-# https://github.com/helmuthdu/aui/blob/master/fifo#L558
+# https://wiki.archlinux.org/index.php/swap#Manually
 echo "/var/swap none swap defaults 0 0" >> /mnt/etc/fstab
 
 
@@ -208,7 +220,7 @@ arch-chroot /mnt bash /chroot
 rm /mnt/chroot
 
 
-section "CREATING BOOT ENTRY"
+section "SETTING UP BOOTLOADER"
 echo "Is $DRIVE an SSD that fully supports TRIM commands?"
 echo "If you are aware of the security implications,"
 echo "you can enable TRIM for performance benefits."
@@ -223,17 +235,15 @@ else
 fi
 
 PARTUUID=$(lsblk -dno PARTUUID $SYSTEM_PARTITION)
-# TODO(JL): REFIND setup
-# Delete existing boot entry match Arch Linux?..
-efibootmgr \
-  --disk "$DRIVE" \
-  --create \
-  --label "Arch Linux" \
-  --loader /vmlinuz-linux \
-  --unicode "cryptdevice=PARTUUID=$PARTUUID:root$TRIM_FLAG root=/dev/mapper/root resume=/var/swap rw initrd=\\initramfs-linux.img" \
-  --verbose \
-  ;
-echo "Entry created for $SYSTEM_PARTITION with PARTUUID $PARTUUID"
+RESUME_OFFSET=$(filefrag -v /mnt/var/swap | awk '{ if($1=="0:"){print $4} }')
+
+echo "Using PARTUUID ${PARTUUID}"
+echo "Using resume_offset ${RESUME_OFFSET}"
+
+arch-chroot /mnt refind-install
+cat > /mnt/boot/refind_linux.conf <<EOL
+"Boot using default options" "cryptdevice=PARTUUID=${PARTUUID}:root${TRIM_FLAG} root=/dev/mapper/root resume=/dev/mapper/root resume_offset=${RESUME_OFFSET} rw add_efi_memmap initrd=boot\intel-ucode.img initrd=boot\initramfs-linux.img"
+EOL
 
 section "CLEANING UP"
 cleanup
