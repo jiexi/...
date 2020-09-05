@@ -29,12 +29,9 @@ function askyesno {
 # NOTE(JL): Assumes Laptop, Lenovo X1 Carbon 8th Gen
 section "INSTALLING PACKAGES"
 pacman -S \
-  dhcpcd \
   git \
   sudo \
   vim \
-  wpa_supplicant \
-  wireless_tools \
   networkmanager \
   network-manager-applet \
   nm-connection-editor \
@@ -53,6 +50,9 @@ pacman -S \
   thermald \
   powertop \
   ;
+  # dhcpcd \ # don't think this is needed with networkmanager
+  # wpa_supplicant \ #same, it's installed as a dep by networkmanager
+  # wireless_tools \
   # thinkfan \
 
 
@@ -112,7 +112,7 @@ ask USERNAME "Username"
 # https://wiki.archlinux.org/index.php/Users_and_groups#User_groups
 # docker group?
 # sys group? (printers)
-useradd -m -g "$USERNAME" -G wheel,storage,power,audio,video,input "$USERNAME"
+useradd -m -g users -G wheel,storage,power,sys,audio,video,input "$USERNAME"
 passwd "$USERNAME"
 echo "Adding wheel group to sudoers"
 sed -i '/%wheel ALL=(ALL) ALL/s/^#//' /etc/sudoers
