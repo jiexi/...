@@ -51,3 +51,5 @@ Tools, notes, and shared packages for [Windows](https://www.microsoft.com/en-us/
   * Disable Smart Standby
   * Enable Always on USB, BUT disable USB charging when computer is off
   * Enable Battery Threshold 70% - 80%
+* BIOS
+  * Security -> I/O Port Access -> Disable Wireless WAN and Fingerprint Reader

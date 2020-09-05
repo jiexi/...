@@ -196,6 +196,7 @@ chmod 600 /mnt/var/swap
 mkswap /mnt/var/swap
 swapon /mnt/var/swap
 
+
 section "INSTALLING BASE"
 # https://wiki.archlinux.org/index.php/Installation_guide#Installation
 # NOTE(JL): Assumes intel machine
@@ -235,19 +236,21 @@ else
 fi
 
 PARTUUID=$(lsblk -dno PARTUUID $SYSTEM_PARTITION)
-RESUME_OFFSET=$(filefrag -v /mnt/var/swap | awk '{ if($1=="0:"){print $4} }')
+RESUME_OFFSET=$(filefrag -v /mnt/var/swap | awk '{ if($1=="0:"){print $4} }' | sed -e 's/\.//g')
 
 echo "Using PARTUUID ${PARTUUID}"
 echo "Using resume_offset ${RESUME_OFFSET}"
 
 arch-chroot /mnt refind-install
 cat > /mnt/boot/refind_linux.conf <<EOL
-"Boot using default options" "cryptdevice=PARTUUID=${PARTUUID}:root${TRIM_FLAG} root=/dev/mapper/root resume=/dev/mapper/root resume_offset=${RESUME_OFFSET} rw add_efi_memmap initrd=boot\intel-ucode.img initrd=boot\initramfs-linux.img"
+"Boot using default options" "cryptdevice=PARTUUID=${PARTUUID}:root${TRIM_FLAG} root=/dev/mapper/root resume=/dev/mapper/root resume_offset=${RESUME_OFFSET} rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img"
 EOL
+
 
 section "CLEANING UP"
 cleanup
 echo "Done"
+echo "Optional: Manually cleanup and reorder boot entries with 'efibootmgr'"
 REBOOT_MACHINE="nil"
 askyesno REBOOT_MACHINE "Reboot?"
 if [ "$REBOOT_MACHINE" == "yes" ]; then

@@ -25,6 +25,7 @@ function askyesno {
   done
 }
 
+
 # NOTE(JL): Assumes Laptop, Lenovo X1 Carbon 8th Gen
 section "INSTALLING PACKAGES"
 pacman -S \
@@ -35,15 +36,25 @@ pacman -S \
   wpa_supplicant \
   wireless_tools \
   networkmanager \
-  nm-connection-editor \
   network-manager-applet \
+  nm-connection-editor \
   gnome-keyring \
   pavucontrol \
   pulseaudio \
+  pulseaudio-alsa \
+  pulseaudio-bluetooth \
   alsa-utils \
+  sof-firmware \
   fwupd \
   tlp \
+  tlp-rdw \
+  acpi_call \
+  lm_sensors \
+  thermald \
+  powertop \
   ;
+  # thinkfan \
+
 
 # https://wiki.archlinux.org/index.php/Installation_guide#Initramfs
 # https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Configuring_mkinitcpio
@@ -51,15 +62,18 @@ section "ADDING ENCRYPT TO MKINITCPIO"
 sed -i '/^HOOKS=/s/.*/HOOKS=(base udev autodetect keyboard keymap modconf block encrypt filesystems resume fsck)/' /etc/mkinitcpio.conf
 mkinitcpio -p linux
 
+
 # https://wiki.archlinux.org/index.php/Installation_guide#Time_zone
 # https://wiki.archlinux.org/index.php/System_time#Time_standard
 section "SETTING TIME"
-# ln -f -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
-# hwclock --systohc --utc
-# systemctl enable systemd-timesyncd.service
+# NOTE(JL): I don't think timedatectl runs in the right context during chroot
 timedatectl set-timezone America/Los_Angeles
 timedatectl set-local-rtc false
 timedatectl set-ntp true
+ln -f -s /usr/share/zoneinfo/America/Los_Angeles /etc/localtime
+hwclock --systohc --utc
+systemctl enable systemd-timesyncd.service
+
 
 # https://wiki.archlinux.org/index.php/Installation_guide#Localization
 section "SETTING LOCALE"
@@ -71,6 +85,7 @@ export LANG=en_US.UTF-8
 mkdir -p /usr/local/share/kbd/keymaps
 echo "keycode 58 = Escape" > /usr/local/share/kbd/keymaps/personal.map
 echo "KEYMAP=/usr/local/share/kbd/keymaps/personal.map" > /etc/vconsole.conf
+
 
 # https://wiki.archlinux.org/index.php/Installation_guide#Network_configuration
 section "SETTING NETWORK"
@@ -86,6 +101,7 @@ systemctl enable NetworkManager.service
 cp /etc/iptables/simple_firewall.rules /etc/iptables/iptables.rules
 systemctl enable iptables.service
 
+
 section "SETTING USER"
 # https://wiki.archlinux.org/index.php/Installation_guide#Root_password
 echo "Setting root password"
@@ -94,9 +110,9 @@ passwd
 echo "Creating regular user account"
 ask USERNAME "Username"
 # https://wiki.archlinux.org/index.php/Users_and_groups#User_groups
-# docker group?..
+# docker group?
 # sys group? (printers)
-useradd -m -g users -G wheel,storage,power,audio,video,input "$USERNAME"
+useradd -m -g "$USERNAME" -G wheel,storage,power,audio,video,input "$USERNAME"
 passwd "$USERNAME"
 echo "Adding wheel group to sudoers"
 sed -i '/%wheel ALL=(ALL) ALL/s/^#//' /etc/sudoers
@@ -105,28 +121,37 @@ Defaults timestamp_timeout=15
 Defaults passprompt="[sudo] password for %u: "
 Defaults lecture=never
 EOL
-# jiexi ALL=(ALL) NOPASSWD: /usr/bin/light ?
 
-section "SETTING PERFORMANCE"
+
+section "SETTING PERFORMANCE/MAINTENANCE"
 # https://wiki.archlinux.org/index.php/Solid_state_drive#Periodic_TRIM
 systemctl enable fstrim.timer
+# https://wiki.archlinux.org/index.php/TLP#Installation
 systemctl enable tlp.service
-# TODO(JL): Consider https://wiki.archlinux.org/index.php/TLP#ThinkPads_only
+systemctl enable NetworkManager-dispatcher.service # For tlp-rdw
+systemctl mask systemd-rfkill.service
+systemctl mask systemd-rfkill.socket
+systemctl enable thermald.service
+# https://wiki.archlinux.org/index.php/Fan_speed_control#ThinkPad_laptops
+# modprobe thinkpad_acpi
+# systemctl enable thinkfan
+# TODO(JL): Configure thinkfan
 
 
 # section "SETTING CONFIG"
 # echo "Configuring dotfiles at /home/$USERNAME/.config"
 # git clone https://github.com/jiexi/....git "/home/$USERNAME/.config"
 
-# Consider https://wiki.archlinux.org/index.php/Laptop
-# Pacman -Sy fwupd
+
+# TODO(JL): Consider https://wiki.archlinux.org/index.php/Laptop
+# Lenovo audio and mic mute LED
+
+
+# FW Update Manager
+# fwupdmgr get-devices
 # fwupdmgr refresh
 # fwupdmgr get-updates
-# TLP
-
-# Install yay?
-# Lenovo audio and mic mute LED
-# https://github.com/helmuthdu/aui/blob/master/fifo#L592
-
-
-# Autologin user since encrypted drive anyway?..
+# fwupdmgr update
+# https://pcsupport.lenovo.com/de/de/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x1-carbon-8th-gen-type-20u9-20ua/20u9/parts/display/compatible
+# fwupdmgr install xxx.cab # and then restart system
+# https://wiki.archlinux.org/index.php/REFInd#Installing_the_rEFInd_Boot_Manager#fwupdate
