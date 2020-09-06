@@ -53,7 +53,7 @@
             "delay"
         ],
         "bass_enhancer": {
-            "state": "true",
+            "state": "false",
             "input-gain": "0",
             "output-gain": "0",
             "amount": "1",
