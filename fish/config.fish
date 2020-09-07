@@ -22,9 +22,6 @@ alias reload "source ~/.config/fish/config.fish"
 # sudo
 alias please "sudo"
 
-# fuck
-thefuck --alias | source
-
 # cd
 alias ..  "cd .."
 alias ... "cd ../.."
