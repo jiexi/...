@@ -1,0 +1,17 @@
+pkgname=jiexiluan-development-meta
+pkgver=1.0.0
+pkgrel=1
+arch=('any')
+url="https://github.com/jiexi/.../"
+depends=(
+
+docker # containers
+docker-compose # docker orchestrator
+git # version control
+sublime-merge # git gui
+visual-studio-code-bin # ide
+
+)
+package() {
+  true
+}

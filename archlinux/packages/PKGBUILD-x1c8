@@ -1,0 +1,24 @@
+pkgname=jiexiluan-x1c8-meta
+pkgver=1.0.0
+pkgrel=1
+arch=('any')
+url="https://github.com/jiexi/.../"
+depends=(
+
+jiexiluan-laptop-meta # laptop meta package
+
+#########################
+### X1 Carbon 8th Gen ###
+#########################
+
+acpi_call # not needed once natacpi's discharge/recalibrate are merged
+          #  see https://linrunner.de/tlp/faq/battery.html
+fwupd # firmware manager
+intel-ucode # intel microcode
+sof-firmware # needed to get audio working
+             # see https://bbs.archlinux.org/viewtopic.php?id=257975
+
+)
+package() {
+  true
+}

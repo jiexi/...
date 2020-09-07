@@ -35,13 +35,7 @@ pacman -S \
   networkmanager \
   nm-connection-editor \
   gnome-keyring \
-  pavucontrol \
-  pulseaudio \
-  pulseaudio-alsa \
-  pulseaudio-bluetooth \
-  alsa-utils \
   sof-firmware \
-  fwupd \
   tlp \
   tlp-rdw \
   acpi_call \
@@ -145,13 +139,3 @@ systemctl enable thermald.service
 
 # TODO(JL): Consider https://wiki.archlinux.org/index.php/Laptop
 # Lenovo audio and mic mute LED
-
-
-# FW Update Manager
-# fwupdmgr get-devices
-# fwupdmgr refresh
-# fwupdmgr get-updates
-# fwupdmgr update
-# https://pcsupport.lenovo.com/de/de/products/laptops-and-netbooks/thinkpad-x-series-laptops/thinkpad-x1-carbon-8th-gen-type-20u9-20ua/20u9/parts/display/compatible
-# fwupdmgr install xxx.cab # and then restart system
-# https://wiki.archlinux.org/index.php/REFInd#Installing_the_rEFInd_Boot_Manager#fwupdate

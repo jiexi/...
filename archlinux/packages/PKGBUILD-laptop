@@ -1,0 +1,20 @@
+pkgname=jiexiluan-laptop-meta
+pkgver=1.0.0
+pkgrel=1
+arch=('any')
+url="https://github.com/jiexi/.../"
+depends=(
+
+##############
+### Laptop ###
+##############
+tlp # battery life optimizer
+tlp-rdw # tlp radio plugin
+lm_sensors # fan control
+thermald # temp control
+powertop # power monitor
+
+)
+package() {
+  true
+}

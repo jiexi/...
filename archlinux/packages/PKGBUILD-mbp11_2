@@ -1,0 +1,24 @@
+pkgname=jiexiluan-mbp11_2-meta
+pkgver=1.0.0
+pkgrel=1
+arch=('any')
+url="https://github.com/jiexi/.../"
+depends=(
+
+jiexiluan-laptop-meta # laptop meta package
+
+#########################
+### MacBook Pro 11,2  ###
+#########################
+
+bcwc-pcie-git # webcam kernel module
+broadcom-wl-dkms # wireless kernel module
+gmux_backlight # screen brightness
+intel-ucode # intel microcode
+linux-macbook # linux kernel for macbook
+mbpfan-git # fan control
+
+)
+package() {
+  true
+}

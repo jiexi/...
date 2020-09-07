@@ -1,0 +1,41 @@
+pkgname=jiexiluan-shared-meta
+pkgver=1.0.0
+pkgrel=1
+arch=('any')
+url="https://github.com/jiexi/.../"
+depends=(
+
+############
+### Base ###
+############
+base
+# base-devel
+linux
+linux-firmware
+
+##################
+### Bootloader ###
+##################
+refind-efi
+os-prober
+
+#############
+### Tools ###
+#############
+
+binutils # required for makepkg
+fish # shell
+fisher # fish plugins
+htop # process monitor
+iputils # network monitoring tools (ping)
+iproute2 # ip routing utils
+jq # json processor
+openssh # ssh client
+vim # text editor
+pkgfile # pacman metadata tool
+man-db # man page reader
+
+)
+package() {
+  true
+}

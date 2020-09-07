@@ -1,0 +1,82 @@
+pkgname=jiexiluan-desktop-meta
+pkgver=1.0.0
+pkgrel=1
+arch=('any')
+url="https://github.com/jiexi/.../"
+depends=(
+
+###########################
+### Desktop Environment ###
+###########################
+
+## Desktop
+sway # compositor
+swayidle # idle/power actions
+swaylock # lockscreen
+xdg-desktop-portal # desktop screencast
+xdg-desktop-portal-wlr # desktop screencast
+xorg-server-xwayland # backwards compatible with X
+
+## Launchers/Menu
+rofi # menu TODO(JL): replace this
+waybar # status bar
+xdg-utils # xdg-open
+
+## Notifications
+libnotify # notify-send (for backwards compatibility)
+mako # notifications
+notify-send.sh # notify-send replacement
+
+## Audio
+alsa-utils # sound controls
+pulseaudio # audio controller
+pavucontrol # volume control gui
+pulseaudio-alsa # pulseaudio alsa hook
+pulseaudio-bluetooth # pulseaudio bluetooth
+pulseeffects # pulseaudio sound effects
+
+## Screen
+light # brightness controls
+redshift-wayland-git # blue filter
+
+## Input
+ruby-fusuma # touch gesture mapping
+ruby-fusuma-plugin-keypress # fusuma keypress plugin
+ruby-fusuma-plugin-tap # fusuma tap plugin
+xdotool # X input simulation # TODO(JL): Kill this at some point
+xf86-input-libinput # fusuma backwards compatibility with X TODO(JL): Is this still needed?
+ydotool # wayland input simulation
+
+## Media
+grim # screenshots
+playerctl # media controls
+slurp # geometry for grim
+wf-recorder # screen recorder
+wl-clipboard # clipboard
+
+## Fonts
+otf-san-francisco # apple san francisco
+ttf-bitstream-vera # base system font
+ttf-material-design-icons-git # material desing font icon
+ttf-roboto # google robot
+ttf-twemoji # twitter emojis
+
+## Miscellaneous
+gluqlo-git # flip clock
+jq # tool to help process sway tree json
+geoclue # tool to help redshift find our location
+
+
+####################
+### Applications ###
+####################
+termite # terminal
+google-chrome # web browser
+vlc # media player TODO(JL): Replace with mpd?
+deluge-gtk # torrents
+libreoffice-still # office suite
+
+)
+package() {
+  true
+}

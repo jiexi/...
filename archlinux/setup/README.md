@@ -1,4 +1,4 @@
-# My archlinux setup scripts
+# Arch Linux Setup Scripts
 
 ### Download:
 
