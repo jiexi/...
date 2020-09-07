@@ -33,7 +33,6 @@ pacman -S \
   sudo \
   vim \
   networkmanager \
-  network-manager-applet \
   nm-connection-editor \
   gnome-keyring \
   pavucontrol \
@@ -50,9 +49,6 @@ pacman -S \
   thermald \
   powertop \
   ;
-  # dhcpcd \ # don't think this is needed with networkmanager
-  # wpa_supplicant \ #same, it's installed as a dep by networkmanager
-  # wireless_tools \
   # thinkfan \
   # acpi_call \ # not needed once natacpi's discharge/recalibrate are merged
   #             # see https://linrunner.de/tlp/faq/battery.html
