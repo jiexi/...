@@ -216,7 +216,7 @@ echo "/var/swap none swap defaults 0 0" >> /mnt/etc/fstab
 
 
 section "RUNNING CHROOT SCRIPT"
-mv chroot /mnt/chroot
+cp chroot /mnt/chroot
 arch-chroot /mnt bash /chroot
 rm /mnt/chroot
 

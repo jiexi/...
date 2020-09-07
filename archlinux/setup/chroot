@@ -49,6 +49,13 @@ pacman -S \
   # sof-firmware \ # is this needed?
   #                # see https://bbs.archlinux.org/viewtopic.php?id=257975
 
+echo "Installing yay"
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+cd ..
+rm -rf yay
+
 
 # https://wiki.archlinux.org/index.php/Installation_guide#Initramfs
 # https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Configuring_mkinitcpio
@@ -108,6 +115,12 @@ ask USERNAME "Username"
 # sys group? (printers)
 useradd -m -g users -G wheel,storage,power,sys,audio,video,input "$USERNAME"
 passwd "$USERNAME"
+mkdir /home/"$USERNAME"/Desktop
+mkdir /home/"$USERNAME"/Documents
+mkdir /home/"$USERNAME"/Downloads
+mkdir /home/"$USERNAME"/Music
+mkdir /home/"$USERNAME"/Pictures
+mkdir /home/"$USERNAME"/Videos
 echo "Adding wheel group to sudoers"
 sed -i '/%wheel ALL=(ALL) ALL/s/^#//' /etc/sudoers
 cat >> /etc/sudoers <<EOL
@@ -127,14 +140,15 @@ systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
 systemctl enable thermald.service
 # https://wiki.archlinux.org/index.php/Fan_speed_control#ThinkPad_laptops
+# looks like something is enabling this for us already
 # modprobe thinkpad_acpi
 # systemctl enable thinkfan
 # TODO(JL): Configure thinkfan
 
 
 # section "SETTING CONFIG"
-# echo "Configuring dotfiles at /home/$USERNAME/.config"
-# git clone https://github.com/jiexi/....git "/home/$USERNAME/.config"
+echo "Cloning dotfiles into /home/$USERNAME/.config"
+git clone https://github.com/jiexi/....git /home/"$USERNAME"/.config
 
 
 # TODO(JL): Consider https://wiki.archlinux.org/index.php/Laptop
