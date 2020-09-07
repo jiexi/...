@@ -1,5 +1,5 @@
 pkgname=jiexiluan-desktop-meta
-pkgver=1.0.0
+pkgver=1.0.1
 pkgrel=1
 arch=('any')
 url="https://github.com/jiexi/.../"
@@ -74,7 +74,6 @@ termite # terminal
 google-chrome # web browser
 vlc # media player TODO(JL): Replace with mpd?
 deluge-gtk # torrents
-libreoffice-still # office suite
 
 )
 package() {
