@@ -43,7 +43,6 @@ pacman -S \
   thermald \
   powertop \
   ;
-  # thinkfan \
   # acpi_call \ # not needed once natacpi's discharge/recalibrate are merged
   #             # see https://linrunner.de/tlp/faq/battery.html
   # sof-firmware \ # is this needed?
@@ -98,7 +97,6 @@ cat >> /etc/hosts <<EOL
 127.0.0.1 ${HOSTNAME}.localdomain ${HOSTNAME}
 EOL
 systemctl enable NetworkManager.service
-# TODO(JL): Where is this from?
 cp /etc/iptables/simple_firewall.rules /etc/iptables/iptables.rules
 systemctl enable iptables.service
 
@@ -140,10 +138,22 @@ systemctl mask systemd-rfkill.service
 systemctl mask systemd-rfkill.socket
 systemctl enable thermald.service
 # https://wiki.archlinux.org/index.php/Fan_speed_control#ThinkPad_laptops
-# looks like something is enabling this for us already
-# modprobe thinkpad_acpi
-# systemctl enable thinkfan
-# TODO(JL): Configure thinkfan
+yay -S thinkfan
+modprobe thinkpad_acpi
+echo "options thinkpad_acpi fan_control=1" > /etc/modprobe.d/thinkfan.conf
+cat > /etc/thinkfan.conf <<EOL
+sensors:
+  - hwmon: /sys/class/hwmon
+    name: coretemp
+    indices: [1,2,3,4,5]
+fans:
+  - tpacpi: /proc/acpi/ibm/fan
+levels:
+  - [0, 0, 50]
+  - ["level auto", 45, 75]
+  - ["level disengaged", 70, 255]
+EOL
+systemctl enable thinkfan
 
 
 # section "SETTING CONFIG"

@@ -199,16 +199,22 @@ swapon /mnt/var/swap
 
 section "INSTALLING BASE"
 # https://wiki.archlinux.org/index.php/Installation_guide#Installation
-# NOTE(JL): Assumes intel machine
 pacstrap /mnt \
   base \
   base-devel \
-  intel-ucode \
   linux \
   linux-firmware \
   refind-efi \
   os-prober \
   ;
+
+askyesno IS_INTEL "Is this an Intel based machine?"
+if [ "$IS_INTEL" == "yes" ]; then
+  rm /mnt/boot/intel-ucode.img # Need to do this or pacstrap will fail
+  pacstrap /mnt intel-ucode
+  INTEL_FLAG="initrd=intel-ucode.img"
+fi
+
 # https://wiki.archlinux.org/index.php/Installation_guide#Configure_the_system
 genfstab -U /mnt >> /mnt/etc/fstab
 # https://wiki.archlinux.org/index.php/swap#Manually
@@ -243,7 +249,7 @@ echo "Using resume_offset ${RESUME_OFFSET}"
 
 arch-chroot /mnt refind-install
 cat > /mnt/boot/refind_linux.conf <<EOL
-"Boot using default options" "cryptdevice=PARTUUID=${PARTUUID}:root${TRIM_FLAG} root=/dev/mapper/root resume=/dev/mapper/root resume_offset=${RESUME_OFFSET} rw add_efi_memmap initrd=intel-ucode.img initrd=initramfs-linux.img"
+"Boot using default options" "cryptdevice=PARTUUID=${PARTUUID}:root${TRIM_FLAG} root=/dev/mapper/root resume=/dev/mapper/root resume_offset=${RESUME_OFFSET} rw add_efi_memmap ${INTEL_FLAG} initrd=initramfs-linux.img"
 EOL
 
 
