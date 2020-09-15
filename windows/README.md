@@ -18,6 +18,7 @@ Tools, notes, and shared packages for [Windows](https://www.microsoft.com/en-us/
   * Open File Explorer
   * View -> Folder Options -> General -> Open File Explorer to: `This PC`
 * Enable BitLocker
+  * See notes on _Dual Boot Linux_
 * Install SSD Drivers/Utilities
 * Enable SSD Trim
 
@@ -30,6 +31,10 @@ Tools, notes, and shared packages for [Windows](https://www.microsoft.com/en-us/
 * BIOS
   * Config -> Power -> Sleep State -> Set to: `Linux`
     * This might break wake by HID though...
+  * Config -> Security -> Security Chip -> Disable TPM
+* Disable TPM BitLocker
+  * gpedit.msc -> Computer Configuration -> Administrative Templates -> Windows Components -> BitLocker Drive Encryption -> Operating System Drives
+  * Require additional authentication at startup -> Enable -> Check "Allow BitLocker without a compatible TPM" checkbox
 
 
 ### Thinkpad
