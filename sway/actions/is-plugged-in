@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+CABLE=$(upower -d | grep -n2 line-power | grep online | awk '{ print $3 }')
+if [[ $CABLE = "yes" ]]; then
+  exit 0
+else
+  exit 1
+fi

@@ -23,6 +23,12 @@ set $explorer 'nautilus --browser ~'
 ## Lockscreen
 set $lock ~/.config/sway/actions/lock-screen
 
+## Sleep
+set $sleep systemctl hybrid-sleep
+
+## Is Plugged In
+set $is_plugged_in ~/.config/sway/actions/is-plugged-in
+
 ## Screenshot
 set $screenshot ~/.config/sway/actions/screenshot
 
@@ -375,7 +381,7 @@ mode $mode_power {
     # (e) logout
     # bindsym e exit
     bindsym l exec $lock, mode "default"
-    bindsym s exec systemctl hybrid-sleep, mode "default"
+    bindsym s exec $sleep, mode "default"
     bindsym r exec systemctl reboot, mode "default"
     bindsym p exec systemctl poweroff, mode "default"
 
@@ -395,11 +401,16 @@ exec $battery_monitor
 
 ## Idle configuration:
 exec swayidle -w \
-     timeout 900 '$lock' \
-    timeout 1800 'swaymsg "output * dpms off"' \
+     timeout 180 '$is_plugged_in || swaymsg "output * dpms off"' \
+          resume '$is_plugged_in || swaymsg "output * dpms on"' \
+     timeout 300 '$is_plugged_in || $sleep' \
+     timeout 600 '$lock' \
+     timeout 900 'swaymsg "output * dpms off"' \
           resume 'swaymsg "output * dpms on"' \
+    timeout 1500 '$sleep' \
     before-sleep '$lock' \
             lock '$lock' \
+          unlock 'pkill swaylock'
 
 # after-resume 'echo "am i needed to awake screens after coming back from closed lid action while on multi-monitor?"'
 

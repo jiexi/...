@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+LID=$(upower -d | grep lid-is-closed | awk '{print $2}')
+if [[ $LID = "no" ]]; then
+  exit 0
+else
+  exit 1
+fi

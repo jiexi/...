@@ -3,7 +3,6 @@
 if [ "$(swaymsg -t get_outputs | jq length)" -gt 1 ]; then
   swaymsg output eDP-1 disable
 else
-  # NOTE: swayidle before-sleep doesn't actually seen to trigger, so....
-  ~/.config/sway/actions/lock-screen
+  loginctl lock-session
   systemctl sleep
 fi
