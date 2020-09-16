@@ -20,7 +20,6 @@ fwupdmgr update
 ```
 
 * Add user to docker group (fixes `docker` sudo permissions)
-  * `dockerd` vs `systemctl enable docker`?...
 * Add instructions for hybrid-sleep based on [this arch wiki page](https://wiki.archlinux.org/index.php/Power_management#Power_management_with_systemd)
 * Chrome swipe gestures: `https://github.com/pawelmatyjasik/chrome-gestures`
 * See if this matters `https://wiki.archlinux.org/index.php/REFInd#Installing_the_rEFInd_Boot_Manager#fwupdate`
