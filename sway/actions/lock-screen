@@ -1,5 +1,9 @@
 #!/usr/bin/env sh
 
+me="$(basename "$0")";
+running=$(ps h -C "$me" | grep -wv $$ | wc -l);
+[[ $running > 1 ]] && exit;
+
 swaylock_process=$(pgrep swaylock  | tail -1)
 if [[ ! -z "$swaylock_process" ]]; then
   exit 0
