@@ -59,7 +59,7 @@ rm -rf yay
 # https://wiki.archlinux.org/index.php/Installation_guide#Initramfs
 # https://wiki.archlinux.org/index.php/Dm-crypt/Encrypting_an_entire_system#Configuring_mkinitcpio
 section "ADDING ENCRYPT TO MKINITCPIO"
-sed -i '/^HOOKS=/s/.*/HOOKS=(base udev autodetect keyboard keymap modconf block encrypt filesystems resume fsck)/' /etc/mkinitcpio.conf
+sed -i '/^HOOKS=/s/.*/HOOKS=(base udev autodetect keyboard modconf block encrypt filesystems resume fsck)/' /etc/mkinitcpio.conf
 mkinitcpio -p linux
 
 
