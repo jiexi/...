@@ -1,20 +1,29 @@
-#!/usr/bin/env sh
+#!/bin/bash
 
-set -e
+~/.config/sway/actions/record-stop
 
-LOOPBACK=/dev/video1
+# https://gist.github.com/progandy/bff675311aa2c3b777a37abe81aa4b4d
+# sway-mirror OPTIONS
+# SDL_VIDEODRIVER=wayland stream
+# SDL_VIDEODRIVER=x11 stream
+# sway-mirror --output LVDS-1
 
 # TODO: Swaynag "You're sharing your screen"?
 # TODO: Mako notification?
 
-if ! lsmod | grep v4l2loopback > /dev/null; then
-  # exclusive_caps=1
-	sudo modprobe v4l2loopback video_nr=1 card_label=v4l2loopback
+instance=sway-mirror$$
+wf-recorder "$@" -c rawvideo -m sdl -f pipe:$instance &
+sleep 1
+if kill -0 $! 2>/dev/null && swaymsg "[title=\"^pipe:$instance\$\"] nop" >/dev/null; then
+	while read type ; read name ; do
+		if [[ $type == '"close"' && $name == "\"pipe:$instance\"" ]]; then
+			break
+		fi
+	done < <(swaymsg -mt subscribe '["window"]' | jq --unbuffered .change,.container.name)
+	#while jobs '%1' >/dev/null && swaymsg "[title=\"^pipe:wf-mirror$$\$\"] nop" >/dev/null; do
+	#	sleep 1
+	#done
 fi
-
-~/.config/sway/actions/record-stop
-
-# wf-recorder --muxer=v4l2 --codec=rawvideo --file="$LOOPBACK" -x yuv420p
-wlstreamer --output $LOOPBACK || true
+kill -INT '%1'
 
 pacat --file-format=wav ~/.config/sway/sounds/screenshot.wav

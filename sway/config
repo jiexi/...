@@ -187,14 +187,12 @@ mode "$mode_record" {
 #
 # Stream Menu:
 #
-set $mode_stream Stream: (s) screen, (w) window, (a) area | ->Webcam: (S) screen | (x) stop
+set $mode_stream Stream: (w) wayland, (x) x11 | (s) stop
 
 mode "$mode_stream" {
-    bindsym s exec $stream screen, mode "default"
-    bindsym w exec $stream window, mode "default"
-    bindsym a exec $stream area, mode "default"
-    bindsym Shift+s exec $stream screen --webcam, mode "default"
-    bindsym x exec $record_stop, mode "default"
+    bindsym w exec SDL_VIDEODRIVER=wayland $stream, mode "default"
+    bindsym x exec SDL_VIDEODRIVER=x11 $stream, mode "default"
+    bindsym s exec $record_stop, mode "default"
 
     # back to normal
     bindsym $mod+Shift+c mode "default"
@@ -401,17 +399,14 @@ exec $battery_monitor
 
 ## Idle configuration:
 exec swayidle -w \
-     timeout 180 '$is_plugged_in || swaymsg "output * dpms off"' \
-          resume '$is_plugged_in || swaymsg "output * dpms on"' \
-     timeout 300 '$is_plugged_in || $sleep' \
      timeout 600 '$lock' \
-     timeout 900 'swaymsg "output * dpms off"' \
+    timeout 1200 'swaymsg "output * dpms off"' \
           resume 'swaymsg "output * dpms on"' \
-    timeout 1500 '$sleep' \
+    timeout 1800 '$sleep' \
     before-sleep '$lock' \
             lock '$lock' \
-          unlock 'pkill swaylock'
-
+#timeout 300 'if pgrep swaylock; then swaymsg "output * dpms off"; fi' \
+#     resume 'if pgrep swaylock; then swaymsg "output * dpms on"; fi' \
 # after-resume 'echo "am i needed to awake screens after coming back from closed lid action while on multi-monitor?"'
 
 seat seat0 hide_cursor 60000
