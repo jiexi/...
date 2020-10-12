@@ -7,9 +7,12 @@ set -x VISUAL vim
 
 # set -x GDK_DPI_SCALE 1.5
 set -x CLUTTER_BACKEND wayland
-# set -x XDG_CURRENT_DESKTOP sway
-set -x XDG_CURRENT_DESKTOP Unity
+set -x XDG_CURRENT_DESKTOP sway
+# set -x XDG_CURRENT_DESKTOP Unity
 set -x XDG_SESSION_TYPE wayland
+
+# dotnet
+set -x PATH ~/.dotnet/tools $PATH
 
 #########################################
 # Alias / Key Bindings
