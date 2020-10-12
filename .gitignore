@@ -26,6 +26,7 @@ eog/
 evince/
 evolution/
 filezilla/
+fonts/dist/.uuid
 gconf/
 gedit/
 goa-*/
