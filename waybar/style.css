@@ -71,7 +71,8 @@ window#waybar {
 #tray,
 #mode,
 #custom-yay,
-#custom-dropbox
+#custom-dropbox,
+#custom-docker
 {
     /* font-size: 18px; */
     margin: 3px 5px 0px 5px;

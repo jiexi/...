@@ -7,7 +7,7 @@
         "margin-right": 0,
         "modules-left": ["custom/launcher", "sway/workspaces", "sway/mode"],
         "modules-center": ["clock"],
-        "modules-right": ["custom/dropbox", "custom/yay", "pulseaudio", "network", "battery", "custom/power"],
+        "modules-right": ["custom/docker", "custom/yay", "pulseaudio", "network", "battery", "custom/power"],
         "sway/workspaces": {
             "disable-scroll": true
         },
@@ -144,6 +144,7 @@
             "format": "󰇣"
         },
         "custom/yay": {
+            //"format": "{} 󰓦",
             "format": "{} 󰏓",
             //"format": "{} 󰀼",
             //"format": "{} 󰆧",
@@ -152,5 +153,13 @@
             "exec-if": "exit 0",                  // always run; consider advanced run conditions
             // "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar", // update system
             "signal": 8
+        },
+        "custom/docker": {
+            "format": "{} 󰡨",
+            "interval": 900,        // every 15 mins
+            "exec": "docker ps | tail -n +2 | wc -l",       // # of running containers
+            "exec-if": "exit 0",                  // always run; consider advanced run conditions
+            // "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar", // update system
+            //"signal": 8
         }
 }
