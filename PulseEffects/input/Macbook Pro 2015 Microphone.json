@@ -73,7 +73,7 @@
             "lpf-frequency": "20000"
         },
         "deesser": {
-            "state": "true",
+            "state": "false",
             "detection": "RMS",
             "mode": "Wide",
             "threshold": "-18",
