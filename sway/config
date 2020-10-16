@@ -438,6 +438,25 @@ input "1452:610:bcm5974" {
     middle_emulation enabled
 }
 
+## X1 Carbon Touchpad
+input "1739:52619:SYNA8006:00_06CB:CD8B_Touchpad" {
+    accel_profile adaptive
+    pointer_accel 0.4
+    scroll_factor 1
+    dwt enabled
+    tap enabled
+    drag disabled
+    natural_scroll enabled
+    middle_emulation enabled
+    click_method clickfinger
+}
+
+## X1 Carbon Trackpoint
+input "2:10:TPPS/2_Elan_TrackPoint" {
+    natural_scroll enabled
+}
+
+
 ## Touchpad Gestures
 exec fusuma -d
 
