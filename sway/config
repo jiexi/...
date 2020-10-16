@@ -420,7 +420,8 @@ for_window [app_id="^.*"] inhibit_idle fullscreen
 # X11:
 #
 xwayland enable
-exec "/usr/lib/xdg-desktop-portal -r & /usr/lib/xdg-desktop-portal-wlr"
+#exec "/usr/lib/xdg-desktop-portal -r & /usr/lib/xdg-desktop-portal-wlr"
+assign [title="^pipe:sway-mirror.*"] workspace X
 
 #
 # Inputs:
