@@ -9,7 +9,7 @@ if [[ ! -z "$swaylock_process" ]]; then
   exit 0
 fi
 
-# TODO(JL): Grab resolution from swaymsg
-# /usr/lib/xscreensaver/gluqlo -ampm -s 1.0 -r 2882x1800 &
-/usr/lib/xscreensaver/gluqlo -ampm -s 0.95 -r 2888x1800 &
+# TODO(JL): Handle multimonitor
+resolution=$(swaymsg -t get_outputs | jq -r '.[0].current_mode | "\(.width)x\(.height)"')
+/usr/lib/xscreensaver/gluqlo -ampm -s 0.95 -r $resolution &
 swaylock -c 00000000 ; killall gluqlo
