@@ -187,12 +187,13 @@ mode "$mode_record" {
 #
 # Stream Menu:
 #
-set $mode_stream Stream: (w) wayland, (x) x11 | (s) stop
+set $mode_stream Stream: (w) wayland, (x) x11 | (W) workspace, (X) stop
 
 mode "$mode_stream" {
     bindsym w exec SDL_VIDEODRIVER=wayland $stream, mode "default"
     bindsym x exec SDL_VIDEODRIVER=x11 $stream, mode "default"
-    bindsym s exec $record_stop, mode "default"
+    bindsym Shift+W workspace X, mode "default"
+    bindsym Shift+x exec $record_stop, mode "default"
 
     # back to normal
     bindsym $mod+Shift+c mode "default"
