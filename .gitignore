@@ -11,7 +11,9 @@ Code/User/*
 !Code/User/keybindings.json
 
 # Others
+Authy Desktop/
 Hamsket/
+Ferdi/
 Ganache/
 Popcorn-Time/
 Postman/
@@ -46,6 +48,7 @@ paperwm/
 pipewire-media-session/
 pulse/
 sublime-merge/
+tlpui/
 totem/
 truffle/
 user-dirs.*
