@@ -19,7 +19,13 @@ fwupdmgr update
 # fwupdmgr install xxx.cab # and then restart system
 ```
 
+## Todo/Notes
+
 * Add user to docker group (fixes `docker` sudo permissions)
 * Add instructions for hybrid-sleep based on [this arch wiki page](https://wiki.archlinux.org/index.php/Power_management#Power_management_with_systemd)
-* Chrome swipe gestures: `https://github.com/pawelmatyjasik/chrome-gestures`
-* See if this matters `https://wiki.archlinux.org/index.php/REFInd#Installing_the_rEFInd_Boot_Manager#fwupdate`
+* Chrome swipe gestures
+* Restore Chrome launch options after wayland regression fixed
+  * https://www.reddit.com/r/swaywm/comments/ipkfbx/chromechromium_850418383_regression_workaround/
+  * /usr/share/applications/google-chrome.desktop
+* Restore pulseaudio settings after 5.9.x kernel is released
+  * https://gist.github.com/hamidzr/dd81e429dc86f4327ded7a2030e7d7d9#gistcomment-3345062
