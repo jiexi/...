@@ -30,3 +30,5 @@
 	restart = reset HEAD --hard
 	all = add --all
 	trigger = commit --allow-empty -m "Trigger"
+[merge]
+	conflictstyle = diff3
