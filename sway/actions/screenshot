@@ -4,6 +4,7 @@ set -e
 
 FILENAME=~/Desktop/$(date +"%Y-%m-%d-%T").png
 CLIPBOARD=0
+EDIT=0
 
 # TODO(JL): Add Clipboard option
 # TODO: Mako notification?
@@ -12,6 +13,10 @@ for arg do
   shift
   if [ "$arg" = "--clipboard" ]; then
     CLIPBOARD=1
+    continue
+  fi
+  if [ "$arg" = "--edit" ]; then
+    EDIT=1
     continue
   fi
   set -- "$@" "$arg"
@@ -37,6 +42,11 @@ esac
 
 if [[ $CLIPBOARD -eq 1 ]]; then
   wl-copy < "$FILENAME"
+  rm "$FILENAME"
+fi
+
+if [[ $EDIT -eq 1 ]]; then
+  swappy -f "$FILENAME"
   rm "$FILENAME"
 fi
 
