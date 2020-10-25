@@ -16,7 +16,7 @@ Fonts to be used across the OS.
 * Install materialdesignicons.com
   * `yay -S ttf-material-design-icons-git`
 * Install noto
-  * `yay -S noto-fonts`
+  * `yay -S noto-fonts noto-fonts-cjk`
 
 ## Debug
 * Font resolution for Space character `fc-match -s sans-serif:charset=0020`
