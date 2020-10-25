@@ -11,5 +11,5 @@ fi
 
 # TODO(JL): Handle multimonitor
 resolution=$(swaymsg -t get_outputs | jq -r '.[0].current_mode | "\(.width)x\(.height)"')
-/usr/lib/xscreensaver/gluqlo -ampm -s 0.95 -r $resolution &
+/usr/lib/xscreensaver/gluqlo -ampm -r $resolution &
 swaylock -c 00000000 ; killall gluqlo
