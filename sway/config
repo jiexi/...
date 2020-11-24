@@ -226,7 +226,7 @@ exec redshift
     bindsym $mod+Return exec $terminal
 
     # Kill focused window
-    bindsym $mod+Shift+q kill
+    bindsym $mod+q kill
 
     # Start your launcher
     bindsym $mod+Space exec $menu
