@@ -83,7 +83,7 @@
     "BTTEnableUsageLogging" : true,
     "snapBottomLeft" : true,
     "BTTScreenshotOpenImgurInBrowser" : true,
-    "BTTDontRestartAfterSleep" : true,
+    "BTTDontRestartAfterSleep" : false,
     "BTTForceNormalClickPressure2F" : 140,
     "BSTSnapAreaDefaultInvisible" : false,
     "BTTDrawingAreaHeight" : 626,
@@ -143,7 +143,7 @@
     "showOtherTriggersTab" : true,
     "BSTSnapAreaDefaultPictoDistanceFromLeft" : 0.10000000149011612
   },
-  "BTTPresetUUID" : "68E4634A-77A2-48D2-9CDD-0EFECDDF84BB",
+  "BTTPresetUUID" : "C700A8E1-5E15-481E-BDB0-524F4EADA364",
   "BTTPresetContent" : [
     {
       "BTTAppBundleIdentifier" : "com.apple.finder",
