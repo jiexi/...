@@ -1,5 +1,5 @@
 pkgname=jiexiluan-desktop-meta
-pkgver=1.0.1
+pkgver=1.0.2
 pkgrel=1
 arch=('any')
 url="https://github.com/jiexi/.../"
@@ -33,7 +33,6 @@ pulseaudio # audio controller
 pavucontrol # volume control gui
 pulseaudio-alsa # pulseaudio alsa hook
 pulseaudio-bluetooth # pulseaudio bluetooth
-pulseeffects # pulseaudio sound effects
 
 ## Screen
 light # brightness controls

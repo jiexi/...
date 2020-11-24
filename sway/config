@@ -77,7 +77,6 @@ bindsym --locked XF86AudioPlay exec ~/.config/sway/actions/media-play
 bindsym --locked XF86AudioStop exec ~/.config/sway/actions/media-stop
 bindsym --locked XF86AudioPrev exec ~/.config/sway/actions/media-prev
 bindsym --locked XF86AudioNext exec ~/.config/sway/actions/media-next
-exec pulseeffects --gapplication-service
 
 #
 # Brightness:
