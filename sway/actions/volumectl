@@ -31,8 +31,8 @@ else
     level="$vol%"
 fi
 
-~/.config/sway/actions/notify-progress "Volume $level" "$vol"
-
 if [[ "$prev_vol" -ne "$vol" || ("$prev_state" == *"off"* && "$state" != *"off"* ) ]]; then
     pacat --file-format=wav ~/.config/sway/sounds/volume.wav &
 fi
+
+~/.config/sway/actions/notify-progress "Volume $level" "$vol"
