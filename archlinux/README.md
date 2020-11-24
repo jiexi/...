@@ -26,5 +26,6 @@ fwupdmgr update
 * Restore Chrome launch options after wayland regression fixed
   * https://www.reddit.com/r/swaywm/comments/ipkfbx/chromechromium_850418383_regression_workaround/
   * /usr/share/applications/google-chrome.desktop
+  * https://www.reddit.com/r/swaywm/comments/imcoo6/chrome_wayland_available_via_feature_flag_in/
 * Restore pulseaudio settings after 5.9.x kernel is released
   * https://gist.github.com/hamidzr/dd81e429dc86f4327ded7a2030e7d7d9#gistcomment-3345062
