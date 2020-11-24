@@ -1,7 +1,6 @@
 # Arch Linux
 
 Tools, notes, and shared packages for [Arch Linux](https://www.archlinux.org/).
-Nothing here currently, but eventually PKGBUILD files.
 
 ## Setup
 `setup/` contains helpers to bootstrap Arch installations.
