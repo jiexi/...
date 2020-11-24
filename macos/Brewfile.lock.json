@@ -1,0 +1,140 @@
+{
+  "entries": {
+    "tap": {
+      "homebrew/bundle": {
+        "revision": "d1a530ada501e983aef2748411b947b8c5696ac9"
+      },
+      "homebrew/cask": {
+        "revision": "da0b7a8819e48824e32396ae1dd4399de552ea70"
+      },
+      "homebrew/cask-versions": {
+        "revision": "529e7d221b538c4acc0fdf485926a9d204562830"
+      },
+      "homebrew/core": {
+        "revision": "77cc5f58bf330320194ddd8537f72cfcdbdbe6a9"
+      },
+      "homebrew/services": {
+        "revision": "0c81bc3e52cb890eb8ef50f9abff803dbe5f3606"
+      },
+      "koekeishiya/formulae": {
+        "revision": "425c0806649643447cbe1e1021ed7a84a9c23790"
+      }
+    },
+    "brew": {
+      "fish": {
+        "version": "3.1.2",
+        "bottle": {
+          "cellar": ":any_skip_relocation",
+          "prefix": "/usr/local",
+          "files": {
+            "big_sur": {
+              "url": "https://homebrew.bintray.com/bottles/fish-3.1.2.big_sur.bottle.tar.gz",
+              "sha256": "ef7f5a2fd69ba2baed78d02ee162cc8fb85644161dd765d47b570b56db9569cf"
+            },
+            "catalina": {
+              "url": "https://homebrew.bintray.com/bottles/fish-3.1.2.catalina.bottle.tar.gz",
+              "sha256": "b158b7f8640feb7c622ff3ca92b1bd88565f274f3e761499f5926bb124eeff7d"
+            },
+            "mojave": {
+              "url": "https://homebrew.bintray.com/bottles/fish-3.1.2.mojave.bottle.tar.gz",
+              "sha256": "6797636eaba364d0cbbc0459103a8767598e985f01846cca6cb57c986dfee7b8"
+            },
+            "high_sierra": {
+              "url": "https://homebrew.bintray.com/bottles/fish-3.1.2.high_sierra.bottle.tar.gz",
+              "sha256": "2609577a0d9f6b661331adccf5d1d8e010662ffe128869757e0af9a6760e26fb"
+            }
+          }
+        }
+      },
+      "git-town": {
+        "version": "7.4.0",
+        "bottle": {
+          "cellar": ":any_skip_relocation",
+          "prefix": "/usr/local",
+          "files": {
+            "big_sur": {
+              "url": "https://homebrew.bintray.com/bottles/git-town-7.4.0.big_sur.bottle.1.tar.gz",
+              "sha256": "95e2d5299980978b1901814ada3baa3b42a5c38474e042f891ba0aff10bbbeff"
+            },
+            "catalina": {
+              "url": "https://homebrew.bintray.com/bottles/git-town-7.4.0.catalina.bottle.1.tar.gz",
+              "sha256": "9c90e21d837c016a37117bbf04a6cb66e5acda6ea129dd7013a133cbf3e23d72"
+            },
+            "mojave": {
+              "url": "https://homebrew.bintray.com/bottles/git-town-7.4.0.mojave.bottle.1.tar.gz",
+              "sha256": "f54ad1a3ad30a40be97995c2a8abbecc447e4d93966f18fbb43fcfaf65448bfc"
+            },
+            "high_sierra": {
+              "url": "https://homebrew.bintray.com/bottles/git-town-7.4.0.high_sierra.bottle.1.tar.gz",
+              "sha256": "2ff4e78e7a3472caa0f5961996efd2ef9e4cfc82455363dfb4f9eaebd441cbe7"
+            }
+          }
+        }
+      },
+      "koekeishiya/formulae/skhd": null,
+      "koekeishiya/formulae/yabai": null
+    },
+    "cask": {
+      "authy": {
+        "version": "1.8.3",
+        "options": {
+          "full_name": "authy"
+        }
+      },
+      "bettertouchtool": {
+        "version": "3.506-1644",
+        "options": {
+          "full_name": "bettertouchtool"
+        }
+      },
+      "docker": {
+        "version": "2.5.0.1,49550",
+        "options": {
+          "full_name": "docker"
+        }
+      },
+      "fliqlo": {
+        "version": "1.8.3",
+        "options": {
+          "full_name": "fliqlo"
+        }
+      },
+      "fork": {
+        "version": "2.0.2",
+        "options": {
+          "full_name": "fork"
+        }
+      },
+      "google-chrome": {
+        "version": "87.0.4280.67",
+        "options": {
+          "full_name": "google-chrome"
+        }
+      },
+      "slack": {
+        "version": "4.11.1",
+        "options": {
+          "full_name": "slack"
+        }
+      },
+      "visual-studio-code": {
+        "version": "1.51.1",
+        "options": {
+          "full_name": "visual-studio-code"
+        }
+      }
+    }
+  },
+  "system": {
+    "macos": {
+      "catalina": {
+        "HOMEBREW_VERSION": "2.5.11",
+        "HOMEBREW_PREFIX": "/usr/local",
+        "Homebrew/homebrew-core": "77cc5f58bf330320194ddd8537f72cfcdbdbe6a9",
+        "CLT": "12.2.0.0.1.1604628099",
+        "Xcode": "12.0",
+        "macOS": "10.15.6"
+      }
+    }
+  }
+}
