@@ -61,6 +61,12 @@ Tools, notes, and shared packages for [MacOS](https://www.apple.com/macos).
       chsh -s /usr/local/bin/fish
     ```
   * Restart shell
+* Add Day-O to menu bar
+  * Disable Icon
+  * Enable Startup
+  * Format ` E MMM d  h:mm a ` (include surrounding spaces)
+  * Disable System Date/Time Widget
+
 
 ### Save Homebrew Packages
 `brew bundle dump`
