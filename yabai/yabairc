@@ -40,15 +40,18 @@ yabai -m config auto_balance                off
 
 # ====== Border settings =======================
 
-yabai -m config window_border               on
-yabai -m config window_border_width         2
-yabai -m config active_window_border_color  "0xE0${focused_border_color}"
-yabai -m config insert_window_border_color  "0xE0${preselect_border_color}"
-yabai -m config normal_window_border_color  "0x00${normal_border_color}"
+# NOTE: window border doesn't behave nicely without SIP disabled
+yabai -m config window_border               off
+# yabai -m config window_border_width         2
+# yabai -m config active_window_border_color  "0xE0${focused_border_color}"
+# yabai -m config insert_window_border_color  "0xE0${preselect_border_color}"
+# yabai -m config normal_window_border_color  "0x00${normal_border_color}"
 
 # ====== List of rules =========================
 
-yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label="Archive Utility" app="^Archive Utility$" manage=off
+# yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label="Finder" app="^Finder$" manage=off
 yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
 yabai -m rule --add label="System Preferences" app="^System Preferences$" manage=off
 yabai -m rule --add label="App Store" app="^App Store$" manage=off
@@ -59,6 +62,5 @@ yabai -m rule --add label="Dictionary" app="^Dictionary$" manage=off
 yabai -m rule --add label="Fork" app="^Fork$" manage=off
 yabai -m rule --add label="mpv" app="^mpv$" manage=off
 yabai -m rule --add label="Sublime Merge" app="^Sublime Merge$" manage=off
-yabai -m rule --add label="The Unarchiver" app="^The Unarchiver$" manage=off
 yabai -m rule --add label="Transmission" app="^Transmission$" manage=off
 yabai -m rule --add label="VirtualBox" app="^VirtualBox$" manage=off
