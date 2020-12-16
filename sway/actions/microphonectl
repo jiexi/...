@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+me="$(basename "$0")";
+running=$(ps h -C "$me" | grep -wv $$ | wc -l);
+[[ $running > 1 ]] && exit;
+
+next_amixer_result=$(amixer set Capture toggle)
+vol=$(echo "$next_amixer_result" | grep -Po "[0-9]+(?=%)" | tail -1)
+state=$(echo "$next_amixer_result" | grep -o "off" | head -n 1)
+
+
+if [[ "$state" == *"off"* ]]; then
+    level="Mute"
+else
+    level="$vol%"
+fi
+
+~/.config/sway/actions/notify-progress "Microphone $level" "$vol"
