@@ -1,22 +1,22 @@
-tap:
+# tap:
   # 1:
   #   command: "echo ----------------tap1----------------------------"
   # 2:
   #   command: "echo ----------------tap2----------------------------"
   # 3:
   #   command: "echo ----------------tap3----------------------------"
-  4:
-    command: "~/.config/sway/actions/cycle-windows next"
+  # 4:
+  #   command: "~/.config/sway/actions/cycle-windows next"
 
-hold:
+# hold:
   # 1:
   #   command: "echo ----------------hold1----------------------------"
   # 2:
   #   command: "echo ----------------hold2----------------------------"
   # 3:
   #   command: "echo ----------------hold3----------------------------"
-  4:
-    command: "~/.config/sway/actions/cycle-windows next"
+  # 4:
+  #   command: "~/.config/sway/actions/cycle-windows next"
   #  command: "echo ----------------hold4----------------------------"
 
 swipe:
@@ -54,5 +54,5 @@ plugin:
   inputs:
     libinput_command_input:
       show-keycodes: true
-      enable-tap: true
-      verbose: true
+#       enable-tap: true
+#       verbose: true
