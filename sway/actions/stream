@@ -35,6 +35,6 @@ done < <(swaymsg -mt subscribe '["window"]' | jq --unbuffered .change,.container
 # fi
 
 # Ensure wf-recorder process is killed
-kill -s SIGINT $pid 2> /dev/null;
+~/.config/sway/actions/record-stop --silent
 
 trap - EXIT

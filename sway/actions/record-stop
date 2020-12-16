@@ -1,8 +1,22 @@
 #!/usr/bin/env sh
 
+SILENT=0
+
+for arg do
+  shift
+  if [ "$arg" = "--silent" ]; then
+    SILENT=1
+    continue
+  fi
+  set -- "$@" "$arg"
+done
+
 killall -s SIGINT wf-recorder
 while pgrep -x wf-recorder >/dev/null; do
   sleep 0.1
 done
 ~/.config/sway/actions/signal-waybar recording
-pacat --file-format=wav ~/.config/sway/sounds/screenshot.wav
+
+if [[ $SILENT -eq 0 ]]; then
+  pacat --file-format=wav ~/.config/sway/sounds/screenshot.wav
+fi
