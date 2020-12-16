@@ -1,6 +1,9 @@
 #!/bin/bash
 
-~/.config/sway/actions/record-stop
+if [[ "$(pgrep wf-recorder)" ]]; then
+  ~/.config/sway/actions/record-stop
+  exit 1
+fi
 
 # https://gist.github.com/progandy/bff675311aa2c3b777a37abe81aa4b4d
 # sway-mirror OPTIONS
@@ -13,17 +16,25 @@
 
 instance=sway-mirror$$
 wf-recorder "$@" -c rawvideo -m sdl -f pipe:$instance &
-sleep 1
-if kill -0 $! 2>/dev/null && swaymsg "[title=\"^pipe:$instance\$\"] nop" >/dev/null; then
-	while read type ; read name ; do
-		if [[ $type == '"close"' && $name == "\"pipe:$instance\"" ]]; then
-			break
-		fi
-	done < <(swaymsg -mt subscribe '["window"]' | jq --unbuffered .change,.container.name)
-	#while jobs '%1' >/dev/null && swaymsg "[title=\"^pipe:wf-mirror$$\$\"] nop" >/dev/null; do
-	#	sleep 1
-	#done
-fi
-kill -INT '%1'
+pid=$!
+trap "kill -s SIGINT $pid 2> /dev/null ; ~/.config/sway/actions/record-stop" EXIT
 
-pacat --file-format=wav ~/.config/sway/sounds/screenshot.wav
+~/.config/sway/actions/signal-waybar recording
+
+while read type ; read name ; do
+	if [[ $type == '"close"' && $name == "\"pipe:$instance\"" ]]; then
+		break
+	fi
+done < <(swaymsg -mt subscribe '["window"]' | jq --unbuffered .change,.container.name)
+
+# Wait and see if wf-recorder process dies
+# sleep 1
+# if ps -p $pid > /dev/null; then
+	# wf-recorder is still alive, which means only the mirror instance was closed
+# 	exit 0
+# fi
+
+# Ensure wf-recorder process is killed
+kill -s SIGINT $pid 2> /dev/null;
+
+trap - EXIT

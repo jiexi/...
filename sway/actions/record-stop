@@ -1,8 +1,8 @@
 #!/usr/bin/env sh
 
-set -e
-
-if [[ "$(pgrep wf-recorder)" ]]; then
-  killall -s SIGINT wf-recorder
-  exit 1
-fi
+killall -s SIGINT wf-recorder
+while pgrep -x wf-recorder >/dev/null; do
+  sleep 0.1
+done
+~/.config/sway/actions/signal-waybar recording
+pacat --file-format=wav ~/.config/sway/sounds/screenshot.wav

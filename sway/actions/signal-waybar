@@ -1,0 +1,20 @@
+#!/usr/bin/env sh
+
+set -e
+
+# SIGNALS
+MODULE_RECORDING=1
+
+send_signal () {
+  pkill -SIGRTMIN+$1 waybar
+}
+
+case "$1" in
+recording)
+  send_signal $MODULE_RECORDING
+  ;;
+
+*)
+  exit 1
+  ;;
+esac

@@ -2,6 +2,11 @@
 
 set -e
 
+if [[ "$(pgrep wf-recorder)" ]]; then
+  ~/.config/sway/actions/record-stop
+  exit 1
+fi
+
 FILENAME=~/Desktop/$(date +"%Y-%m-%d-%T").mp4
 FLAG=""
 
@@ -17,36 +22,31 @@ for arg do
   set -- "$@" "$arg"
 done
 
-play_beep () {
-  pacat --file-format=wav ~/.config/sway/sounds/volume.wav
-  # sleep 0.5
-  # pacat --file-format=wav ~/.config/sway/sounds/volume.wav
-  # sleep 0.5
-  # pacat --file-format=wav ~/.config/sway/sounds/volume.wav
-  # sleep 0.5
-}
-
-~/.config/sway/actions/record-stop
-
 case "$1" in
 screen)
-  play_beep
-  wf-recorder $FLAG -f "$FILENAME"
+  wf-recorder $FLAG -f "$FILENAME" &
   ;;
 
 area)
-  play_beep
-  wf-recorder $FLAG -g "$(slurp)" -f "$FILENAME"
+  geometry=$(slurp)
+  wf-recorder $FLAG -g "$geometry" -f "$FILENAME" &
   ;;
 
 window)
-  play_beep
-  wf-recorder $FLAG -g "$(~/.config/sway/actions/slurp-window)" -f "$FILENAME"
+  geometry=$(~/.config/sway/actions/slurp-window)
+  wf-recorder $FLAG -g "$geometry" -f "$FILENAME" &
   ;;
 
 *)
   exit 1
   ;;
 esac
+pid=$!
+trap "kill $pid 2> /dev/null ; ~/.config/sway/actions/record-stop" EXIT
 
-pacat --file-format=wav ~/.config/sway/sounds/screenshot.wav
+# pacat --file-format=wav ~/.config/sway/sounds/volume.wav
+~/.config/sway/actions/signal-waybar recording
+
+tail --pid=$pid -f /dev/null
+
+trap - EXIT

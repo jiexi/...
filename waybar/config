@@ -147,6 +147,19 @@
         "custom/dropbox": {
             "format": "󰡨   󰃠   󰂚"
         },
+        "custom/recording": {
+            "format": "󰙧",
+            //"format": "󰙦",
+            //"format": "󰻃",
+            //"format": "󰻂",
+            //"format": "󰑋",
+            "return-type": "json",
+            "exec": "echo '{}'",
+            "exec-if": "pgrep wf-recorder",
+            "on-click": "~/.config/sway/actions/record-stop",
+            "interval": "once",
+            "signal": 1
+        },
         "custom/yay": {
             //"format": "{} 󰓦",
             //"format": "{} 󰏓",
