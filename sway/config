@@ -250,6 +250,7 @@ exec redshift
 
     # Exit sway (logs you out of your Wayland session)
     bindsym $mod+Shift+BackSpace exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+
 #
 # Moving around:
 #
@@ -294,6 +295,8 @@ exec redshift
     bindsym $mod+7 workspace 7
     bindsym $mod+8 workspace 8
     bindsym $mod+9 workspace 9
+
+    # Show/Hide waybar
     bindsym $mod+0 exec $toggle_waybar
 
     # Move focused container to workspace
@@ -423,6 +426,7 @@ xwayland enable
 #exec "/usr/lib/xdg-desktop-portal -r & /usr/lib/xdg-desktop-portal-wlr"
 assign [title="^pipe:sway-mirror.*"] workspace X
 
+
 #
 # Inputs:
 #
@@ -492,6 +496,8 @@ focus_on_window_activation focus
 #
 # Appearance:
 #
-
+for_window [app_id="^org.gnome.Nautilus$"] floating enable
+for_window [app_id="^wdisplays$"] floating enable
+for_window [app_id="^pavucontrol$"] floating enable
 
 include @sysconfdir@/sway/config.d/*
