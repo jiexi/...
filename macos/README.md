@@ -48,7 +48,7 @@ Tools, notes, and shared packages for [MacOS](https://www.apple.com/macos).
   * Show battery status in menu bar
     * Show percentage
 
-### Boostrap
+### Manual
 * Install [homebrew](https://brew.sh/)
   * `brew bundle install`
 * Disable Press And Hold

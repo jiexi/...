@@ -50,6 +50,7 @@ yabai -m config window_border               off
 # ====== List of rules =========================
 
 yabai -m rule --add label="Archive Utility" app="^Archive Utility$" manage=off
+yabai -m rule --add label="BetterTouchTool" app="^BetterTouchTool$" manage=off
 # yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
 yabai -m rule --add label="Finder" app="^Finder$" manage=off
 yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
