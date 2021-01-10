@@ -126,6 +126,13 @@ Defaults timestamp_timeout=15
 Defaults passprompt="[sudo] password for %u: "
 Defaults lecture=never
 EOL
+echo "Setting user to auto login on startup"
+mkdir -p /etc/systemd/system/getty@tty1.service.d/
+cat > /etc/systemd/system/getty@tty1.service.d/override.conf <<EOL
+[Service]
+ExecStart=
+ExecStart=-/usr/bin/agetty --autologin $USERNAME --noclear %I \$TERM
+EOL
 
 
 section "SETTING PERFORMANCE/MAINTENANCE"
