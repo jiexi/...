@@ -26,6 +26,7 @@ Tools, notes, and shared packages for [MacOS](https://www.apple.com/macos).
   * Shortcuts
     * Disable Turn Dock Hiding On/Off
     * Enable Switch to Desktop 1 - 6
+    * Change Switch to Desktop 1 - 6 modifier from ctrl to alt
     * Enable Move focus to active or next window
     * Enable Show Spotlight search
   * Dictation -> Off
