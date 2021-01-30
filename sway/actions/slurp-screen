@@ -1,0 +1,13 @@
+#!/usr/bin/env sh
+
+set -e
+
+# https://github.com/luispabon/sway-dotfiles/blob/master/scripts/sway-screenshare.sh
+
+output_dimensions=$(swaymsg -t get_outputs -r | jq -r '.[] | select(.active) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')
+
+if [ "$(echo "$output_dimensions" | wc -l)" -eq 1 ]; then
+  echo "$output_dimensions"
+else
+  echo "$output_dimensions" | slurp
+fi

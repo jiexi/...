@@ -24,7 +24,8 @@ done
 
 case "$1" in
 screen)
-  wf-recorder $FLAG -f "$FILENAME" &
+  geometry=$(~/.config/sway/actions/slurp-screen)
+  wf-recorder $FLAG -g "$geometry" -f "$FILENAME" &
   ;;
 
 area)

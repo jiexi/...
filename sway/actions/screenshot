@@ -24,7 +24,7 @@ done
 
 case "$1" in
 screen)
-  grim "$FILENAME"
+  ~/.config/sway/actions/slurp-screen | grim -g - "$FILENAME"
   ;;
 
 area)

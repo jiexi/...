@@ -14,8 +14,12 @@ fi
 # TODO: Swaynag "You're sharing your screen"?
 # TODO: Mako notification?
 
+unset SDL_VIDEODRIVER
+
 instance=sway-mirror$$
-wf-recorder "$@" -c rawvideo -m sdl -f pipe:$instance &
+geometry=$(~/.config/sway/actions/slurp-screen)
+
+wf-recorder "$@" -c rawvideo --geometry="$geometry" -m sdl -f pipe:$instance &
 pid=$!
 trap "kill -s SIGINT $pid 2> /dev/null ; ~/.config/sway/actions/record-stop" EXIT
 
