@@ -32,3 +32,5 @@
 	trigger = commit --allow-empty -m "Trigger"
 [merge]
 	conflictstyle = diff3
+[core]
+	ignorecase = false
