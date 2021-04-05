@@ -204,7 +204,7 @@ pacstrap /mnt \
   base-devel \
   linux \
   linux-firmware \
-  refind-efi \
+  refind \
   os-prober \
   ;
 

@@ -1,5 +1,5 @@
 pkgname=jiexiluan-shared-meta
-pkgver=1.0.0
+pkgver=1.1.0
 pkgrel=1
 arch=('any')
 url="https://github.com/jiexi/.../"
@@ -16,7 +16,7 @@ linux-firmware
 ##################
 ### Bootloader ###
 ##################
-refind-efi
+refind
 os-prober
 
 #############
