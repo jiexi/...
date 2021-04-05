@@ -31,11 +31,12 @@ Tools, notes, and shared packages for [Windows](https://www.microsoft.com/en-us/
 * BIOS
   * Config -> Power -> Sleep State -> Set to: `Linux`
     * This might break wake by HID though...
+  * Config -> Thunderbolt BIOS Assist Mode -> Enabled
+    * You may have to disable Kernel DMA Protection in Security -> Virtualization -> Kernel DMA Protection
   * Config -> Security -> Security Chip -> Disable TPM
 * Disable TPM BitLocker
   * gpedit.msc -> Computer Configuration -> Administrative Templates -> Windows Components -> BitLocker Drive Encryption -> Operating System Drives
   * Require additional authentication at startup -> Enable -> Check "Allow BitLocker without a compatible TPM" checkbox
-
 
 ### Thinkpad
 * Make Middle Mouse Button work for click and scroll

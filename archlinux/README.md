@@ -25,7 +25,8 @@ fwupdmgr update
 * Chrome swipe gestures
 * Restore Chrome launch options after wayland regression fixed
   * https://www.reddit.com/r/swaywm/comments/ipkfbx/chromechromium_850418383_regression_workaround/
-  * /usr/share/applications/google-chrome.desktop
   * https://www.reddit.com/r/swaywm/comments/imcoo6/chrome_wayland_available_via_feature_flag_in/
   * https://www.reddit.com/r/archlinux/comments/iwv6oo/artifacts_while_scrolling_and_typing_with/g64ai4u/
   * Disable Hardware Acceleration
+  * `-enable-features=UseOzonePlatform -ozone-platform=wayland`
+  * /usr/share/applications/google-chrome.desktop
