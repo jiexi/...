@@ -36,7 +36,7 @@ fonts/dist/.uuid
 gconf/
 gedit/
 goa-*/
-google-chrome/
+google-chrome*/
 gtk-*/
 htop/
 jesseduffield/
