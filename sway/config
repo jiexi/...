@@ -78,6 +78,15 @@ bindsym --locked XF86AudioStop exec ~/.config/sway/actions/media-stop
 bindsym --locked XF86AudioPrev exec ~/.config/sway/actions/media-prev
 bindsym --locked XF86AudioNext exec ~/.config/sway/actions/media-next
 bindsym --locked XF86AudioMicMute exec ~/.config/sway/actions/microphonectl mute
+### https://github.com/swaywm/sway/wiki/Shortcut-handling#how-to-identify-keys
+### Repurpose X1C8
+#### XKB keycodes - message: 444, answer: 445, hangup: 446, favorites, left shift: 42
+#### +8 to all to get wayland equivalent scancode
+bindcode --locked 452 exec ~/.config/sway/actions/media-play
+bindcode --locked 453 exec ~/.config/sway/actions/media-stop
+bindcode --locked 454 exec ~/.config/sway/actions/media-prev
+bindsym --locked XF86Favorites exec ~/.config/sway/actions/media-next
+
 
 #
 # Brightness:
