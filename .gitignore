@@ -26,6 +26,7 @@ chromium/
 configstore/
 dconf/
 deluge/
+discord/
 dleyna-*
 enchant/
 eog/
@@ -51,6 +52,7 @@ pavucontrol.ini
 paperwm/
 pipewire-media-session/
 pulse/
+spotify/
 sublime-merge/
 tlpui/
 totem/
