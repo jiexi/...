@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+displays_on=$(swaymsg -t get_outputs | jq ' .[] | select(.dpms==true)')
+if [ -z "$displays_on" ]; then
+  swaymsg "output * dpms on"
+  exit 1
+fi

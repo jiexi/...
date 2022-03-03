@@ -16,3 +16,5 @@ else
 fi
 
 ~/.config/sway/actions/notify-progress "Microphone $level" "$vol"
+
+~/.config/sway/actions/signal-waybar mute

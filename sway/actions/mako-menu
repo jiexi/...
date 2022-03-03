@@ -1,0 +1,91 @@
+#!/bin/sh
+# arguments: program [ args ]
+# example: ./mako-menu.sh fzf --prompt='Select action: '
+#          ./mako-menu.sh rofi -dmenu -p 'Select action: '
+
+# The expansion "$@" is the only POSIX expansion which
+# expands to a list and doesn't mangle spaces or quotes.
+# We use a one-time function to use multiple lists.
+
+if [ $# -eq 0 ]; then
+	echo >&2 \
+	"$0: No program provided.
+
+Usage:    $0 [program] [[args]]
+
+The list of actions will be provided to the program
+on stdin, separated by newlines. The program should
+print to stdout exactly one action.
+
+Examples: $0 fzf --prompt='Select action: '
+          $0 rofi -dmenu -p 'Select action: '
+          $0 wofi -dp 'Select action: '
+"
+	exit 1
+fi
+
+# Get current notification
+# list is quoted, and will contain multiple actions
+# the first action is the most recent that is currently shown
+busctl_list="$(busctl --user call org.freedesktop.Notifications /fr/emersion/Mako \
+	fr.emersion.Mako ListNotifications)"
+
+case $busctl_list in
+	*'"actions" a{ss} 0 '*)
+		echo >&2 "$0: No actions found."
+		exit 1 ;;
+	*'"actions" a{ss}'*) :;;
+	*)
+		echo >&2 "$0: No notification found."
+		exit 1 ;;
+esac
+
+# get notification id in case another notification appears
+# while the user is selecting an action
+# ... "id" u [id] ...
+id="${busctl_list#*' "id" u '}"
+id="${id%% *}"
+
+# strip head of busctl_list to actions
+# ... "actions" a{ss} [count] "key" "value" "key" "value" ...
+busctl_list="${busctl_list#*' "actions" a{ss} '}"
+action_count="${busctl_list%% *}"
+# remove action_count from front, escape all '$' and '`'
+busctl_list="$(printf '%s' "${busctl_list#* }" | sed 's/[\$`]/\\&/g')"
+
+# Build newline-separated action list
+join_actions(){
+	eval set -- "$1"
+	i=0
+	while [ $((i += 1)) -le "$action_count" ]; do
+		# key is $1, val is $2
+		value_list="$(printf '%s\n%s' "$2" "$value_list")"
+		# shift to next key-val pair
+		shift 2
+	done
+}
+join_actions "$busctl_list"
+
+# Call user's program
+selected_value="$(printf '%s' "$value_list" | "$@")"
+
+# Test selected value against possible values
+eval set -- "$busctl_list"
+i=0
+while [ $((i += 1)) -le "$action_count" ]; do
+	# key is $1, val is $2
+	if [ "$2" = "$selected_value" ]; then
+		# The key may contain C escape sequences, use printf %b to evaluate them.
+		# Since sh removes trailing newlines in command substitutions,
+		# we append an extra character to suppress this behaviour.
+		selected_key="$(printf '%b:' "$1")"
+		exec busctl --user call org.freedesktop.Notifications /fr/emersion/Mako \
+			fr.emersion.Mako InvokeAction us "$id" "${selected_key%?}"
+	fi
+	# shift to next key-val pair
+	shift 2
+done
+
+echo >&2 "$0: No action selected."
+exit 1
+# vim: foldmethod=marker

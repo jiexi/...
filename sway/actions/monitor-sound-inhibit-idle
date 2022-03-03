@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+MAX_INHIBIT_LOOPS=15
+COUNT=0
+
+# Ensure swayidle is enabled if script is killed
+trap "echo 'enabling swayidle before exiting'; pkill -CONT swayidle" EXIT
+
+while :
+do
+  echo -e "$COUNT \c"
+  SINKS_RUNNING=$(pacmd list-sink-inputs | grep -c 'state: RUNNING')
+  if [[ $SINKS_RUNNING -ne 0 ]]; then
+    echo "active"
+    if [[ $COUNT -eq 0 ]]; then
+      echo "disable swayidle"
+      pkill -STOP swayidle
+    elif [[ $COUNT -eq $MAX_INHIBIT_LOOPS ]]; then
+      echo "passed max"
+      echo "enable swayidle"
+      pkill -CONT swayidle
+    fi
+    COUNT=$((COUNT+1))
+  else
+    echo "inactive"
+    if [[ $COUNT -gt 0 ]] && [[ $COUNT -le $MAX_INHIBIT_LOOPS ]]; then
+      echo "enable swayidle"
+      pkill -CONT swayidle
+    fi
+    COUNT=0
+  fi
+
+sleep 60
+
+done

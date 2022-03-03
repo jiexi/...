@@ -9,10 +9,10 @@
     "workbench.editor.revealIfOpen": true,
     "explorer.confirmDragAndDrop": false,
     "editor.dragAndDrop": false,
-    "window.zoomLevel": 1,
     "typescript.updateImportsOnFileMove.enabled": "always",
     "editor.tabSize": 2,
     "javascript.updateImportsOnFileMove.enabled": "always",
     "editor.fontFamily": "'Droid Sans Mono', 'monospace', monospace, 'Droid Sans Fallback', 'Material Design Icons'",
-    "workbench.startupEditor": "none"
+    "workbench.startupEditor": "none",
+    "window.zoomLevel": 1
 }

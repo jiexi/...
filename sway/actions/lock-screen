@@ -9,7 +9,14 @@ if [[ ! -z "$swaylock_process" ]]; then
   exit 0
 fi
 
+gluqlo_process=$(pgrep gluqlo  | tail -1)
+if [[ ! -z "$gluqlo_process" ]]; then
+  exit 0
+fi
+
 # TODO(JL): Handle multimonitor
 resolution=$(swaymsg -t get_outputs | jq -r '.[0].current_mode | "\(.width)x\(.height)"')
 /usr/lib/xscreensaver/gluqlo -ampm -r $resolution &
-swaylock -c 00000000 ; killall gluqlo
+swaylock -f -c 00000000
+
+~/.config/sway/actions/monitor-lock-screen

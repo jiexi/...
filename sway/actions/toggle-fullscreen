@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+
+me="$(basename "$0")";
+running=$(ps h -C "$me" | grep -wv $$ | wc -l);
+[[ $running > 1 ]] && exit;
+
+# normal=$(swaymsg -t get_tree | jq '.. | (.floating_nodes? // empty)[] | select(.focused==true) | .pid,.fullscreen_mode')
+# if [[ ! -z "$normal" ]]; then
+#   normal_pid=$($normal | head -n 1)
+#   fullscreen=$($normal | tail -n 1)
+
+#   if [[ $fullscreen -eq 1 ]]; then
+#     swaymsg "[pid=$normal_pid]" floating toggle
+#   else
+#     swaymsg "[pid=$normal_pid]" fullscreen toggle
+#   fi
+# fi
+
+normal_pid=$(swaymsg -t get_tree | jq '.. | (.nodes? // empty)[] | select(.focused==true and .visible==true) | .pid')
+if [[ ! -z "$normal_pid" ]]; then
+  echo "normal pid $normal_pid"
+  swaymsg fullscreen toggle
+  exit 0
+fi
+
+floating_pid=$(swaymsg -t get_tree | jq '.. | (.floating_nodes? // empty)[] | select(.focused==true and .visible==true) | .pid')
+if [[ ! -z "$floating_pid" ]]; then
+  echo "floating pid"
+  swaymsg fullscreen toggle
+  exit 0
+fi

@@ -4,6 +4,7 @@ set -e
 
 # SIGNALS
 MODULE_RECORDING=1
+MODULE_MUTE=2
 
 send_signal () {
   pkill -SIGRTMIN+$1 waybar
@@ -12,6 +13,10 @@ send_signal () {
 case "$1" in
 recording)
   send_signal $MODULE_RECORDING
+  ;;
+
+mute)
+  send_signal $MODULE_MUTE
   ;;
 
 *)

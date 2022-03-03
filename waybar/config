@@ -7,13 +7,10 @@
         "margin-right": 0,
         "modules-left": ["custom/launcher", "sway/workspaces", "sway/window", "sway/mode"],
         "modules-center": ["clock"],
-        "modules-right": ["custom/docker", "custom/yay", "pulseaudio", "network", "battery", "custom/power"],
-        //"modules-left": ["custom/launcher", "sway/workspaces", "wlr/taskbar", "sway/mode"],
-        //"modules-center": [],
-        //"modules-right": ["custom/dropbox", "custom/yay", "pulseaudio", "network", "battery", "clock", "custom/power"],
+        "modules-right": ["custom/recording", "custom/docker", "custom/yay", "custom/nightlight", "custom/notification", "custom/mute", "pulseaudio", "network", "battery", "battery#batpercent"],
         "sway/workspaces": {
             "disable-scroll": true,
-            "current-only": true
+            "current-only": false
         },
         "sway/mode": {
             "tooltip": false,
@@ -26,13 +23,17 @@
         "clock": {
             "tooltip": true,
             "tooltip-format": "<big>{:%B %Y}</big>\n<tt><small>{calendar}</small></tt>",
-            "format": "{:%a, %b %d %I:%M%P}"
+            "format": "{:%a, %b %d %I:%M%p}"
         },
         "cpu": {
             "format": "{}% 󰻠"
         },
         "memory": {
             "format": "{}% 󰍛"
+        },
+        "battery#batpercent": {
+            "tooltip": true,
+            "format": "{capacity}%"
         },
         "battery": {
             "tooltip": true,
@@ -54,6 +55,7 @@
             //"format-unknown":"󰂑",
             "format-full":"󰁹",
             //"format-not-charging":"󰁹",
+            "format-plugged":"󰂅",
             "format-discharging-100":"󰁹",
             "format-discharging-90":"󰂂",
             "format-discharging-80":"󰂁",
@@ -99,6 +101,17 @@
             "format-icons": ["󰤯", "󰤟", "󰤢", "󰤥", "󰤨"]
             // "on-click": "notify-send -t 2000 \"Connected to $(iw dev wlan0 link | perl -lne 'print $1 if /SSID: (.*)/')\"",
             // "on-click-right": "notify-send -t 2000 \"Connected to $(iw dev wlan0 link | perl -lne 'print $1 if /SSID: (.*)/')\""
+        },
+        "bluetooth": {
+            "format": "{icon}",
+            "format-alt": "bluetooth: {status}",
+            "interval": 30,
+            "format-icons": {
+                "enabled": "󰂯",
+                "disabled": ""
+                //"disabled": "󰂲"
+            },
+            "tooltip-format": "{status}"
         },
         "pulseaudio": {
             "tooltip": true,
@@ -147,6 +160,11 @@
         "custom/dropbox": {
             "format": "󰡨   󰃠   󰂚"
         },
+        "custom/notification": {
+            //"format": "󰂚"
+            "format": "󰍧",
+            "on-click": "~/.config/sway/actions/mako-menu rofi -dmenu -p 'Select action: '"
+        },
         "custom/recording": {
             "format": "󰙧",
             //"format": "󰙦",
@@ -160,23 +178,37 @@
             "interval": "once",
             "signal": 1
         },
+        "custom/mute": {
+            "format": "󰍭",
+            "return-type": "json",
+            "exec": "echo '{}'",
+            "exec-if": "[[ ! -z \"$(amixer get Capture | grep -o \"off\" | head -n 1)\" ]] || { exit 1; }",
+            "on-click": "~/.config/sway/actions/microphonectl toggle",
+            "interval": "once",
+            "signal": 2
+        },
+        "custom/nightlight": {
+            "format": "󰃟"
+            //"format": "󰃞"
+            //"format": "󰃠"
+        },
         "custom/yay": {
             //"format": "{} 󰓦",
             //"format": "{} 󰏓",
             "format": "󰏓",
             //"format": "{} 󰀼",
             //"format": "{} 󰆧",
-            "interval": 3600,        // every hour
-            "exec": "yay -Pn",       // # of updates
-            "exec-if": "exit 0",                  // always run; consider advanced run conditions
-            // "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar", // update system
+            "interval": 28800,        // every 8 hours
+            "exec": "yay -Spu | wc -l",       // # of updates
+            "exec-if": "[[ $(yay -Spu | wc -l) -gt 100 ]] || { exit 1; }",                  // always run; consider advanced run conditions
+            "on-click": "termite -e 'yay'; pkill -SIGRTMIN+8 waybar", // update system
             "signal": 8
         },
         "custom/docker": {
-            "format": "{} 󰡨",
+            "format": "󰡨",
             "interval": 900,        // every 15 mins
             "exec": "docker ps | tail -n +2 | wc -l",       // # of running containers
-            "exec-if": "exit 0",                  // always run; consider advanced run conditions
+            "exec-if": "[[ $(docker ps | tail -n +2 | wc -l) -gt 0 ]] || { exit 1; }",                  // always run; consider advanced run conditions
             // "on-click": "termite -e 'sudo pacman -Syu'; pkill -SIGRTMIN+8 waybar", // update system
             //"signal": 8
         }
