@@ -7,7 +7,7 @@
         "margin-right": 0,
         "modules-left": ["custom/launcher", "sway/workspaces", "sway/window", "sway/mode"],
         "modules-center": ["clock"],
-        "modules-right": ["custom/recording", "custom/docker", "custom/yay", "custom/nightlight", "custom/notification", "custom/mute", "pulseaudio", "network", "battery", "battery#batpercent"],
+        "modules-right": ["custom/recording", "custom/docker", "custom/yay", "custom/egpu", "custom/nightlight", "custom/notification", "custom/mute", "pulseaudio", "network", "battery", "battery#batpercent"],
         "sway/workspaces": {
             "disable-scroll": true,
             "current-only": false
@@ -191,6 +191,14 @@
             "format": "󰃟"
             //"format": "󰃞"
             //"format": "󰃠"
+        },
+        "custom/egpu": {
+            "format": "󰆧",
+            "return-type": "json",
+            "exec": "echo '{}'",
+            "exec-if": "[[ $(echo $DRI_PRIME) -eq 1 ]] || { exit 1; }",
+            "on-click": "",
+            "interval": "once"
         },
         "custom/yay": {
             //"format": "{} 󰓦",

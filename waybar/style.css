@@ -78,6 +78,7 @@ window#waybar {
 #battery.batpercent,
 #custom-notification,
 #custom-nightlight,
+#custom-egpu,
 #custom-recording
 {
     margin: 3px 4px 0px 4px;

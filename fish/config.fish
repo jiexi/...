@@ -94,7 +94,7 @@ function fish_title
 end
 
 if [ (tty) = "/dev/tty1" ]
-  exec sway
+  exec ~/.config/sway/start.sh
 end
 
 # TODO: Add dotfile update checker

@@ -236,6 +236,15 @@ mode "$mode_stream" {
 output eDP-1 scale 1
 #output eDP-1 bg ~/.config/sway/wallpaper.jpg fill
 output eDP-1 bg ~/Downloads/pink_cherry.jpg fill
+output DP-3 bg ~/Downloads/green_plant_leaves_wallpaper.jpg fill
+
+## Monitor
+
+# eGPU
+output DP-3 adaptive_sync on
+workspace 1 output DP-3
+focus output DP-3
+exec ~/.config/sway/config.sh
 
 ## Positioning
 exec kanshi
@@ -406,15 +415,15 @@ exec redshift
 # Power:
 #
 ## Menu
-set $mode_power "System: (l) lock, (s) sleep, (r) reboot, (p) poweroff"
+set $mode_power "System: (l) lock, (s) sleep, (r) reboot, (p) poweroff, (e) exit"
 
 mode $mode_power {
     # (e) logout
-    # bindsym e exit
     bindsym l exec $lock, mode "default"
     bindsym s exec $sleep, mode "default"
     bindsym r exec systemctl reboot, mode "default"
     bindsym p exec systemctl poweroff, mode "default"
+    bindsym e exit
 
     # back to normal
     bindsym $mod+Shift+BackSpace mode "default"
