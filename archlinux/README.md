@@ -30,3 +30,8 @@ fwupdmgr update
   * Disable Hardware Acceleration
   * `-enable-features=UseOzonePlatform -ozone-platform=wayland`
   * /usr/share/applications/google-chrome.desktop
+* eGPU
+  * Add `amdgpu` to modules in /etc/mkinitcpio.conf
+  * Add [egpu-power.service](etc/egpu-power.service)
+  * Disable TB3 Linux OS support
+  * Enable TB3 Preboot Pre-ACL

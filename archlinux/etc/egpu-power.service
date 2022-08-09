@@ -1,0 +1,10 @@
+[Unit]
+Description = "Set the eGPU PowerScaling"
+After=suspend.target
+
+[Service]
+ExecStart=/usr/bin/sh -c 'echo "high" > /sys/class/drm/card0/device/power_dpm_force_performance_level'
+Type=idle
+
+[Install]
+WantedBy=multi-user.target suspend.target
