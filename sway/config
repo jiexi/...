@@ -30,7 +30,13 @@ set $lock ~/.config/sway/actions/lock-screen
 set $monitor_lock ~/.config/sway/actions/monitor-lock-screen
 
 ## Sleep
-set $sleep systemctl hybrid-sleep
+set $sleep systemctl suspend
+
+## Hibernate
+set $hibernate systemctl hibernate
+
+## Sleep Then Hibernate
+set $sleephibernate systemctl suspend-then-hibernate
 
 ## Power Button Guard
 set $power_button_guard ~/.config/sway/actions/power-button-guard
@@ -238,9 +244,7 @@ output eDP-1 scale 1
 output eDP-1 bg ~/Downloads/pink_cherry.jpg fill
 output DP-3 bg ~/Downloads/green_plant_leaves_wallpaper.jpg fill
 
-## Monitor
-
-# eGPU
+## eGPU
 output DP-3 adaptive_sync on
 workspace 1 output DP-3
 focus output DP-3
@@ -415,12 +419,13 @@ exec redshift
 # Power:
 #
 ## Menu
-set $mode_power "System: (l) lock, (s) sleep, (r) reboot, (p) poweroff, (e) exit"
+set $mode_power "System: (l) lock, (s) sleep, (h) hibernate, (r) reboot, (p) poweroff, (e) exit"
 
 mode $mode_power {
     # (e) logout
     bindsym l exec $lock, mode "default"
     bindsym s exec $sleep, mode "default"
+    bindsym h exec $hibernate, mode "default"
     bindsym r exec systemctl reboot, mode "default"
     bindsym p exec systemctl poweroff, mode "default"
     bindsym e exit
@@ -453,6 +458,7 @@ exec swayidle -w \
     before-sleep '$lock &' \
             lock '$lock &' \
     after-resume 'swaymsg "output * dpms on" && $monitor_lock'
+
 #timeout 300 'if pgrep swaylock; then swaymsg "output * dpms off"; fi' \
 #     resume 'if pgrep swaylock; then swaymsg "output * dpms on"; fi' \
 # after-resume 'echo "am i needed to awake screens after coming back from closed lid action while on multi-monitor?"'

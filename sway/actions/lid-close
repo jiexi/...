@@ -3,5 +3,5 @@
 if [ "$(swaymsg -t get_outputs | jq length)" -gt 1 ]; then
   swaymsg output eDP-1 disable
 else
-  systemctl sleep
+  systemctl suspend-then-hibernate
 fi
