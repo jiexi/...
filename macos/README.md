@@ -50,18 +50,27 @@ Tools, notes, and shared packages for [MacOS](https://www.apple.com/macos).
     * Show percentage
 
 ### Manual
+* Create SSH Key
+  ```
+    ssh-keygen -t rsa
+    pbcopy < ~/.ssh/id_rsa.pub
+    ssh-add ~/.ssh/id_rsa
+  ```
 * Install [homebrew](https://brew.sh/)
   * `brew bundle install`
 * Disable Press And Hold
   * `defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false`
 * Symlink VSCode config
   * `sudo ln -s /Users/jiexi/.config/Code/ "/Users/jiexi/Library/Application Support/"`
-* Make Fish default shell
+* Setup Fish
   * ```
-      sudo bash -c 'echo /usr/local/bin/fish >> /etc/shells'
-      chsh -s /usr/local/bin/fish
+      # You may have to edit /etc/shells directly
+      sudo bash -c 'echo /opt/homebrew/bin/fish >> /etc/shells'
+      chsh -s /opt/homebrew/bin/fish
+      # Restart terminal
+      fish_add_path /opt/homebrew/bin
+      fish_update_completions
     ```
-  * Restart shell
 * Add Day-O to menu bar
   * Disable Icon
   * Enable Startup
