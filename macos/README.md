@@ -78,5 +78,9 @@ Tools, notes, and shared packages for [MacOS](https://www.apple.com/macos).
   * Disable System Date/Time Widget
 
 
-### Save Homebrew Packages
-`brew bundle dump`
+
+### Homebrew
+```
+brew bundle # install packages and update lock
+brew bundle dump # save packages
+```
