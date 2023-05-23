@@ -62,3 +62,6 @@ vlc/
 unity3d/
 yarn/
 zoomus.conf
+
+# MacOS
+**/.DS_Store
