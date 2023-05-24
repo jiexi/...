@@ -71,13 +71,8 @@ Tools, notes, and shared packages for [MacOS](https://www.apple.com/macos).
       fish_add_path /opt/homebrew/bin
       fish_update_completions
     ```
-* Add Day-O to menu bar
-  * Disable Icon
-  * Enable Startup
-  * Format ` E MMM d  h:mm a ` (include surrounding spaces)
-  * Disable System Date/Time Widget
-
-
+* Fix smooth scrolling for mice
+  * Install [mos](https://mos.caldis.me/)
 
 ### Homebrew
 ```
