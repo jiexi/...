@@ -60,6 +60,7 @@ Tools, notes, and shared packages for [MacOS](https://www.apple.com/macos).
   * `brew bundle install`
 * Disable Press And Hold
   * `defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false`
+* Disable Trackpad double tap and click (conflict with BTT)
 * Symlink VSCode config
   * `sudo ln -s /Users/jiexi/.config/Code/ "/Users/jiexi/Library/Application Support/"`
 * Setup Fish
@@ -70,6 +71,11 @@ Tools, notes, and shared packages for [MacOS](https://www.apple.com/macos).
       # Restart terminal
       fish_add_path /opt/homebrew/bin
       fish_update_completions
+    ```
+* Start yabai and skhd
+  * ```
+      yabai --start-service
+      skhd --start-service
     ```
 * Fix smooth scrolling for mice
   * Install [mos](https://mos.caldis.me/)
