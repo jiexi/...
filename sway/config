@@ -525,6 +525,15 @@ input "1133:4131:Logitech_G700" {
     drag disabled
 }
 
+## MX Master 3S Mouse
+input "1133:50504:Logitech_USB_Receiver_Mouse" {
+    accel_profile adaptive
+    pointer_accel 0.225
+    scroll_factor 2.5
+    drag disabled
+}
+exec solaar --window hide --restart-on-wake-up
+
 # Not sure if drag disabled needed...
 
 
