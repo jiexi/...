@@ -438,13 +438,15 @@ mode $mode_power {
 bindsym $mod++Shift+BackSpace mode $mode_power
 
 ## Power Key
-bindsym --locked XF86PowerOff exec $power_button_guard && $sleep
+bindsym --locked XF86PowerOff exec $sleep
+bindsym --locked Shift+XF86PowerOff exec $sleep
 bindsym --locked $mod+XF86PowerOff exec systemctl poweroff
 exec systemd-inhibit --what=handle-power-key sh -c 'while true; do sleep 1000; done'
 
 ## Lid Controls
 bindswitch lid:on exec ~/.config/sway/actions/lid-close
 bindswitch lid:off exec ~/.config/sway/actions/lid-open
+exec systemd-inhibit --what=handle-lid-switch sh -c 'while true; do sleep 1000; done'
 
 ## Notifications
 exec $battery_monitor
