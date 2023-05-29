@@ -69,7 +69,7 @@ set $cycle_windows ~/.config/sway/actions/cycle-windows
 set $battery_monitor ~/.config/sway/actions/monitor-notify-battery
 
 ##  Sound Inhibit Idle Monitor
-set $sound_inhibit_idle_monitor ~/.config/sway/actions/monitor-sound-inhibit-idle
+# set $sound_inhibit_idle_monitor ~/.config/sway/actions/monitor-sound-inhibit-idle
 
 #
 # Gaps:
@@ -466,7 +466,7 @@ exec swayidle -w \
 # after-resume 'echo "am i needed to awake screens after coming back from closed lid action while on multi-monitor?"'
 
 ## Inhibit on sound
-# exec $sound_inhibit_idle_monitor
+exec sway-audio-idle-inhibit
 
 ## Inhibit on full screen window
 for_window [class="^.*"] inhibit_idle fullscreen
