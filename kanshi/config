@@ -1,0 +1,4 @@
+profile {
+	output eDP-1 mode 2560x1440 position 1920,0
+	output "Lenovo Group Limited M14 V906GBP3" mode 1920x1080 position 2240,1440
+}
