@@ -4,19 +4,29 @@ me="$(basename "$0")";
 running=$(ps h -C "$me" | grep -wv $$ | wc -l);
 [[ $running > 1 ]] && exit;
 
-swaylock_process=$(pgrep swaylock  | tail -1)
-if [[ ! -z "$swaylock_process" ]]; then
-  exit 0
-fi
+# swaylock_process=$(pgrep swaylock  | tail -1)
+# if [[ ! -z "$swaylock_process" ]]; then
+#   exit 0
+# fi
 
-gluqlo_process=$(pgrep gluqlo  | tail -1)
-if [[ ! -z "$gluqlo_process" ]]; then
-  exit 0
-fi
+# gluqlo_process=$(pgrep gluqlo  | tail -1)
+# if [[ ! -z "$gluqlo_process" ]]; then
+#   exit 0
+# fi
 
 # TODO(JL): Handle multimonitor
 resolution=$(swaymsg -t get_outputs | jq -r '.[0].current_mode | "\(.width)x\(.height)"')
-/usr/lib/xscreensaver/gluqlo -ampm -r $resolution -s 0.8 &
-swaylock -f -c 00000000
 
-~/.config/sway/actions/monitor-lock-screen
+# if [ "$resolution" == "nullxnull" ] && [ "$DRI_PRIME" -eq 1 ]; then
+#     resolution="2560x1440"
+#     echo "Connected to eGPU. Using $resolution"
+# fi
+
+if [ "$resolution" == "nullxnull" ]; then
+  echo "No output detected"
+  swaylock -f -c 888888
+else
+  # /usr/lib/xscreensaver/gluqlo -ampm -r $resolution -s 0.85 &
+  swaylock -f -c 222222
+  # ~/.config/sway/actions/monitor-lock-screen
+fi

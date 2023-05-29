@@ -1,7 +1,20 @@
 #!/usr/bin/env sh
 
 if [ "$(swaymsg -t get_outputs | jq length)" -gt 1 ]; then
+  echo "Disabling internal output"
   swaymsg output eDP-1 disable
-else
-  systemctl suspend-then-hibernate
+  exit 0
 fi
+
+if [ "$DRI_PRIME" -eq 1 ]; then
+  echo "Connected to eGPU"
+  exit 0
+fi
+
+if [ -n "$(swaymsg -t get_outputs | grep eDP-1)" ]; then
+  echo "Suspending"
+  systemctl suspend-then-hibernate
+  exit 0
+fi
+
+echo "Internal output was not found"
