@@ -480,7 +480,7 @@ seat seat0 hide_cursor 30000
 # X11:
 #
 xwayland enable
-#exec "/usr/lib/xdg-desktop-portal -r & /usr/lib/xdg-desktop-portal-wlr"
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 assign [title="^pipe:sway-mirror.*"] workspace X
 
 
