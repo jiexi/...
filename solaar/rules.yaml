@@ -1,0 +1,25 @@
+%YAML 1.3
+---
+- Test: [thumb_wheel_up, 13]
+- Execute: [xdotool, key, ctrl+Tab]
+...
+---
+- Test: [thumb_wheel_down, 13]
+- Execute: [xdotool, key, ctrl+shift+Tab]
+...
+---
+- MouseGesture: Mouse Up
+- Execute: /home/jiexi/.config/sway/actions/toggle-fullscreen
+...
+---
+- MouseGesture: Mouse Down
+- Execute: /home/jiexi/.config/sway/actions/toggle-fullscreen
+...
+---
+- MouseGesture: Mouse Right
+- Execute: [swaymsg, workspace, prev]
+...
+---
+- MouseGesture: Mouse Left
+- Execute: [swaymsg, workspace, next]
+...
