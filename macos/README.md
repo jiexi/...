@@ -48,6 +48,8 @@ Tools, notes, and shared packages for [MacOS](https://www.apple.com/macos).
   * Power Adapter: 15 Minutes
   * Show battery status in menu bar
     * Show percentage
+* Desktop & Dock
+  * Disable Hot Corners
 
 ### Manual
 * Create SSH Key
@@ -58,6 +60,7 @@ Tools, notes, and shared packages for [MacOS](https://www.apple.com/macos).
   ```
 * Install [homebrew](https://brew.sh/)
   * `brew bundle install`
+* Install [asdf](https://asdf-vm.com/guide/getting-started.html)
 * Disable Press And Hold
   * `defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false`
 * Disable Trackpad double tap and click (conflict with BTT)
