@@ -32,10 +32,9 @@ alias .... "cd ../../.."
 
 function cd
   builtin cd $argv
-  ls -1
+  ls
   echo
 end
-
 
 # TODO(JL): clean these up
 # clipboard
