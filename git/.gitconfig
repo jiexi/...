@@ -7,13 +7,13 @@
 	append = town append
 	continue = town continue
 	hack = town hack
-	kill = town kill
 	new-pull-request = town new-pull-request
 		pr = new-pull-request
 		new-merge-request = new-pull-request
 		mr = new-pull-request
 	prepend = town prepend
-	rename-branch = town rename-branch
+	prune-branches = fetch --prune --tags
+		pb = prune-branches
 	repo = town repo
 	set-parent-branch = town set-parent-branch
 	ship = town ship
@@ -24,11 +24,17 @@
 	co = checkout
 	br = branch
 	ci = commit
+	pr = town propose
 	unstage = reset HEAD --
 	restart = reset HEAD --hard
 	all = add --all
 	trigger = commit --allow-empty -m "Trigger"
+	propose = town propose
+	set-parent = town set-parent
+	delete = town delete
+	rename = town rename
 [merge]
 	conflictstyle = diff3
 [core]
 	ignorecase = false
+	excludesFile = ~/.gitignore
