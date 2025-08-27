@@ -53,6 +53,7 @@ yabai -m rule --add label="Archive Utility" app="^Archive Utility$" manage=off
 yabai -m rule --add label="BetterTouchTool" app="^BetterTouchTool$" manage=off
 # yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
 yabai -m rule --add label="Finder" app="^Finder$" manage=off
+yabai -m rule --add label="Firefox" app="^Firefox$" manage=off
 yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
 yabai -m rule --add label="System Preferences" app="^System Preferences$" manage=off
 yabai -m rule --add label="App Store" app="^App Store$" manage=off
@@ -65,3 +66,4 @@ yabai -m rule --add label="mpv" app="^mpv$" manage=off
 yabai -m rule --add label="Sublime Merge" app="^Sublime Merge$" manage=off
 yabai -m rule --add label="Transmission" app="^Transmission$" manage=off
 yabai -m rule --add label="VirtualBox" app="^VirtualBox$" manage=off
+yabai -m rule --add label="Simulator" app="^Simulator$" manage=off
