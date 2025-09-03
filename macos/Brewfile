@@ -1,5 +1,5 @@
-tap "homebrew/bundle"
 tap "koekeishiya/formulae"
+brew "asdf"
 brew "docker"
 brew "fish"
 brew "git-town"
